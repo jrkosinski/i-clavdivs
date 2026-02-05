@@ -1,0 +1,16 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+build
+coverage
+
+# Generated files
+*.tsbuildinfo
+pnpm-lock.yaml
+
+# Temporary
+.cache
+*.log
