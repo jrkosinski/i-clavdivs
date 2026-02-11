@@ -1,0 +1,41 @@
+* comment the code liberally, but use my style of comments for in-code (non-doc-header) comments. My style is // followed by NO space, with the first letter of the comment being lowercase. 
+One exception is //TODO: comments. In these the whole word TODO is capital.
+
+* write code that is very well composed in an object-oriented style; avoid very long functions and very long files; prefer composition to long-windedness. Prefer brief, intuitive, clear and readable method calls to long stretches of code.
+    Example: 
+    prefer 
+    function launchRocket() {
+        if (this.fuelCheck() && this.preflightChecks()) {
+            this.startLaunchProcedure();
+            this.launch();
+        }
+        else {
+            this.notifyFailedChecks()
+        }
+    }
+
+    to
+    function launchRocket() {
+        //do fuel check
+        ... etc. .. fuel check code 
+        ...
+
+        //if fuel check successful, do preflights checks
+        ... etc. ... preflight check code written out 
+
+        //if all that went well, start launch procedure
+        .... etc.... you get the idea 
+    }
+* add doc headers to public classes & methods (and non-public ones if deemed necessary)
+
+* try to avoid massively long functions or classes, or files
+
+* names of all non-public fields and methods of classes should be prefixed with an _ underscore 
+
+* all method definitions should be explicit about naming access modifiers public, private, and protected e.g. ('public async methodName()...)')
+
+* please be free about asking me any questions that arise. 
+
+* interface names begin with an I 
+
+* public methods in a class go ABOVE non-public methods. The order is properties -> constructor -> methods, public above non-public
