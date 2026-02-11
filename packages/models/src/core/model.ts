@@ -38,7 +38,13 @@ export abstract class BaseModel implements IModel {
     }
 
     public getDefinition(): ModelDefinition {
-        return { ...this._definition };
+        return {
+            ...this._definition,
+            cost: { ...this._definition.cost },
+            input: [...this._definition.input],
+            output: [...this._definition.output],
+            metadata: this._definition.metadata ? { ...this._definition.metadata } : undefined,
+        };
     }
 
     /**

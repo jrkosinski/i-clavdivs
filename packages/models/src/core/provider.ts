@@ -47,7 +47,12 @@ export abstract class BaseProvider implements IProvider {
     }
 
     public getConfig(): ProviderConfig {
-        return { ...this._config };
+        return {
+            ...this._config,
+            auth: { ...this._config.auth },
+            headers: this._config.headers ? { ...this._config.headers } : undefined,
+            models: this._config.models.map((m) => ({ ...m })),
+        };
     }
 
     public getModel(modelId: string): IModel | undefined {

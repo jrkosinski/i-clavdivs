@@ -146,18 +146,21 @@ class AnthropicModel extends BaseModel {
     }
 
     private _parseResponse(response: AnthropicMessageResponse): CompletionResponse {
-        //extract content
+        //extract content (filter out tool_use blocks as they're handled separately)
+        const textBlocks = response.content.filter(
+            (block): block is AnthropicTextBlock => block.type === 'text'
+        );
+
         let content: string | MessageContent[];
-        const firstBlock = response.content[0];
-        if (response.content.length === 1 && firstBlock && firstBlock.type === 'text') {
-            content = firstBlock.text;
+        if (textBlocks.length === 1 && textBlocks[0]) {
+            content = textBlocks[0].text;
+        } else if (textBlocks.length > 1) {
+            content = textBlocks.map((block) => ({
+                type: 'text' as const,
+                text: block.text,
+            }));
         } else {
-            content = response.content.map((block) => {
-                if (block.type === 'text') {
-                    return { type: 'text' as const, text: block.text };
-                }
-                throw new Error(`unsupported content type: ${block.type}`);
-            });
+            content = '';
         }
 
         //extract tool calls
