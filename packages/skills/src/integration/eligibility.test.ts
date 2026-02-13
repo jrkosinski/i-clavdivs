@@ -37,7 +37,6 @@ describe('skill eligibility integration tests', () => {
       };
 
       const eligibleSkills = registry.getEligibleSkills(context);
-      const allSkills = registry.getAllSkills();
 
       //should have eligible skills
       expect(eligibleSkills.length).toBeGreaterThan(0);
@@ -230,7 +229,6 @@ describe('skill eligibility integration tests', () => {
     it('should use local platform detection when no remote context provided', () => {
       //no eligibility context - uses local platform
       const eligibleSkills = registry.getEligibleSkills();
-      const allSkills = registry.getAllSkills();
 
       //should return all skills (or filter based on local platform)
       expect(eligibleSkills.length).toBeGreaterThan(0);
@@ -255,10 +253,9 @@ describe('skill eligibility integration tests', () => {
       for (const entry of skillsWithOSRestrictions) {
         const os = entry.metadata?.os;
         if (os) {
-          //either includes current platform OR skill loader is using looser filtering
-          const isCompatible = os.includes(process.platform);
           //we can't guarantee this on all platforms, so just verify structure
           expect(Array.isArray(os)).toBe(true);
+          expect(os.length).toBeGreaterThan(0);
         }
       }
     });
