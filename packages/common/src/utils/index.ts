@@ -2,6 +2,8 @@
  * Utility functions
  */
 
+import { validate as validateUuid } from 'uuid';
+
 /**
  * Check if a value is defined (not null or undefined)
  */
@@ -36,4 +38,155 @@ export function debounce<T extends (...args: any[]) => any>(
     }
     timeout = setTimeout(later, wait);
   };
+}
+
+/**
+ * Asynchronous delay helper function.
+ *
+ * @param ms - Number of milliseconds to pause
+ * @returns Promise that resolves after the specified delay
+ */
+export async function pause(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+}
+
+/**
+ * Checks if a string consists only of digits (no decimal points).
+ *
+ * @param s - The string to validate
+ * @returns True if the string is non-null and contains only digits after trimming, false otherwise
+ */
+export function stringIsNumeric(s: string): boolean {
+  return s ? /^[0-9]+$/.test(s.trim()) : false;
+}
+
+/**
+ * Validates if a value is numeric (supports string, number, or BigInt).
+ *
+ * @param value - The value to validate
+ * @returns True if the value represents a valid number, false otherwise
+ */
+export function isNumeric(value: string | number | BigInt): boolean {
+  if (typeof value === 'number') {
+    return !isNaN(value);
+  }
+  const s = value.toString();
+
+  for (let i = 0; i < s.length; i++) {
+    if (isNaN(Number(s[i]))) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Validates if a string is a properly formatted UUID.
+ *
+ * @param value - The string to validate
+ * @returns True if the string matches UUID format, false otherwise
+ */
+export function isValidUuid(value: string): boolean {
+  return validateUuid(value);
+}
+
+/**
+ * Type guard to check if a value is an array of strings.
+ *
+ * @param value - The value to check
+ * @returns True if value is an array where all elements are strings, false otherwise
+ */
+export function isStringArray(value: any): value is string[] {
+  // First, check if the value is an array
+  if (!Array.isArray(value)) {
+    return false;
+  }
+
+  // Then, check if every element in the array is a string
+  return value.every((item) => typeof item === 'string');
+}
+
+/**
+ * Gets the current Unix timestamp in seconds.
+ *
+ * @returns Current time as Unix timestamp (seconds since epoch)
+ * @example
+ * const now = getUnixTimestamp(); // 1735689600
+ */
+export function getUnixTimestamp() {
+  return Math.floor(Date.now() / 1000);
+}
+
+/**
+ * Converts a JavaScript Date object to a Unix timestamp in seconds.
+ *
+ * @param date - The Date object to convert
+ * @returns Unix timestamp in seconds
+ * @example
+ * const date = new Date('2025-01-01T00:00:00.000Z');
+ * const timestamp = toUnixTimestamp(date); // 1735689600
+ */
+export function toUnixTimestamp(date: Date) {
+  return Math.floor(date.getTime() / 1000);
+}
+
+/**
+ * Parses an ISO date string and returns both a Date object and Unix timestamp.
+ * Truncates the ISO string to 23 characters and appends 'Z' for UTC timezone.
+ *
+ * @param isoDateString - ISO 8601 formatted date string
+ * @returns Object containing both Date and Unix timestamp
+ * @example
+ * const result = parseIsoDate('2025-01-15T10:30:00.000Z');
+ * // { date: Date, timestamp: 1736936400 }
+ */
+export function parseIsoDate(isoDateString: string): {
+  date: Date;
+  timestamp: number;
+} {
+  const parsed =
+    isoDateString.length <= 23
+      ? isoDateString
+      : Date.parse(isoDateString.slice(0, 23) + 'Z');
+  const date = new Date(parsed);
+  const timestamp = toUnixTimestamp(date);
+
+  return { date, timestamp };
+}
+
+/**
+ * Adds or subtracts minutes from a given time and returns Unix timestamp.
+ *
+ * @param time - Either a Date object or Unix timestamp in seconds
+ * @param minutes - Number of minutes to add (positive) or subtract (negative)
+ * @returns Resulting Unix timestamp in seconds
+ * @example
+ * const timestamp = 1735689600;
+ * const later = timePlusMinutes(timestamp, 30); // 1735691400 (30 minutes later)
+ * const earlier = timePlusMinutes(timestamp, -15); // 1735688700 (15 minutes earlier)
+ */
+export function timePlusMinutes(time: Date | number, minutes: number): number {
+  if (typeof time != 'number') time = toUnixTimestamp(time);
+  return time + minutes * 60;
+}
+
+/**
+ * Attempts to parse a string into a float. Returns a default value if parsing fails.
+ *
+ * @param value - The string to parse as a float
+ * @param defaultValue - The value to return if parsing fails (default: 0.00)
+ * @returns The parsed float or the default value
+ * @example
+ * tryParseFloat('3.14'); // 3.14
+ * tryParseFloat('invalid'); // 0.00
+ * tryParseFloat('invalid', -1); // -1
+ */
+export function tryParseFloat(value: string, defaultValue: number = 0.0): number {
+  const parsed = parseFloat(value);
+  return isNaN(parsed) ? defaultValue : parsed;
 }
