@@ -28,7 +28,7 @@ import { SkillRegistry } from '@i-clavdivs/skills';
 //configure registry with skill directories
 const registry = SkillRegistry.getInstance();
 registry.configure({
-  bundledSkillsDir: './skills',
+    bundledSkillsDir: './skills',
 });
 
 //load skills
@@ -53,13 +53,13 @@ const tmux = new TmuxSkill();
 
 //find tmux sessions
 const sessions = tmux.findSessions({
-  scanAll: true,
-  query: 'my-session',
+    scanAll: true,
+    query: 'my-session',
 });
 
 //wait for text in a pane
 const found = await tmux.waitForText('session:0.0', 'Ready', {
-  timeout: 30,
+    timeout: 30,
 });
 ```
 
@@ -70,16 +70,16 @@ Skills are defined in SKILL.md files with YAML frontmatter:
 ```markdown
 ---
 name: github
-description: "Interact with GitHub using the `gh` CLI"
+description: 'Interact with GitHub using the `gh` CLI'
 metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "🐙",
-        "requires": { "bins": ["gh"] },
-        "install": [{ "kind": "brew", "formula": "gh" }],
-      },
-  }
+    {
+        'openclaw':
+            {
+                'emoji': '🐙',
+                'requires': { 'bins': ['gh'] },
+                'install': [{ 'kind': 'brew', 'formula': 'gh' }],
+            },
+    }
 ---
 
 # GitHub Skill
