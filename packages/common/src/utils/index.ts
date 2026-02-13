@@ -190,3 +190,53 @@ export function tryParseFloat(value: string, defaultValue: number = 0.0): number
   const parsed = parseFloat(value);
   return isNaN(parsed) ? defaultValue : parsed;
 }
+
+export interface IBooleanParseOptions {
+  truthy?: string[];
+  falsy?: string[];
+}
+
+const DEFAULT_TRUTHY = ['true', '1', 'yes', 'on'] as const;
+const DEFAULT_FALSY = ['false', '0', 'no', 'off'] as const;
+const DEFAULT_TRUTHY_SET = new Set<string>(DEFAULT_TRUTHY);
+const DEFAULT_FALSY_SET = new Set<string>(DEFAULT_FALSY);
+
+/**
+ * Parses a value as a boolean, supporting various string representations.
+ * Returns undefined if the value cannot be parsed as a boolean.
+ *
+ * @param value - The value to parse (boolean, string, or other)
+ * @param options - Optional custom truthy/falsy string arrays
+ * @returns The parsed boolean value, or undefined if unparseable
+ * @example
+ * parseBooleanValue(true); // true
+ * parseBooleanValue('yes'); // true
+ * parseBooleanValue('no'); // false
+ * parseBooleanValue('invalid'); // undefined
+ */
+export function parseBooleanValue(
+  value: unknown,
+  options: IBooleanParseOptions = {}
+): boolean | undefined {
+  if (typeof value === 'boolean') {
+    return value;
+  }
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) {
+    return undefined;
+  }
+  const truthy = options.truthy ?? DEFAULT_TRUTHY;
+  const falsy = options.falsy ?? DEFAULT_FALSY;
+  const truthySet = truthy === DEFAULT_TRUTHY ? DEFAULT_TRUTHY_SET : new Set(truthy);
+  const falsySet = falsy === DEFAULT_FALSY ? DEFAULT_FALSY_SET : new Set(falsy);
+  if (truthySet.has(normalized)) {
+    return true;
+  }
+  if (falsySet.has(normalized)) {
+    return false;
+  }
+  return undefined;
+}

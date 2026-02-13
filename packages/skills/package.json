@@ -1,0 +1,44 @@
+{
+  "name": "@i-clavdivs/skills",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Skills system for managing and executing tool-based capabilities",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
+  "files": [
+    "dist",
+    "src",
+    "skills"
+  ],
+  "keywords": [
+    "skills",
+    "tools",
+    "capabilities"
+  ],
+  "dependencies": {
+    "@i-clavdivs/common": "workspace:*",
+    "json5": "^2.2.3",
+    "yaml": "^2.8.2"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.18"
+  }
+}
