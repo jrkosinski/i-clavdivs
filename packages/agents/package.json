@@ -1,0 +1,40 @@
+{
+  "name": "@i-clavdivs/agents",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "AI agent orchestration and execution layer",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "agents",
+    "ai",
+    "llm",
+    "orchestration"
+  ],
+  "dependencies": {
+    "@i-clavdivs/common": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "4.0.18"
+  }
+}
