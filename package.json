@@ -1,31 +1,31 @@
 {
-  "name": "i-clavdivs",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "description": "A TypeScript pnpm workspace monorepo",
-  "scripts": {
-    "build": "pnpm -r --filter=./packages/* run build",
-    "dev": "pnpm -r --parallel --filter=./packages/* run dev",
-    "test": "pnpm -r --filter=./packages/* run test",
-    "lint": "pnpm -r --filter=./packages/* run lint",
-    "typecheck": "pnpm -r --filter=./packages/* run typecheck",
-    "clean": "pnpm -r --filter=./packages/* run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md}\""
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.17",
-    "@vitest/ui": "4.0.18",
-    "happy-dom": "20.6.1",
-    "prettier": "^3.2.5",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3",
-    "vitest": "4.0.18"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
-  },
-  "packageManager": "pnpm@8.15.0"
+    "name": "i-clavdivs",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "description": "A TypeScript pnpm workspace monorepo",
+    "scripts": {
+        "build": "pnpm -r --filter=./packages/* run build",
+        "dev": "pnpm -r --parallel --filter=./packages/* run dev",
+        "test": "pnpm -r --filter=./packages/* run test",
+        "lint": "pnpm -r --filter=./packages/* run lint",
+        "typecheck": "pnpm -r --filter=./packages/* run typecheck",
+        "clean": "pnpm -r --filter=./packages/* run clean && rm -rf node_modules",
+        "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
+        "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md}\""
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.17",
+        "@vitest/ui": "4.0.18",
+        "happy-dom": "20.6.1",
+        "prettier": "^3.2.5",
+        "tsx": "^4.7.1",
+        "typescript": "^5.3.3",
+        "vitest": "4.0.18"
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "pnpm": ">=8.0.0"
+    },
+    "packageManager": "pnpm@8.15.0"
 }

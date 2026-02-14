@@ -1,6 +1,6 @@
 /**
  * Frontmatter parsing utilities for YAML and key-value formats.
- * Adapted from OpenClaw/moltbot markdown frontmatter parser.
+ * Adapted from i-clavdivs/moltbot markdown frontmatter parser.
  */
 
 import YAML from 'yaml';

@@ -3,25 +3,28 @@ name: trello
 description: Manage Trello boards, lists, and cards via the Trello REST API.
 homepage: https://developer.atlassian.com/cloud/trello/rest/
 metadata:
-  {
-    "openclaw":
-      { "emoji": "📋", "requires": { "bins": ["jq"], "env": ["TRELLO_API_KEY", "TRELLO_TOKEN"] } },
-  }
+    {
+        'i-clavdivs':
+            {
+                'emoji': '📋',
+                'requires': { 'bins': ['jq'], 'env': ['TRELLO_API_KEY', 'TRELLO_TOKEN'] },
+            },
+    }
 ---
 
 # Trello Skill
 
-Manage Trello boards, lists, and cards directly from OpenClaw.
+Manage Trello boards, lists, and cards directly from i-clavdivs.
 
 ## Setup
 
 1. Get your API key: https://trello.com/app-key
 2. Generate a token (click "Token" link on that page)
 3. Set environment variables:
-   ```bash
-   export TRELLO_API_KEY="your-api-key"
-   export TRELLO_TOKEN="your-token"
-   ```
+    ```bash
+    export TRELLO_API_KEY="your-api-key"
+    export TRELLO_TOKEN="your-token"
+    ```
 
 ## Usage
 

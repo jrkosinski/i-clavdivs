@@ -78,9 +78,7 @@ describe('OpenAIProvider', () => {
 
     describe('model.complete', () => {
         it('should complete a simple request', async () => {
-            fetchMock.mockResolvedValueOnce(
-                createMockResponse(mockOpenAIResponses.chat.success)
-            );
+            fetchMock.mockResolvedValueOnce(createMockResponse(mockOpenAIResponses.chat.success));
 
             const model = provider.getModel('gpt-4o');
             expect(model).toBeDefined();
@@ -112,9 +110,7 @@ describe('OpenAIProvider', () => {
         });
 
         it('should handle cached tokens', async () => {
-            fetchMock.mockResolvedValueOnce(
-                createMockResponse(mockOpenAIResponses.chat.withCache)
-            );
+            fetchMock.mockResolvedValueOnce(createMockResponse(mockOpenAIResponses.chat.withCache));
 
             const model = provider.getModel('gpt-4o');
             const response = await model!.complete(testCompletionRequests.simple);
@@ -123,9 +119,7 @@ describe('OpenAIProvider', () => {
         });
 
         it('should send correct request headers', async () => {
-            fetchMock.mockResolvedValueOnce(
-                createMockResponse(mockOpenAIResponses.chat.success)
-            );
+            fetchMock.mockResolvedValueOnce(createMockResponse(mockOpenAIResponses.chat.success));
 
             const model = provider.getModel('gpt-4o');
             await model!.complete(testCompletionRequests.simple);
@@ -143,9 +137,7 @@ describe('OpenAIProvider', () => {
         });
 
         it('should send correct payload structure', async () => {
-            fetchMock.mockResolvedValueOnce(
-                createMockResponse(mockOpenAIResponses.chat.success)
-            );
+            fetchMock.mockResolvedValueOnce(createMockResponse(mockOpenAIResponses.chat.success));
 
             const model = provider.getModel('gpt-4o');
             await model!.complete(testCompletionRequests.withTemperature);
@@ -164,9 +156,7 @@ describe('OpenAIProvider', () => {
         });
 
         it('should convert multi-part messages correctly', async () => {
-            fetchMock.mockResolvedValueOnce(
-                createMockResponse(mockOpenAIResponses.chat.success)
-            );
+            fetchMock.mockResolvedValueOnce(createMockResponse(mockOpenAIResponses.chat.success));
 
             const model = provider.getModel('gpt-4o');
             await model!.complete(testCompletionRequests.withImage);
@@ -207,9 +197,7 @@ describe('OpenAIProvider', () => {
         });
 
         it('should throw error on api error', async () => {
-            fetchMock.mockResolvedValueOnce(
-                createMockErrorResponse('Invalid API key', 401)
-            );
+            fetchMock.mockResolvedValueOnce(createMockErrorResponse('Invalid API key', 401));
 
             const model = provider.getModel('gpt-4o');
 

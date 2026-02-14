@@ -1,14 +1,14 @@
 ---
 name: discord
-description: Use when you need to control Discord from OpenClaw via the discord tool: send messages, react, post or upload stickers, upload emojis, run polls, manage threads/pins/search, create/edit/delete channels and categories, fetch permissions or member/role/channel info, set bot presence/activity, or handle moderation actions in Discord DMs or channels.
-metadata: {"openclaw":{"emoji":"🎮","requires":{"config":["channels.discord"]}}}
+description: Use when you need to control Discord from i-clavdivs via the discord tool: send messages, react, post or upload stickers, upload emojis, run polls, manage threads/pins/search, create/edit/delete channels and categories, fetch permissions or member/role/channel info, set bot presence/activity, or handle moderation actions in Discord DMs or channels.
+metadata: {"i-clavdivs":{"emoji":"🎮","requires":{"config":["channels.discord"]}}}
 ---
 
 # Discord Actions
 
 ## Overview
 
-Use `discord` to manage messages, reactions, threads, polls, and moderation. You can disable groups via `discord.actions.*` (defaults to enabled, except roles/moderation). The tool uses the bot token configured for OpenClaw.
+Use `discord` to manage messages, reactions, threads, polls, and moderation. You can disable groups via `discord.actions.*` (defaults to enabled, except roles/moderation). The tool uses the bot token configured for i-clavdivs.
 
 ## Inputs to collect
 
@@ -31,10 +31,10 @@ Message context lines include `discord message id` and `channel` fields you can 
 
 ```json
 {
-  "action": "react",
-  "channelId": "123",
-  "messageId": "456",
-  "emoji": "✅"
+    "action": "react",
+    "channelId": "123",
+    "messageId": "456",
+    "emoji": "✅"
 }
 ```
 
@@ -42,10 +42,10 @@ Message context lines include `discord message id` and `channel` fields you can 
 
 ```json
 {
-  "action": "reactions",
-  "channelId": "123",
-  "messageId": "456",
-  "limit": 100
+    "action": "reactions",
+    "channelId": "123",
+    "messageId": "456",
+    "limit": 100
 }
 ```
 
@@ -53,10 +53,10 @@ Message context lines include `discord message id` and `channel` fields you can 
 
 ```json
 {
-  "action": "sticker",
-  "to": "channel:123",
-  "stickerIds": ["9876543210"],
-  "content": "Nice work!"
+    "action": "sticker",
+    "to": "channel:123",
+    "stickerIds": ["9876543210"],
+    "content": "Nice work!"
 }
 ```
 
@@ -67,11 +67,11 @@ Message context lines include `discord message id` and `channel` fields you can 
 
 ```json
 {
-  "action": "emojiUpload",
-  "guildId": "999",
-  "name": "party_blob",
-  "mediaUrl": "file:///tmp/party.png",
-  "roleIds": ["222"]
+    "action": "emojiUpload",
+    "guildId": "999",
+    "name": "party_blob",
+    "mediaUrl": "file:///tmp/party.png",
+    "roleIds": ["222"]
 }
 ```
 
@@ -82,12 +82,12 @@ Message context lines include `discord message id` and `channel` fields you can 
 
 ```json
 {
-  "action": "stickerUpload",
-  "guildId": "999",
-  "name": "openclaw_wave",
-  "description": "OpenClaw waving hello",
-  "tags": "👋",
-  "mediaUrl": "file:///tmp/wave.png"
+    "action": "stickerUpload",
+    "guildId": "999",
+    "name": "i-clavdivs_wave",
+    "description": "i-clavdivs waving hello",
+    "tags": "👋",
+    "mediaUrl": "file:///tmp/wave.png"
 }
 ```
 
@@ -98,13 +98,13 @@ Message context lines include `discord message id` and `channel` fields you can 
 
 ```json
 {
-  "action": "poll",
-  "to": "channel:123",
-  "question": "Lunch?",
-  "answers": ["Pizza", "Sushi", "Salad"],
-  "allowMultiselect": false,
-  "durationHours": 24,
-  "content": "Vote now"
+    "action": "poll",
+    "to": "channel:123",
+    "question": "Lunch?",
+    "answers": ["Pizza", "Sushi", "Salad"],
+    "allowMultiselect": false,
+    "durationHours": 24,
+    "content": "Vote now"
 }
 ```
 
@@ -114,8 +114,8 @@ Message context lines include `discord message id` and `channel` fields you can 
 
 ```json
 {
-  "action": "permissions",
-  "channelId": "123"
+    "action": "permissions",
+    "channelId": "123"
 }
 ```
 
@@ -145,9 +145,9 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "readMessages",
-  "channelId": "123",
-  "limit": 20
+    "action": "readMessages",
+    "channelId": "123",
+    "limit": 20
 }
 ```
 
@@ -155,17 +155,17 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "fetchMessage",
-  "guildId": "999",
-  "channelId": "123",
-  "messageId": "456"
+    "action": "fetchMessage",
+    "guildId": "999",
+    "channelId": "123",
+    "messageId": "456"
 }
 ```
 
 ```json
 {
-  "action": "fetchMessage",
-  "messageLink": "https://discord.com/channels/999/123/456"
+    "action": "fetchMessage",
+    "messageLink": "https://discord.com/channels/999/123/456"
 }
 ```
 
@@ -173,9 +173,9 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "sendMessage",
-  "to": "channel:123",
-  "content": "Hello from OpenClaw"
+    "action": "sendMessage",
+    "to": "channel:123",
+    "content": "Hello from i-clavdivs"
 }
 ```
 
@@ -183,10 +183,10 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "sendMessage",
-  "to": "channel:123",
-  "content": "Check out this audio!",
-  "mediaUrl": "file:///tmp/audio.mp3"
+    "action": "sendMessage",
+    "to": "channel:123",
+    "content": "Check out this audio!",
+    "mediaUrl": "file:///tmp/audio.mp3"
 }
 ```
 
@@ -196,18 +196,18 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "editMessage",
-  "channelId": "123",
-  "messageId": "456",
-  "content": "Fixed typo"
+    "action": "editMessage",
+    "channelId": "123",
+    "messageId": "456",
+    "content": "Fixed typo"
 }
 ```
 
 ```json
 {
-  "action": "deleteMessage",
-  "channelId": "123",
-  "messageId": "456"
+    "action": "deleteMessage",
+    "channelId": "123",
+    "messageId": "456"
 }
 ```
 
@@ -215,25 +215,25 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "threadCreate",
-  "channelId": "123",
-  "name": "Bug triage",
-  "messageId": "456"
+    "action": "threadCreate",
+    "channelId": "123",
+    "name": "Bug triage",
+    "messageId": "456"
 }
 ```
 
 ```json
 {
-  "action": "threadList",
-  "guildId": "999"
+    "action": "threadList",
+    "guildId": "999"
 }
 ```
 
 ```json
 {
-  "action": "threadReply",
-  "channelId": "777",
-  "content": "Replying in thread"
+    "action": "threadReply",
+    "channelId": "777",
+    "content": "Replying in thread"
 }
 ```
 
@@ -241,16 +241,16 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "pinMessage",
-  "channelId": "123",
-  "messageId": "456"
+    "action": "pinMessage",
+    "channelId": "123",
+    "messageId": "456"
 }
 ```
 
 ```json
 {
-  "action": "listPins",
-  "channelId": "123"
+    "action": "listPins",
+    "channelId": "123"
 }
 ```
 
@@ -258,11 +258,11 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "searchMessages",
-  "guildId": "999",
-  "content": "release notes",
-  "channelIds": ["123", "456"],
-  "limit": 10
+    "action": "searchMessages",
+    "guildId": "999",
+    "content": "release notes",
+    "channelIds": ["123", "456"],
+    "limit": 10
 }
 ```
 
@@ -270,16 +270,16 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "memberInfo",
-  "guildId": "999",
-  "userId": "111"
+    "action": "memberInfo",
+    "guildId": "999",
+    "userId": "111"
 }
 ```
 
 ```json
 {
-  "action": "roleInfo",
-  "guildId": "999"
+    "action": "roleInfo",
+    "guildId": "999"
 }
 ```
 
@@ -287,8 +287,8 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "emojiList",
-  "guildId": "999"
+    "action": "emojiList",
+    "guildId": "999"
 }
 ```
 
@@ -296,10 +296,10 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "roleAdd",
-  "guildId": "999",
-  "userId": "111",
-  "roleId": "222"
+    "action": "roleAdd",
+    "guildId": "999",
+    "userId": "111",
+    "roleId": "222"
 }
 ```
 
@@ -307,15 +307,15 @@ Use `discord.actions.*` to disable action groups:
 
 ```json
 {
-  "action": "channelInfo",
-  "channelId": "123"
+    "action": "channelInfo",
+    "channelId": "123"
 }
 ```
 
 ```json
 {
-  "action": "channelList",
-  "guildId": "999"
+    "action": "channelList",
+    "guildId": "999"
 }
 ```
 
@@ -327,12 +327,12 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "channelCreate",
-  "guildId": "999",
-  "name": "general-chat",
-  "type": 0,
-  "parentId": "888",
-  "topic": "General discussion"
+    "action": "channelCreate",
+    "guildId": "999",
+    "name": "general-chat",
+    "type": 0,
+    "parentId": "888",
+    "topic": "General discussion"
 }
 ```
 
@@ -344,9 +344,9 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "categoryCreate",
-  "guildId": "999",
-  "name": "Projects"
+    "action": "categoryCreate",
+    "guildId": "999",
+    "name": "Projects"
 }
 ```
 
@@ -354,10 +354,10 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "channelEdit",
-  "channelId": "123",
-  "name": "new-name",
-  "topic": "Updated topic"
+    "action": "channelEdit",
+    "channelId": "123",
+    "name": "new-name",
+    "topic": "Updated topic"
 }
 ```
 
@@ -367,11 +367,11 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "channelMove",
-  "guildId": "999",
-  "channelId": "123",
-  "parentId": "888",
-  "position": 2
+    "action": "channelMove",
+    "guildId": "999",
+    "channelId": "123",
+    "parentId": "888",
+    "position": 2
 }
 ```
 
@@ -381,8 +381,8 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "channelDelete",
-  "channelId": "123"
+    "action": "channelDelete",
+    "channelId": "123"
 }
 ```
 
@@ -390,16 +390,16 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "categoryEdit",
-  "categoryId": "888",
-  "name": "Renamed Category"
+    "action": "categoryEdit",
+    "categoryId": "888",
+    "name": "Renamed Category"
 }
 ```
 
 ```json
 {
-  "action": "categoryDelete",
-  "categoryId": "888"
+    "action": "categoryDelete",
+    "categoryId": "888"
 }
 ```
 
@@ -407,9 +407,9 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "voiceStatus",
-  "guildId": "999",
-  "userId": "111"
+    "action": "voiceStatus",
+    "guildId": "999",
+    "userId": "111"
 }
 ```
 
@@ -417,8 +417,8 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "eventList",
-  "guildId": "999"
+    "action": "eventList",
+    "guildId": "999"
 }
 ```
 
@@ -426,10 +426,10 @@ Create, edit, delete, and move channels and categories. Enable via `discord.acti
 
 ```json
 {
-  "action": "timeout",
-  "guildId": "999",
-  "userId": "111",
-  "durationMinutes": 10
+    "action": "timeout",
+    "guildId": "999",
+    "userId": "111",
+    "durationMinutes": 10
 }
 ```
 
@@ -449,9 +449,9 @@ Discord bots can only set `name`, `state`, `type`, and `url` on an activity. Oth
 
 ```json
 {
-  "action": "setPresence",
-  "activityType": "playing",
-  "activityName": "with fire"
+    "action": "setPresence",
+    "activityType": "playing",
+    "activityName": "with fire"
 }
 ```
 
@@ -461,10 +461,10 @@ Result in sidebar: "**with fire**". Flyout shows: "Playing: with fire"
 
 ```json
 {
-  "action": "setPresence",
-  "activityType": "playing",
-  "activityName": "My Game",
-  "activityState": "In the lobby"
+    "action": "setPresence",
+    "activityType": "playing",
+    "activityName": "My Game",
+    "activityState": "In the lobby"
 }
 ```
 
@@ -474,10 +474,10 @@ Result in sidebar: "**My Game**". Flyout shows: "Playing: My Game (newline) In t
 
 ```json
 {
-  "action": "setPresence",
-  "activityType": "streaming",
-  "activityName": "Live coding",
-  "activityUrl": "https://twitch.tv/example"
+    "action": "setPresence",
+    "activityType": "streaming",
+    "activityName": "Live coding",
+    "activityUrl": "https://twitch.tv/example"
 }
 ```
 
@@ -485,17 +485,17 @@ Result in sidebar: "**My Game**". Flyout shows: "Playing: My Game (newline) In t
 
 ```json
 {
-  "action": "setPresence",
-  "activityType": "listening",
-  "activityName": "Spotify"
+    "action": "setPresence",
+    "activityType": "listening",
+    "activityName": "Spotify"
 }
 ```
 
 ```json
 {
-  "action": "setPresence",
-  "activityType": "watching",
-  "activityName": "the logs"
+    "action": "setPresence",
+    "activityType": "watching",
+    "activityName": "the logs"
 }
 ```
 
@@ -503,9 +503,9 @@ Result in sidebar: "**My Game**". Flyout shows: "Playing: My Game (newline) In t
 
 ```json
 {
-  "action": "setPresence",
-  "activityType": "custom",
-  "activityState": "Vibing"
+    "action": "setPresence",
+    "activityType": "custom",
+    "activityState": "Vibing"
 }
 ```
 
@@ -515,8 +515,8 @@ Result in sidebar: "Vibing". Note: `activityName` is ignored for custom type.
 
 ```json
 {
-  "action": "setPresence",
-  "status": "dnd"
+    "action": "setPresence",
+    "status": "dnd"
 }
 ```
 

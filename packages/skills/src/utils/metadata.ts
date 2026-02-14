@@ -1,6 +1,6 @@
 /**
  * Metadata parsing utilities for skill frontmatter.
- * Adapted from OpenClaw/moltbot frontmatter processing.
+ * Adapted from i-clavdivs/moltbot frontmatter processing.
  */
 
 import JSON5 from 'json5';
@@ -14,7 +14,7 @@ import type {
 } from '../types/index.js';
 
 //manifest key constants
-const MANIFEST_KEY = 'openclaw';
+const MANIFEST_KEY = 'i-clavdivs';
 const LEGACY_MANIFEST_KEYS = ['clawdbot', 'moltbot'];
 
 /**

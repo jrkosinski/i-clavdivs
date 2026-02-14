@@ -1,26 +1,26 @@
 ---
 name: things-mac
-description: Manage Things 3 via the `things` CLI on macOS (add/update projects+todos via URL scheme; read/search/list from the local Things database). Use when a user asks OpenClaw to add a task to Things, list inbox/today/upcoming, search tasks, or inspect projects/areas/tags.
+description: Manage Things 3 via the `things` CLI on macOS (add/update projects+todos via URL scheme; read/search/list from the local Things database). Use when a user asks i-clavdivs to add a task to Things, list inbox/today/upcoming, search tasks, or inspect projects/areas/tags.
 homepage: https://github.com/ossianhempel/things3-cli
 metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "✅",
-        "os": ["darwin"],
-        "requires": { "bins": ["things"] },
-        "install":
-          [
+    {
+        'i-clavdivs':
             {
-              "id": "go",
-              "kind": "go",
-              "module": "github.com/ossianhempel/things3-cli/cmd/things@latest",
-              "bins": ["things"],
-              "label": "Install things3-cli (go)",
+                'emoji': '✅',
+                'os': ['darwin'],
+                'requires': { 'bins': ['things'] },
+                'install':
+                    [
+                        {
+                            'id': 'go',
+                            'kind': 'go',
+                            'module': 'github.com/ossianhempel/things3-cli/cmd/things@latest',
+                            'bins': ['things'],
+                            'label': 'Install things3-cli (go)',
+                        },
+                    ],
             },
-          ],
-      },
-  }
+    }
 ---
 
 # Things 3 CLI
@@ -30,7 +30,7 @@ Use `things` to read your local Things database (inbox/today/search/projects/are
 Setup
 
 - Install (recommended, Apple Silicon): `GOBIN=/opt/homebrew/bin go install github.com/ossianhempel/things3-cli/cmd/things@latest`
-- If DB reads fail: grant **Full Disk Access** to the calling app (Terminal for manual runs; `OpenClaw.app` for gateway runs).
+- If DB reads fail: grant **Full Disk Access** to the calling app (Terminal for manual runs; `i-clavdivs.app` for gateway runs).
 - Optional: set `THINGSDB` (or pass `--db`) to point at your `ThingsData-*` folder.
 - Optional: set `THINGS_AUTH_TOKEN` to avoid passing `--auth-token` for update ops.
 
@@ -57,11 +57,11 @@ Examples: add a todo
 - With tags: `things add "Call dentist" --tags "health,phone"`
 - Checklist: `things add "Trip prep" --checklist-item "Passport" --checklist-item "Tickets"`
 - From STDIN (multi-line => title + notes):
-  - `cat <<'EOF' | things add -`
-  - `Title line`
-  - `Notes line 1`
-  - `Notes line 2`
-  - `EOF`
+    - `cat <<'EOF' | things add -`
+    - `Title line`
+    - `Notes line 1`
+    - `Notes line 2`
+    - `EOF`
 
 Examples: modify a todo (needs auth token)
 

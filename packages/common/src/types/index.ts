@@ -6,21 +6,21 @@
  * Make all properties of T optional recursively
  */
 export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+    [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
 /**
  * Make all properties of T required recursively
  */
 export type DeepRequired<T> = {
-  [P in keyof T]-?: T[P] extends object ? DeepRequired<T[P]> : T[P];
+    [P in keyof T]-?: T[P] extends object ? DeepRequired<T[P]> : T[P];
 };
 
 /**
  * Extract keys of T where the value is of type U
  */
 export type KeysOfType<T, U> = {
-  [K in keyof T]: T[K] extends U ? K : never;
+    [K in keyof T]: T[K] extends U ? K : never;
 }[keyof T];
 
 /**

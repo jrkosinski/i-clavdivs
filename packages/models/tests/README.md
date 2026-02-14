@@ -32,21 +32,25 @@ Current test coverage: **93%**
 ## Running Tests
 
 ### Run all tests
+
 ```bash
 pnpm test
 ```
 
 ### Watch mode (re-run tests on file changes)
+
 ```bash
 pnpm test:watch
 ```
 
 ### Run with UI
+
 ```bash
 pnpm test:ui
 ```
 
 ### Generate coverage report
+
 ```bash
 pnpm test:coverage
 ```
@@ -56,18 +60,21 @@ pnpm test:coverage
 ### Unit Tests (86 tests)
 
 #### Auth Utilities (`api-key.test.ts`)
+
 - Environment variable loading
 - Auth credential creation (API key, bearer token)
 - API key validation (format, length, prefix)
 - API key masking for logs
 
 #### Base Model (`model.test.ts`)
+
 - Model definition management
 - Request validation (messages, maxTokens, temperature, topP)
 - Cost calculation
 - Deep copy verification
 
 #### Base Provider & Registry (`provider.test.ts`)
+
 - Provider configuration management
 - Model registration and retrieval
 - Authentication updates
@@ -77,6 +84,7 @@ pnpm test:coverage
 ### Integration Tests (43 tests)
 
 #### OpenAI Provider (`openai.test.ts`)
+
 - Model initialization and configuration
 - Completion requests (simple, with tools, with images)
 - Streaming responses
@@ -85,6 +93,7 @@ pnpm test:coverage
 - Finish reason mapping
 
 #### Anthropic Provider (`anthropic.test.ts`)
+
 - Model initialization and configuration
 - Message completion (with system messages, tools, images)
 - Streaming responses
@@ -95,13 +104,17 @@ pnpm test:coverage
 ## Test Fixtures
 
 ### Mock Responses (`mock-responses.ts`)
+
 Provides realistic API responses for:
+
 - OpenAI Chat Completions (success, tool calls, cached tokens, streaming)
 - Anthropic Messages (success, tool use, cached tokens, streaming)
 - Error responses
 
 ### Test Data (`test-data.ts`)
+
 Provides reusable test data:
+
 - Model definitions
 - Provider configurations
 - Completion requests (simple, with tools, with images, etc.)
@@ -159,19 +172,23 @@ it('should make API call', async () => {
 ## Future Test Additions
 
 ### Real API Integration Tests (separate from unit tests)
+
 For testing with actual API endpoints:
+
 - Create a separate `tests/e2e/` directory
 - Use environment variables for real API keys
 - Run only when explicitly requested (not in CI)
 - Test rate limiting, retries, and error recovery
 
 ### Performance Tests
+
 - Token counting accuracy
 - Cost calculation precision
 - Stream parsing performance
 - Memory usage with large contexts
 
 ### Edge Cases
+
 - Very large token counts
 - Unicode and special characters
 - Malformed API responses

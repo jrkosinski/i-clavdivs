@@ -167,18 +167,14 @@ export function createTestRequest(overrides: Partial<CompletionRequest>): Comple
     };
 }
 
-export function createTestModelDefinition(
-    overrides: Partial<ModelDefinition>
-): ModelDefinition {
+export function createTestModelDefinition(overrides: Partial<ModelDefinition>): ModelDefinition {
     return {
         ...testModelDefinitions['gpt-4o']!,
         ...overrides,
     };
 }
 
-export function createTestProviderConfig(
-    overrides: Partial<ProviderConfig>
-): ProviderConfig {
+export function createTestProviderConfig(overrides: Partial<ProviderConfig>): ProviderConfig {
     return {
         ...testProviderConfigs.openai,
         ...overrides,

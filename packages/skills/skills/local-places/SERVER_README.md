@@ -38,14 +38,14 @@ Example search request:
 
 ```json
 {
-  "query": "italian restaurant",
-  "filters": {
-    "types": ["restaurant"],
-    "open_now": true,
-    "min_rating": 4.0,
-    "price_levels": [1, 2]
-  },
-  "limit": 10
+    "query": "italian restaurant",
+    "filters": {
+        "types": ["restaurant"],
+        "open_now": true,
+        "min_rating": 4.0,
+        "price_levels": [1, 2]
+    },
+    "limit": 10
 }
 ```
 

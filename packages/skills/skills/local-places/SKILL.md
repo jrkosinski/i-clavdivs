@@ -3,14 +3,14 @@ name: local-places
 description: Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost.
 homepage: https://github.com/Hyaxia/local_places
 metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📍",
-        "requires": { "bins": ["uv"], "env": ["GOOGLE_PLACES_API_KEY"] },
-        "primaryEnv": "GOOGLE_PLACES_API_KEY",
-      },
-  }
+    {
+        'i-clavdivs':
+            {
+                'emoji': '📍',
+                'requires': { 'bins': ['uv'], 'env': ['GOOGLE_PLACES_API_KEY'] },
+                'primaryEnv': 'GOOGLE_PLACES_API_KEY',
+            },
+    }
 ---
 
 # 📍 Local Places
@@ -83,19 +83,19 @@ curl http://127.0.0.1:8000/places/{place_id}
 
 ```json
 {
-  "results": [
-    {
-      "place_id": "ChIJ...",
-      "name": "Coffee Shop",
-      "address": "123 Main St",
-      "location": { "lat": 51.5, "lng": -0.1 },
-      "rating": 4.6,
-      "price_level": 2,
-      "types": ["cafe", "food"],
-      "open_now": true
-    }
-  ],
-  "next_page_token": "..."
+    "results": [
+        {
+            "place_id": "ChIJ...",
+            "name": "Coffee Shop",
+            "address": "123 Main St",
+            "location": { "lat": 51.5, "lng": -0.1 },
+            "rating": 4.6,
+            "price_level": 2,
+            "types": ["cafe", "food"],
+            "open_now": true
+        }
+    ],
+    "next_page_token": "..."
 }
 ```
 

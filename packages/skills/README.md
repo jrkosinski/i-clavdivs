@@ -1,6 +1,6 @@
 # @i-clavdivs/skills
 
-Skills system for managing and executing tool-based capabilities. Adapted from OpenClaw/moltbot.
+Skills system for managing and executing tool-based capabilities. Adapted from i-clavdivs/moltbot.
 
 ## Overview
 
@@ -73,7 +73,7 @@ name: github
 description: 'Interact with GitHub using the `gh` CLI'
 metadata:
     {
-        'openclaw':
+        'i-clavdivs':
             {
                 'emoji': '🐙',
                 'requires': { 'bins': ['gh'] },
@@ -89,7 +89,7 @@ Documentation for using the gh CLI...
 
 ## Features
 
-- **54 bundled skills** from OpenClaw (github, tmux, weather, discord, slack, etc.)
+- **54 bundled skills** from i-clavdivs (github, tmux, weather, discord, slack, etc.)
 - **Metadata parsing** with JSON5 support
 - **OS and binary requirements** filtering
 - **Install specifications** (brew, apt, npm, etc.)

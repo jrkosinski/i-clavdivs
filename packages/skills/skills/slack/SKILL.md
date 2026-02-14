@@ -1,14 +1,14 @@
 ---
 name: slack
-description: Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.
-metadata: { "openclaw": { "emoji": "💬", "requires": { "config": ["channels.slack"] } } }
+description: Use when you need to control Slack from i-clavdivs via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.
+metadata: { 'i-clavdivs': { 'emoji': '💬', 'requires': { 'config': ['channels.slack'] } } }
 ---
 
 # Slack Actions
 
 ## Overview
 
-Use `slack` to react, manage pins, send/edit/delete messages, and fetch member info. The tool uses the bot token configured for OpenClaw.
+Use `slack` to react, manage pins, send/edit/delete messages, and fetch member info. The tool uses the bot token configured for i-clavdivs.
 
 ## Inputs to collect
 
@@ -34,10 +34,10 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "react",
-  "channelId": "C123",
-  "messageId": "1712023032.1234",
-  "emoji": "✅"
+    "action": "react",
+    "channelId": "C123",
+    "messageId": "1712023032.1234",
+    "emoji": "✅"
 }
 ```
 
@@ -45,9 +45,9 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "reactions",
-  "channelId": "C123",
-  "messageId": "1712023032.1234"
+    "action": "reactions",
+    "channelId": "C123",
+    "messageId": "1712023032.1234"
 }
 ```
 
@@ -55,9 +55,9 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "sendMessage",
-  "to": "channel:C123",
-  "content": "Hello from OpenClaw"
+    "action": "sendMessage",
+    "to": "channel:C123",
+    "content": "Hello from i-clavdivs"
 }
 ```
 
@@ -65,10 +65,10 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "editMessage",
-  "channelId": "C123",
-  "messageId": "1712023032.1234",
-  "content": "Updated text"
+    "action": "editMessage",
+    "channelId": "C123",
+    "messageId": "1712023032.1234",
+    "content": "Updated text"
 }
 ```
 
@@ -76,9 +76,9 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "deleteMessage",
-  "channelId": "C123",
-  "messageId": "1712023032.1234"
+    "action": "deleteMessage",
+    "channelId": "C123",
+    "messageId": "1712023032.1234"
 }
 ```
 
@@ -86,9 +86,9 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "readMessages",
-  "channelId": "C123",
-  "limit": 20
+    "action": "readMessages",
+    "channelId": "C123",
+    "limit": 20
 }
 ```
 
@@ -96,9 +96,9 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "pinMessage",
-  "channelId": "C123",
-  "messageId": "1712023032.1234"
+    "action": "pinMessage",
+    "channelId": "C123",
+    "messageId": "1712023032.1234"
 }
 ```
 
@@ -106,9 +106,9 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "unpinMessage",
-  "channelId": "C123",
-  "messageId": "1712023032.1234"
+    "action": "unpinMessage",
+    "channelId": "C123",
+    "messageId": "1712023032.1234"
 }
 ```
 
@@ -116,8 +116,8 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "listPins",
-  "channelId": "C123"
+    "action": "listPins",
+    "channelId": "C123"
 }
 ```
 
@@ -125,8 +125,8 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "memberInfo",
-  "userId": "U123"
+    "action": "memberInfo",
+    "userId": "U123"
 }
 ```
 
@@ -134,7 +134,7 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ```json
 {
-  "action": "emojiList"
+    "action": "emojiList"
 }
 ```
 

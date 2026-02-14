@@ -1,34 +1,34 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "lib": ["ES2022"],
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "checkJs": false,
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ESNext",
+        "lib": ["ES2022"],
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "checkJs": false,
 
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "allowSyntheticDefaultImports": true,
 
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
 
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "composite": true,
-    "incremental": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "composite": true,
+        "incremental": true,
 
-    "outDir": "./dist",
-    "rootDir": "./src"
-  },
-  "exclude": ["node_modules", "dist", "build", "**/*.spec.ts", "**/*.test.ts"]
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "exclude": ["node_modules", "dist", "build", "**/*.spec.ts", "**/*.test.ts"]
 }

@@ -70,13 +70,13 @@ unquoted: value
         const content = `---
 name: test
 metadata:
-  {"openclaw": {"emoji": "🔧"}}
+  {"i-clavdivs": {"emoji": "🔧"}}
 ---`;
 
         const result = parseFrontmatterBlock(content);
 
         expect(result.name).toBe('test');
-        expect(result.metadata).toContain('openclaw');
+        expect(result.metadata).toContain('i-clavdivs');
     });
 
     it('should handle empty values', () => {
@@ -114,13 +114,13 @@ another: value
     it('should parse JSON objects in frontmatter', () => {
         const content = `---
 name: test
-metadata: {"openclaw": {"emoji": "🎯", "requires": {"bins": ["curl"]}}}
+metadata: {"i-clavdivs": {"emoji": "🎯", "requires": {"bins": ["curl"]}}}
 ---`;
 
         const result = parseFrontmatterBlock(content);
 
         expect(result.metadata).toBeDefined();
-        expect(result.metadata).toContain('openclaw');
+        expect(result.metadata).toContain('i-clavdivs');
         expect(result.metadata).toContain('emoji');
     });
 
@@ -238,13 +238,13 @@ Content`;
     it('should prefer JSON values from line parser when present', () => {
         const content = `---
 name: test
-metadata: {"openclaw": {"emoji": "🔧"}}
+metadata: {"i-clavdivs": {"emoji": "🔧"}}
 ---`;
 
         const result = parseFrontmatterBlock(content);
 
         //metadata should be preserved as JSON string, not parsed as YAML
         expect(result.metadata).toContain('{');
-        expect(result.metadata).toContain('openclaw');
+        expect(result.metadata).toContain('i-clavdivs');
     });
 });
