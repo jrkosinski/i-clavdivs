@@ -34,6 +34,7 @@
     "@i-clavdivs/common": "workspace:*"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
     "typescript": "^5.3.3",
     "vitest": "4.0.18"
   }
