@@ -32,6 +32,7 @@ agents/
 ### Agent Runner
 
 The `AgentRunner` class orchestrates the execution of AI agent tasks with automatic:
+
 - Authentication profile rotation on failures
 - Context overflow detection and compaction
 - Provider failover on errors
@@ -40,6 +41,7 @@ The `AgentRunner` class orchestrates the execution of AI agent tasks with automa
 ### Authentication Profiles
 
 Supports multiple authentication profiles per provider with:
+
 - Round-robin selection
 - Cooldown management after failures
 - Last-good profile prioritization
@@ -48,6 +50,7 @@ Supports multiple authentication profiles per provider with:
 ### Session Events
 
 Real-time streaming of agent responses through event subscriptions:
+
 - Text delta streaming
 - Tool execution events
 - Error notifications
@@ -59,22 +62,23 @@ Real-time streaming of agent responses through event subscriptions:
 import { AgentRunner } from '@i-clavdivs/agents';
 
 const runner = new AgentRunner({
-  authManager,
-  sessionManager,
-  toolFactory
+    authManager,
+    sessionManager,
+    toolFactory,
 });
 
 const result = await runner.run({
-  sessionId: 'session-123',
-  prompt: 'Hello, agent!',
-  provider: 'anthropic',
-  model: 'claude-3-5-sonnet-20241022'
+    sessionId: 'session-123',
+    prompt: 'Hello, agent!',
+    provider: 'anthropic',
+    model: 'claude-3-5-sonnet-20241022',
 });
 ```
 
 ## Design Principles
 
 This package adheres to the i-clavdivs coding standards:
+
 - **OOP-first**: Class-based architecture with clear responsibilities
 - **Interface-driven**: All major components implement interfaces
 - **Composable**: Small, focused classes over monolithic modules

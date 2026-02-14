@@ -3,23 +3,23 @@ name: gemini
 description: Gemini CLI for one-shot Q&A, summaries, and generation.
 homepage: https://ai.google.dev/
 metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "♊️",
-        "requires": { "bins": ["gemini"] },
-        "install":
-          [
+    {
+        'i-clavdivs':
             {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "gemini-cli",
-              "bins": ["gemini"],
-              "label": "Install Gemini CLI (brew)",
+                'emoji': '♊️',
+                'requires': { 'bins': ['gemini'] },
+                'install':
+                    [
+                        {
+                            'id': 'brew',
+                            'kind': 'brew',
+                            'formula': 'gemini-cli',
+                            'bins': ['gemini'],
+                            'label': 'Install Gemini CLI (brew)',
+                        },
+                    ],
             },
-          ],
-      },
-  }
+    }
 ---
 
 # Gemini CLI

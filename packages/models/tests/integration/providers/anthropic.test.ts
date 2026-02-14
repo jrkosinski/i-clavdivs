@@ -285,9 +285,7 @@ describe('AnthropicProvider', () => {
         });
 
         it('should throw error on api error', async () => {
-            fetchMock.mockResolvedValueOnce(
-                createMockErrorResponse('Invalid API key', 401)
-            );
+            fetchMock.mockResolvedValueOnce(createMockErrorResponse('Invalid API key', 401));
 
             const model = provider.getModel('claude-3-5-sonnet-20241022');
 

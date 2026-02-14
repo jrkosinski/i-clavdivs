@@ -1,0 +1,16 @@
+# Default owners for everything in the repo
+* @blanta
+
+# Package-specific owners
+/packages/agents/ @blanta
+/packages/models/ @blanta
+/packages/skills/ @blanta
+/packages/common/ @blanta
+
+# CI/CD and configuration
+/.github/ @blanta
+*.yml @blanta
+*.yaml @blanta
+package.json @blanta
+pnpm-workspace.yaml @blanta
+tsconfig*.json @blanta

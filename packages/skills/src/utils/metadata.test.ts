@@ -23,9 +23,9 @@ describe('metadata utilities', () => {
             expect(metadata).toBeUndefined();
         });
 
-        it('should parse valid metadata with openclaw key', () => {
+        it('should parse valid metadata with i-clavdivs key', () => {
             const frontmatter = {
-                metadata: '{"openclaw": {"emoji": "🔧", "requires": {"bins": ["test"]}}}',
+                metadata: '{"i-clavdivs": {"emoji": "🔧", "requires": {"bins": ["test"]}}}',
             };
             const metadata = resolveSkillMetadata(frontmatter);
 
@@ -48,7 +48,7 @@ describe('metadata utilities', () => {
         it('should parse install specifications', () => {
             const frontmatter = {
                 metadata: `{
-          "openclaw": {
+          "i-clavdivs": {
             "install": [
               {"kind": "brew", "formula": "gh", "bins": ["gh"]},
               {"kind": "apt", "package": "gh"}
@@ -67,7 +67,7 @@ describe('metadata utilities', () => {
 
         it('should parse OS requirements', () => {
             const frontmatter = {
-                metadata: '{"openclaw": {"os": ["darwin", "linux"]}}',
+                metadata: '{"i-clavdivs": {"os": ["darwin", "linux"]}}',
             };
             const metadata = resolveSkillMetadata(frontmatter);
 
@@ -77,7 +77,7 @@ describe('metadata utilities', () => {
         it('should parse binary requirements', () => {
             const frontmatter = {
                 metadata: `{
-          "openclaw": {
+          "i-clavdivs": {
             "requires": {
               "bins": ["curl", "jq"],
               "anyBins": ["wget", "curl"],
@@ -106,7 +106,7 @@ describe('metadata utilities', () => {
 
         it('should parse boolean flags', () => {
             const frontmatter = {
-                metadata: '{"openclaw": {"always": true}}',
+                metadata: '{"i-clavdivs": {"always": true}}',
             };
             const metadata = resolveSkillMetadata(frontmatter);
 
@@ -115,7 +115,7 @@ describe('metadata utilities', () => {
 
         it('should parse skillKey and primaryEnv', () => {
             const frontmatter = {
-                metadata: '{"openclaw": {"skillKey": "custom-key", "primaryEnv": "NODE_ENV"}}',
+                metadata: '{"i-clavdivs": {"skillKey": "custom-key", "primaryEnv": "NODE_ENV"}}',
             };
             const metadata = resolveSkillMetadata(frontmatter);
 

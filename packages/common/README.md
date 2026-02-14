@@ -16,20 +16,20 @@ import type { DeepPartial, DeepRequired } from '@i-clavdivs/common';
 
 // Utility functions
 if (isDefined(someValue)) {
-  // someValue is not null or undefined
+    // someValue is not null or undefined
 }
 
 await sleep(1000); // Wait 1 second
 
 const debouncedFn = debounce(() => {
-  console.log('Called!');
+    console.log('Called!');
 }, 300);
 
 // Type utilities
 type User = {
-  id: string;
-  name: string;
-  email: string;
+    id: string;
+    name: string;
+    email: string;
 };
 
 type PartialUser = DeepPartial<User>;
@@ -38,11 +38,13 @@ type PartialUser = DeepPartial<User>;
 ## Features
 
 ### Utilities
+
 - `isDefined<T>()` - Type guard for non-nullable values
 - `sleep()` - Promise-based sleep function
 - `debounce()` - Debounce function calls
 
 ### Types
+
 - `DeepPartial<T>` - Recursive partial type
 - `DeepRequired<T>` - Recursive required type
 - `KeysOfType<T, U>` - Extract keys by value type

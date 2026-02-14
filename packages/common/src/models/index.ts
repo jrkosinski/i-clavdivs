@@ -3,7 +3,7 @@
  * @description
  */
 export type ServiceMethodOutput<T> = {
-  code?: number;
-  message?: string;
-  data?: T;
+    code?: number;
+    message?: string;
+    data?: T;
 };

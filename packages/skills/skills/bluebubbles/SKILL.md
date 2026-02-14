@@ -1,14 +1,14 @@
 ---
 name: bluebubbles
 description: Use when you need to send or manage iMessages via BlueBubbles (recommended iMessage integration). Calls go through the generic message tool with channel="bluebubbles".
-metadata: { "openclaw": { "emoji": "🫧", "requires": { "config": ["channels.bluebubbles"] } } }
+metadata: { 'i-clavdivs': { 'emoji': '🫧', 'requires': { 'config': ['channels.bluebubbles'] } } }
 ---
 
 # BlueBubbles Actions
 
 ## Overview
 
-BlueBubbles is OpenClaw’s recommended iMessage integration. Use the `message` tool with `channel: "bluebubbles"` to send messages and manage iMessage conversations: send texts and attachments, react (tapbacks), edit/unsend, reply in threads, and manage group participants/names/icons.
+BlueBubbles is i-clavdivs’s recommended iMessage integration. Use the `message` tool with `channel: "bluebubbles"` to send messages and manage iMessage conversations: send texts and attachments, react (tapbacks), edit/unsend, reply in threads, and manage group participants/names/icons.
 
 ## Inputs to collect
 
@@ -25,10 +25,10 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "send",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "message": "hello from OpenClaw"
+    "action": "send",
+    "channel": "bluebubbles",
+    "target": "+15551234567",
+    "message": "hello from i-clavdivs"
 }
 ```
 
@@ -36,11 +36,11 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "react",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "messageId": "<message-guid>",
-  "emoji": "❤️"
+    "action": "react",
+    "channel": "bluebubbles",
+    "target": "+15551234567",
+    "messageId": "<message-guid>",
+    "emoji": "❤️"
 }
 ```
 
@@ -48,12 +48,12 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "react",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "messageId": "<message-guid>",
-  "emoji": "❤️",
-  "remove": true
+    "action": "react",
+    "channel": "bluebubbles",
+    "target": "+15551234567",
+    "messageId": "<message-guid>",
+    "emoji": "❤️",
+    "remove": true
 }
 ```
 
@@ -61,11 +61,11 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "edit",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "messageId": "<message-guid>",
-  "message": "updated text"
+    "action": "edit",
+    "channel": "bluebubbles",
+    "target": "+15551234567",
+    "messageId": "<message-guid>",
+    "message": "updated text"
 }
 ```
 
@@ -73,10 +73,10 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "unsend",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "messageId": "<message-guid>"
+    "action": "unsend",
+    "channel": "bluebubbles",
+    "target": "+15551234567",
+    "messageId": "<message-guid>"
 }
 ```
 
@@ -84,11 +84,11 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "reply",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "replyTo": "<message-guid>",
-  "message": "replying to that"
+    "action": "reply",
+    "channel": "bluebubbles",
+    "target": "+15551234567",
+    "replyTo": "<message-guid>",
+    "message": "replying to that"
 }
 ```
 
@@ -96,11 +96,11 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "sendAttachment",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "path": "/tmp/photo.jpg",
-  "caption": "here you go"
+    "action": "sendAttachment",
+    "channel": "bluebubbles",
+    "target": "+15551234567",
+    "path": "/tmp/photo.jpg",
+    "caption": "here you go"
 }
 ```
 
@@ -108,11 +108,11 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "sendWithEffect",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "message": "big news",
-  "effect": "balloons"
+    "action": "sendWithEffect",
+    "channel": "bluebubbles",
+    "target": "+15551234567",
+    "message": "big news",
+    "effect": "balloons"
 }
 ```
 

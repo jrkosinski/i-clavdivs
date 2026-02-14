@@ -3,23 +3,23 @@ name: mcporter
 description: Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.
 homepage: http://mcporter.dev
 metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📦",
-        "requires": { "bins": ["mcporter"] },
-        "install":
-          [
+    {
+        'i-clavdivs':
             {
-              "id": "node",
-              "kind": "node",
-              "package": "mcporter",
-              "bins": ["mcporter"],
-              "label": "Install mcporter (node)",
+                'emoji': '📦',
+                'requires': { 'bins': ['mcporter'] },
+                'install':
+                    [
+                        {
+                            'id': 'node',
+                            'kind': 'node',
+                            'package': 'mcporter',
+                            'bins': ['mcporter'],
+                            'label': 'Install mcporter (node)',
+                        },
+                    ],
             },
-          ],
-      },
-  }
+    }
 ---
 
 # mcporter

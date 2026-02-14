@@ -1,6 +1,6 @@
 /**
  * Skill loading utilities for reading SKILL.md files from directories.
- * Adapted from OpenClaw/moltbot skill loading system.
+ * Adapted from i-clavdivs/moltbot skill loading system.
  */
 
 import fs from 'node:fs';

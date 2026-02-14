@@ -37,12 +37,10 @@ const model = openai.getModel('gpt-4o');
 
 //make a completion request
 const response = await model.complete({
-    messages: [
-        { role: 'user', content: 'Hello! How are you?' }
-    ],
+    messages: [{ role: 'user', content: 'Hello! How are you?' }],
     model: 'gpt-4o',
     temperature: 0.7,
-    maxTokens: 1000
+    maxTokens: 1000,
 });
 
 console.log(response.content);
@@ -56,10 +54,8 @@ const model = openai.getModel('gpt-4o');
 
 //stream responses
 for await (const chunk of model.stream({
-    messages: [
-        { role: 'user', content: 'Write a short poem about coding' }
-    ],
-    model: 'gpt-4o'
+    messages: [{ role: 'user', content: 'Write a short poem about coding' }],
+    model: 'gpt-4o',
 })) {
     if (!chunk.done) {
         process.stdout.write(chunk.delta);
@@ -86,7 +82,7 @@ const claude = registry.getModel('anthropic', 'claude-3-5-sonnet-20241022');
 
 //list all available models
 const allModels = registry.listAllModels();
-console.log(allModels.map(m => `${m.provider}/${m.id}`));
+console.log(allModels.map((m) => `${m.provider}/${m.id}`));
 ```
 
 ### Image Support
@@ -99,11 +95,11 @@ const response = await model.complete({
             role: 'user',
             content: [
                 { type: 'text', text: 'What is in this image?' },
-                { type: 'image', source: 'https://example.com/image.jpg' }
-            ]
-        }
+                { type: 'image', source: 'https://example.com/image.jpg' },
+            ],
+        },
     ],
-    model: 'gpt-4o'
+    model: 'gpt-4o',
 });
 ```
 
@@ -111,9 +107,7 @@ const response = await model.complete({
 
 ```typescript
 const response = await model.complete({
-    messages: [
-        { role: 'user', content: 'What is the weather in San Francisco?' }
-    ],
+    messages: [{ role: 'user', content: 'What is the weather in San Francisco?' }],
     model: 'gpt-4o',
     tools: [
         {
@@ -124,14 +118,14 @@ const response = await model.complete({
                 properties: {
                     location: {
                         type: 'string',
-                        description: 'City name'
-                    }
+                        description: 'City name',
+                    },
                 },
-                required: ['location']
-            }
-        }
+                required: ['location'],
+            },
+        },
     ],
-    toolChoice: 'auto'
+    toolChoice: 'auto',
 });
 
 if (response.toolCalls) {
@@ -176,6 +170,7 @@ new AnthropicProvider(apiKey: string, version?: string)
 See [src/core/types.ts](src/core/types.ts) for complete type definitions.
 
 Key exported types:
+
 - `ModelDefinition` - Model capabilities and pricing
 - `CompletionRequest` - Request parameters
 - `CompletionResponse` - Response with content and usage
@@ -205,6 +200,7 @@ console.log('Using key:', maskApiKey(apiKey)); // sk-ab...xyz
 ```
 
 Available auth utilities:
+
 - `loadApiKeyFromEnv(varName: string): string | undefined`
 - `createApiKeyAuth(key: string): AuthCredential`
 - `createBearerTokenAuth(token: string): AuthCredential`

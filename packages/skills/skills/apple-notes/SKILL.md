@@ -1,26 +1,26 @@
 ---
 name: apple-notes
-description: Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks OpenClaw to add a note, list notes, search notes, or manage note folders.
+description: Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks i-clavdivs to add a note, list notes, search notes, or manage note folders.
 homepage: https://github.com/antoniorodr/memo
 metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📝",
-        "os": ["darwin"],
-        "requires": { "bins": ["memo"] },
-        "install":
-          [
+    {
+        'i-clavdivs':
             {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "antoniorodr/memo/memo",
-              "bins": ["memo"],
-              "label": "Install memo via Homebrew",
+                'emoji': '📝',
+                'os': ['darwin'],
+                'requires': { 'bins': ['memo'] },
+                'install':
+                    [
+                        {
+                            'id': 'brew',
+                            'kind': 'brew',
+                            'formula': 'antoniorodr/memo/memo',
+                            'bins': ['memo'],
+                            'label': 'Install memo via Homebrew',
+                        },
+                    ],
             },
-          ],
-      },
-  }
+    }
 ---
 
 # Apple Notes CLI
@@ -42,28 +42,28 @@ View Notes
 Create Notes
 
 - Add a new note: `memo notes -a`
-  - Opens an interactive editor to compose the note.
+    - Opens an interactive editor to compose the note.
 - Quick add with title: `memo notes -a "Note Title"`
 
 Edit Notes
 
 - Edit existing note: `memo notes -e`
-  - Interactive selection of note to edit.
+    - Interactive selection of note to edit.
 
 Delete Notes
 
 - Delete a note: `memo notes -d`
-  - Interactive selection of note to delete.
+    - Interactive selection of note to delete.
 
 Move Notes
 
 - Move note to folder: `memo notes -m`
-  - Interactive selection of note and destination folder.
+    - Interactive selection of note and destination folder.
 
 Export Notes
 
 - Export to HTML/Markdown: `memo notes -ex`
-  - Exports selected note; uses Mistune for markdown processing.
+    - Exports selected note; uses Mistune for markdown processing.
 
 Limitations
 

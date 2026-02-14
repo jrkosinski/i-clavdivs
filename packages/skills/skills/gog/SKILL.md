@@ -3,23 +3,23 @@ name: gog
 description: Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.
 homepage: https://gogcli.sh
 metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "🎮",
-        "requires": { "bins": ["gog"] },
-        "install":
-          [
+    {
+        'i-clavdivs':
             {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/gogcli",
-              "bins": ["gog"],
-              "label": "Install gog (brew)",
+                'emoji': '🎮',
+                'requires': { 'bins': ['gog'] },
+                'install':
+                    [
+                        {
+                            'id': 'brew',
+                            'kind': 'brew',
+                            'formula': 'steipete/tap/gogcli',
+                            'bins': ['gog'],
+                            'label': 'Install gog (brew)',
+                        },
+                    ],
             },
-          ],
-      },
-  }
+    }
 ---
 
 # gog
@@ -63,17 +63,17 @@ Calendar Colors
 - Use `gog calendar colors` to see all available event colors (IDs 1-11)
 - Add colors to events with `--event-color <id>` flag
 - Event color IDs (from `gog calendar colors` output):
-  - 1: #a4bdfc
-  - 2: #7ae7bf
-  - 3: #dbadff
-  - 4: #ff887c
-  - 5: #fbd75b
-  - 6: #ffb878
-  - 7: #46d6db
-  - 8: #e1e1e1
-  - 9: #5484ed
-  - 10: #51b749
-  - 11: #dc2127
+    - 1: #a4bdfc
+    - 2: #7ae7bf
+    - 3: #dbadff
+    - 4: #ff887c
+    - 5: #fbd75b
+    - 6: #ffb878
+    - 7: #46d6db
+    - 8: #e1e1e1
+    - 9: #5484ed
+    - 10: #51b749
+    - 11: #dc2127
 
 Email Formatting
 
@@ -84,27 +84,27 @@ Email Formatting
 - HTML tags: `<p>` for paragraphs, `<br>` for line breaks, `<strong>` for bold, `<em>` for italic, `<a href="url">` for links, `<ul>`/`<li>` for lists.
 - Example (plain text via stdin):
 
-  ```bash
-  gog gmail send --to recipient@example.com \
-    --subject "Meeting Follow-up" \
-    --body-file - <<'EOF'
-  Hi Name,
+    ```bash
+    gog gmail send --to recipient@example.com \
+      --subject "Meeting Follow-up" \
+      --body-file - <<'EOF'
+    Hi Name,
 
-  Thanks for meeting today. Next steps:
-  - Item one
-  - Item two
+    Thanks for meeting today. Next steps:
+    - Item one
+    - Item two
 
-  Best regards,
-  Your Name
-  EOF
-  ```
+    Best regards,
+    Your Name
+    EOF
+    ```
 
 - Example (HTML list):
-  ```bash
-  gog gmail send --to recipient@example.com \
-    --subject "Meeting Follow-up" \
-    --body-html "<p>Hi Name,</p><p>Thanks for meeting today. Here are the next steps:</p><ul><li>Item one</li><li>Item two</li></ul><p>Best regards,<br>Your Name</p>"
-  ```
+    ```bash
+    gog gmail send --to recipient@example.com \
+      --subject "Meeting Follow-up" \
+      --body-html "<p>Hi Name,</p><p>Thanks for meeting today. Here are the next steps:</p><ul><li>Item one</li><li>Item two</li></ul><p>Best regards,<br>Your Name</p>"
+    ```
 
 Notes
 
