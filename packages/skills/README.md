@@ -1,6 +1,6 @@
 # @i-clavdivs/skills
 
-Skills system for managing and executing tool-based capabilities.
+Skills system for managing and executing tool-based capabilities. Adapted from i-clavdivs/moltbot.
 
 ## Overview
 

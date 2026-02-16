@@ -29,6 +29,9 @@ jobs:
                       chore
                       revert
                   requireScope: false
+                  subjectPattern: ^(?![A-Z]).+$
+                  subjectPatternError: |
+                      The subject must start with a lowercase letter.
 
     changed-files:
         name: Detect Changed Files
