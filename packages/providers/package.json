@@ -1,0 +1,44 @@
+{
+    "name": "@i-clavdivs/providers",
+    "version": "0.0.0",
+    "type": "module",
+    "description": "AI model provider integrations and authentication",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "dev": "tsc -p tsconfig.json --watch",
+        "clean": "rm -rf dist *.tsbuildinfo",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:ui": "vitest --ui",
+        "test:coverage": "vitest run --coverage"
+    },
+    "files": [
+        "dist",
+        "src"
+    ],
+    "keywords": [
+        "providers",
+        "ai",
+        "llm",
+        "authentication",
+        "github-copilot",
+        "qwen"
+    ],
+    "dependencies": {
+        "@i-clavdivs/common": "workspace:*"
+    },
+    "devDependencies": {
+        "@vitest/coverage-v8": "^4.0.18",
+        "typescript": "^5.3.3",
+        "vitest": "^4.0.18"
+    }
+}
