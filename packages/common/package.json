@@ -8,15 +8,10 @@
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
-<<<<<<< HEAD
             "import": "./dist/index.js",
             "default": "./dist/index.js"
         },
         "./src/*": "./src/*"
-=======
-            "import": "./dist/index.js"
-        }
->>>>>>> ci-cd
     },
     "scripts": {
         "build": "tsc -p tsconfig.json",
