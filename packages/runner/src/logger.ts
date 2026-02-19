@@ -17,10 +17,18 @@ export class Logger {
         this._minLevel = minLevel ?? this._resolveEnvLevel();
     }
 
-    public debug(msg: string): void { this._write('debug', msg); }
-    public info(msg: string): void { this._write('info', msg); }
-    public warn(msg: string): void { this._write('warn', msg); }
-    public error(msg: string): void { this._write('error', msg); }
+    public debug(msg: string): void {
+        this._write('debug', msg);
+    }
+    public info(msg: string): void {
+        this._write('info', msg);
+    }
+    public warn(msg: string): void {
+        this._write('warn', msg);
+    }
+    public error(msg: string): void {
+        this._write('error', msg);
+    }
 
     private _write(level: LogLevel, msg: string): void {
         if (LEVELS[level] < LEVELS[this._minLevel]) return;

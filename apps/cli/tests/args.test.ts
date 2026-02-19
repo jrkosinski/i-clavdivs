@@ -85,7 +85,15 @@ describe('CliArgs', () => {
     describe('flag combinations', () => {
         it('should handle all flags together', () => {
             const result = CliArgs.parse(
-                argv('--session', 'proj', '--model', 'claude-3-5-sonnet-20241022', '--stream', '--new', 'write a poem'),
+                argv(
+                    '--session',
+                    'proj',
+                    '--model',
+                    'claude-3-5-sonnet-20241022',
+                    '--stream',
+                    '--new',
+                    'write a poem'
+                )
             );
 
             expect(result.sessionId).toBe('proj');

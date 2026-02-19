@@ -67,15 +67,16 @@ export class SessionStore {
 
     /** Returns true if a session file exists on disk. */
     public async exists(sessionId: string): Promise<boolean> {
-        return fs.stat(this._resolvePath(sessionId)).then(() => true).catch(() => false);
+        return fs
+            .stat(this._resolvePath(sessionId))
+            .then(() => true)
+            .catch(() => false);
     }
 
     private _resolvePath(sessionId: string): string {
         //replace any character that isn't safe for a filename, then collapse
         //any remaining ".." sequences so path traversal is impossible
-        const safe = sessionId
-            .replace(/[^a-zA-Z0-9_\-.:]/g, '_')
-            .replace(/\.{2,}/g, '_');
+        const safe = sessionId.replace(/[^a-zA-Z0-9_\-.:]/g, '_').replace(/\.{2,}/g, '_');
         return path.join(this._sessionDir, `${safe}.json`);
     }
 }

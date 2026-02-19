@@ -48,7 +48,9 @@ export class AgentRunner implements IAgentRunner {
             return await this._execute(request, startedAt);
         } finally {
             this._active.delete(request.sessionId);
-            log.debug(`run end: sessionId=${request.sessionId} durationMs=${Date.now() - startedAt}`);
+            log.debug(
+                `run end: sessionId=${request.sessionId} durationMs=${Date.now() - startedAt}`
+            );
         }
     }
 
@@ -95,7 +97,7 @@ export class AgentRunner implements IAgentRunner {
     private async _completeResponse(
         model: ReturnType<AnthropicProvider['getModel']>,
         messages: Message[],
-        request: IAgentRequest,
+        request: IAgentRequest
     ): Promise<string> {
         const response = await model!.complete({
             model: request.model,
@@ -104,16 +106,23 @@ export class AgentRunner implements IAgentRunner {
             temperature: request.temperature,
         });
         const content = response.content;
-        return typeof content === 'string' ? content : content.map(c => c.type === 'text' ? c.text : '').join('');
+        return typeof content === 'string'
+            ? content
+            : content.map((c) => (c.type === 'text' ? c.text : '')).join('');
     }
 
     private async _streamResponse(
         model: ReturnType<AnthropicProvider['getModel']>,
         messages: Message[],
-        request: IAgentRequest,
+        request: IAgentRequest
     ): Promise<string> {
         const chunks: string[] = [];
-        for await (const chunk of model!.stream({ model: request.model, messages, maxTokens: request.maxTokens, temperature: request.temperature })) {
+        for await (const chunk of model!.stream({
+            model: request.model,
+            messages,
+            maxTokens: request.maxTokens,
+            temperature: request.temperature,
+        })) {
             const delta = this._chunkText(chunk);
             if (delta) {
                 chunks.push(delta);
@@ -162,7 +171,7 @@ export class AgentRunner implements IAgentRunner {
 
     private _chunkText(chunk: CompletionChunk): string {
         const delta = chunk.delta;
-        return typeof delta === 'string' ? delta : (delta.type === 'text' ? delta.text : '');
+        return typeof delta === 'string' ? delta : delta.type === 'text' ? delta.text : '';
     }
 
     private _errorResult(message: string, startedAt: number): IAgentRunResult {

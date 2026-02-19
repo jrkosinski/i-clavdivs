@@ -44,9 +44,9 @@ vi.mock('../src/session-store.js', () => ({
                 sessionData.delete(id);
                 return Promise.resolve();
             }),
-            exists: vi.fn().mockImplementation((id: string) =>
-                Promise.resolve(sessionData.has(id))
-            ),
+            exists: vi
+                .fn()
+                .mockImplementation((id: string) => Promise.resolve(sessionData.has(id))),
         };
     }),
 }));

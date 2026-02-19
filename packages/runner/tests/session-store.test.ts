@@ -70,14 +70,13 @@ describe('SessionStore', () => {
 
             await store.save('my-session', MOCK_MESSAGES);
 
-            expect(fs.mkdir).toHaveBeenCalledWith(
-                expect.stringContaining('test-sessions'),
-                { recursive: true },
-            );
+            expect(fs.mkdir).toHaveBeenCalledWith(expect.stringContaining('test-sessions'), {
+                recursive: true,
+            });
             expect(fs.writeFile).toHaveBeenCalledWith(
                 expect.stringContaining('my-session.json'),
                 JSON.stringify(MOCK_MESSAGES, null, 2),
-                'utf-8',
+                'utf-8'
             );
         });
     });
@@ -119,10 +118,7 @@ describe('SessionStore', () => {
 
             await store.load('../../../etc/passwd');
 
-            expect(fs.readFile).toHaveBeenCalledWith(
-                expect.not.stringContaining('..'),
-                'utf-8',
-            );
+            expect(fs.readFile).toHaveBeenCalledWith(expect.not.stringContaining('..'), 'utf-8');
         });
 
         it('should preserve safe characters like hyphens, dots and colons', async () => {
@@ -132,7 +128,7 @@ describe('SessionStore', () => {
 
             expect(fs.readFile).toHaveBeenCalledWith(
                 expect.stringContaining('discord:123:456.json'),
-                'utf-8',
+                'utf-8'
             );
         });
     });
