@@ -1,31 +1,23 @@
 {
-    "name": "@i-clavdivs/runner",
+    "name": "@i-clavdivs/cli",
     "version": "0.0.0",
     "type": "module",
-    "description": "Agent runner: session management and LLM execution loop",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.js"
-        }
+    "description": "CLI entrypoint for running the agent from the command line",
+    "bin": {
+        "i-clavdivs": "./dist/index.js"
     },
     "scripts": {
         "build": "tsc -p tsconfig.json",
         "dev": "tsc -p tsconfig.json --watch",
         "clean": "rm -rf dist *.tsbuildinfo",
         "typecheck": "tsc --noEmit",
+        "start": "node dist/index.js",
         "test": "vitest run",
         "test:watch": "vitest"
     },
-    "files": [
-        "dist",
-        "src"
-    ],
     "dependencies": {
         "@i-clavdivs/agents": "workspace:*",
-        "@i-clavdivs/models": "workspace:*"
+        "@i-clavdivs/runner": "workspace:*"
     },
     "devDependencies": {
         "typescript": "^5.3.3",

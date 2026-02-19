@@ -71,8 +71,11 @@ export class SessionStore {
     }
 
     private _resolvePath(sessionId: string): string {
-        //sanitise to prevent path traversal
-        const safe = sessionId.replace(/[^a-zA-Z0-9_\-.:]/g, '_');
+        //replace any character that isn't safe for a filename, then collapse
+        //any remaining ".." sequences so path traversal is impossible
+        const safe = sessionId
+            .replace(/[^a-zA-Z0-9_\-.:]/g, '_')
+            .replace(/\.{2,}/g, '_');
         return path.join(this._sessionDir, `${safe}.json`);
     }
 }
