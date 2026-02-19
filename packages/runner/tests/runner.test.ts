@@ -29,9 +29,11 @@ vi.mock('@i-clavdivs/models', async (importOriginal) => {
 let sessionData = new Map<string, Message[]>();
 
 vi.mock('../src/session-store.js', () => ({
+    //use a class so `new SessionStore()` works and each instance reads sessionData dynamically
     SessionStore: vi.fn().mockImplementation(function () {
         return {
             load: vi.fn().mockImplementation((id: string) =>
+                //read sessionData at call time, not at construction time
                 Promise.resolve(sessionData.get(id) ?? [])
             ),
             save: vi.fn().mockImplementation((id: string, messages: Message[]) => {

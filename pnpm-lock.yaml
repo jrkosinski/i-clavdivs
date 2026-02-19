@@ -30,6 +30,22 @@ importers:
         specifier: 4.0.18
         version: 4.0.18(@types/node@20.19.32)(@vitest/ui@4.0.18)(happy-dom@20.6.1)(tsx@4.21.0)(yaml@2.8.2)
 
+  apps/cli:
+    dependencies:
+      '@i-clavdivs/agents':
+        specifier: workspace:*
+        version: link:../../packages/agents
+      '@i-clavdivs/runner':
+        specifier: workspace:*
+        version: link:../../packages/runner
+    devDependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+      vitest:
+        specifier: 4.0.18
+        version: 4.0.18(@types/node@20.19.32)(@vitest/ui@4.0.18)(happy-dom@20.6.1)(tsx@4.21.0)(yaml@2.8.2)
+
   packages/agents:
     dependencies:
       '@i-clavdivs/common':
@@ -105,6 +121,22 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^4.0.18
+        version: 4.0.18(@types/node@20.19.32)(@vitest/ui@4.0.18)(happy-dom@20.6.1)(tsx@4.21.0)(yaml@2.8.2)
+
+  packages/runner:
+    dependencies:
+      '@i-clavdivs/agents':
+        specifier: workspace:*
+        version: link:../agents
+      '@i-clavdivs/models':
+        specifier: workspace:*
+        version: link:../models
+    devDependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+      vitest:
+        specifier: 4.0.18
         version: 4.0.18(@types/node@20.19.32)(@vitest/ui@4.0.18)(happy-dom@20.6.1)(tsx@4.21.0)(yaml@2.8.2)
 
   packages/skills:

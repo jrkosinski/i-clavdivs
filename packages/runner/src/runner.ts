@@ -71,14 +71,16 @@ export class AgentRunner implements IAgentRunner {
         }
 
         const history = await this._store.load(request.sessionId);
-        const messages = this._buildMessages(request, history);
+        const trimmedHistory = this._trimHistory(history);
+        const messages = this._buildMessages(request, trimmedHistory);
 
         try {
             const responseText = this._config.onChunk
                 ? await this._streamResponse(model, messages, request)
                 : await this._completeResponse(model, messages, request);
 
-            const updatedHistory = this._appendTurn(history, request.prompt, responseText);
+            //append to trimmed history so the file never grows beyond the limit
+            const updatedHistory = this._appendTurn(trimmedHistory, request.prompt, responseText);
             await this._store.save(request.sessionId, updatedHistory);
 
             return {
@@ -130,9 +132,9 @@ export class AgentRunner implements IAgentRunner {
 
         const systemMessage: Message = { role: 'system', content: systemPrompt };
         const userMessage: Message = { role: 'user', content: request.prompt };
-        const trimmed = this._trimHistory(history);
 
-        return [systemMessage, ...trimmed, userMessage];
+        //history is already trimmed by the caller
+        return [systemMessage, ...history, userMessage];
     }
 
     private _trimHistory(history: Message[]): Message[] {
