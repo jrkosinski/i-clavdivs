@@ -14,6 +14,7 @@ import { AgentRunner } from '@i-clavdivs/runner';
 import { SessionStore } from '@i-clavdivs/runner';
 import { CliArgs } from './args.js';
 import { writeChunk, writeResponse, exitWithError } from './output.js';
+import { loadPlugins } from './plugin-loader.js';
 
 /**
  * Main CLI entry point.
@@ -21,8 +22,25 @@ import { writeChunk, writeResponse, exitWithError } from './output.js';
 async function main(): Promise<void> {
     const args = parseArgsOrExit();
     await prepareSession(args);
-    const result = await runAgent(args);
-    handleOutput(result, args.stream);
+
+    //create runner
+    const runner = createRunner(args.stream);
+
+    //load plugins for channel support
+    const pluginManager = await loadPlugins(runner);
+
+    //setup graceful shutdown
+    setupShutdownHandlers(pluginManager);
+
+    //if prompt provided, run once and exit
+    if (args.prompt) {
+        await runSinglePrompt(runner, args);
+        await pluginManager.cleanup();
+        process.exit(0);
+    }
+
+    //otherwise, run in daemon mode listening to channels
+    await runDaemonMode();
 }
 
 /**
@@ -47,17 +65,29 @@ async function prepareSession(args: ReturnType<typeof CliArgs.parse>): Promise<v
 }
 
 /**
- * Runs the agent and returns the result.
+ * Run a single prompt and return the result.
  */
-async function runAgent(args: ReturnType<typeof CliArgs.parse>) {
-    const runner = createRunner(args.stream);
-    return await runner.run({
+async function runSinglePrompt(runner: AgentRunner, args: ReturnType<typeof CliArgs.parse>) {
+    const result = await runner.run({
         sessionId: args.sessionId,
         prompt: args.prompt,
         provider: 'anthropic',
         model: args.model,
         workspaceDir: process.cwd(),
     });
+
+    handleOutput(result, args.stream);
+}
+
+/**
+ * Run in daemon mode, listening for channel messages.
+ */
+async function runDaemonMode(): Promise<void> {
+    console.log('i-clavdivs is running in daemon mode. Press Ctrl+C to stop.');
+    console.log('Listening for messages on configured channels...\n');
+
+    //keep process alive
+    await new Promise(() => {});
 }
 
 /**
@@ -103,6 +133,20 @@ function validatePayload(payload: NonNullable<ReturnType<typeof extractPayload>>
     if (payload.isError) {
         exitWithError(payload.text ?? 'unknown error');
     }
+}
+
+/**
+ * Setup handlers for graceful shutdown.
+ */
+function setupShutdownHandlers(pluginManager: any): void {
+    const shutdown = async () => {
+        console.log('\nShutting down gracefully...');
+        await pluginManager.cleanup();
+        process.exit(0);
+    };
+
+    process.on('SIGINT', shutdown);
+    process.on('SIGTERM', shutdown);
 }
 
 main().catch((err: unknown) => {

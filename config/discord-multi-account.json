@@ -1,0 +1,25 @@
+{
+    "channels": {
+        "discord": {
+            "enabled": true,
+            "accounts": [
+                {
+                    "id": "bot1",
+                    "token": "${DISCORD_BOT1_TOKEN}",
+                    "requireMention": true,
+                    "allowedChannels": ["1234567890", "0987654321"]
+                },
+                {
+                    "id": "bot2",
+                    "token": "${DISCORD_BOT2_TOKEN}",
+                    "requireMention": false,
+                    "allowedChannels": ["5555555555"]
+                }
+            ]
+        }
+    },
+    "agent": {
+        "provider": "anthropic",
+        "model": "claude-3-5-sonnet-20241022"
+    }
+}

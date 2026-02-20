@@ -17,7 +17,9 @@
     },
     "dependencies": {
         "@i-clavdivs/agents": "workspace:*",
-        "@i-clavdivs/runner": "workspace:*"
+        "@i-clavdivs/runner": "workspace:*",
+        "@i-clavdivs/plugins": "workspace:*",
+        "@i-clavdivs/discord": "workspace:*"
     },
     "devDependencies": {
         "typescript": "^5.3.3",
