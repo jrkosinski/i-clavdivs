@@ -294,4 +294,143 @@ describe('ConfigLoader', () => {
             });
         });
     });
+
+    describe('config merging', () => {
+        it('should merge file and env configurations', async () => {
+            const configPath = join(testDir, 'config.json');
+            const configData = {
+                channels: {
+                    discord: {
+                        enabled: true,
+                        token: 'file-token',
+                        allowedChannels: ['ch1', 'ch2'],
+                        customSetting: 'custom',
+                    },
+                },
+            };
+
+            await writeFile(configPath, JSON.stringify(configData, null, 2));
+
+            process.env.DISCORD_BOT_TOKEN = 'env-token';
+
+            const config = await ConfigLoader.load(configPath);
+
+            //env config completely replaces discord section when DISCORD_BOT_TOKEN is set
+            expect(config.channels?.discord).toMatchObject({
+                enabled: true,
+                token: 'env-token',
+                requireMention: false,
+            });
+        });
+
+        it('should handle empty file config with env config', async () => {
+            const configPath = join(testDir, 'empty.json');
+            await writeFile(configPath, '{}');
+
+            process.env.DISCORD_BOT_TOKEN = 'env-token';
+
+            const config = await ConfigLoader.load(configPath);
+
+            expect(config.channels?.discord).toMatchObject({
+                enabled: true,
+                token: 'env-token',
+            });
+        });
+
+        it('should handle arrays in config merging', async () => {
+            const configPath = join(testDir, 'config.json');
+            const configData = {
+                channels: {
+                    discord: {
+                        enabled: true,
+                        token: 'file-token',
+                        allowedChannels: ['ch1', 'ch2'],
+                    },
+                },
+            };
+
+            await writeFile(configPath, JSON.stringify(configData, null, 2));
+
+            process.env.DISCORD_BOT_TOKEN = 'env-token';
+            process.env.DISCORD_ALLOWED_CHANNELS = 'ch3,ch4,ch5';
+
+            const config = await ConfigLoader.load(configPath);
+
+            //env array should override file array
+            expect(config.channels?.discord).toMatchObject({
+                enabled: true,
+                token: 'env-token',
+                allowedChannels: ['ch3', 'ch4', 'ch5'], //overridden by env
+            });
+        });
+    });
+
+    describe('edge cases', () => {
+        it('should handle boolean env vars correctly', async () => {
+            process.env.DISCORD_BOT_TOKEN = 'token';
+            process.env.DISCORD_REQUIRE_MENTION = 'false';
+
+            const config = await ConfigLoader.load();
+
+            expect(config.channels?.discord).toMatchObject({
+                enabled: true,
+                token: 'token',
+                requireMention: false,
+            });
+        });
+
+        it('should handle empty string env vars', async () => {
+            process.env.DISCORD_BOT_TOKEN = 'token';
+            process.env.DISCORD_ALLOWED_CHANNELS = '';
+
+            const config = await ConfigLoader.load();
+
+            const discord = config.channels?.discord as any;
+            expect(discord.allowedChannels).toEqual(['']); //split creates array with empty string
+        });
+
+        it('should handle comma-separated values with various whitespace', async () => {
+            process.env.DISCORD_BOT_TOKEN = 'token';
+            process.env.DISCORD_ALLOWED_CHANNELS = 'ch1,  ch2  ,ch3  ,  ch4';
+
+            const config = await ConfigLoader.load();
+
+            expect(config.channels?.discord).toMatchObject({
+                enabled: true,
+                token: 'token',
+                allowedChannels: ['ch1', 'ch2', 'ch3', 'ch4'],
+            });
+        });
+
+        it('should handle number values in environment variables', async () => {
+            process.env.TEST_NUMBER = '42';
+
+            const configPath = join(testDir, 'config.json');
+            const configData = {
+                numberValue: '${TEST_NUMBER}',
+            };
+
+            await writeFile(configPath, JSON.stringify(configData, null, 2));
+
+            const config = await ConfigLoader.load(configPath);
+
+            //env vars are always strings
+            expect(config.numberValue).toBe('42');
+        });
+
+        it('should handle undefined env vars in arrays', async () => {
+            const configPath = join(testDir, 'config.json');
+            const configData = {
+                values: ['${DEFINED_VAR}', '${UNDEFINED_VAR}', 'static'],
+            };
+
+            process.env.DEFINED_VAR = 'defined';
+
+            await writeFile(configPath, JSON.stringify(configData, null, 2));
+
+            const config = await ConfigLoader.load(configPath);
+
+            expect(config.values).toEqual(['defined', '${UNDEFINED_VAR}', 'static']);
+        });
+    });
 });

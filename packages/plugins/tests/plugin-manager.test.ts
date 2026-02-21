@@ -41,7 +41,7 @@ describe('PluginManager', () => {
                 register: registerSpy,
             };
 
-            registry.register(plugin);
+            getGlobalPluginRegistry().register(plugin);
 
             const manager = new PluginManager(mockRunner);
             await manager.initializeAll();
@@ -123,7 +123,7 @@ describe('PluginManager', () => {
                 createGateway: () => mockGateway,
             };
 
-            registry.registerChannel(channelPlugin);
+            getGlobalPluginRegistry().registerChannel(channelPlugin);
 
             const config = {
                 channels: {
@@ -344,6 +344,211 @@ describe('PluginManager', () => {
 
             //should not throw
             await expect(manager.cleanup()).resolves.not.toThrow();
+        });
+    });
+
+    describe('error handling', () => {
+        it('should throw error when starting duplicate gateway', async () => {
+            const mockGateway: IChannelGateway = {
+                start: vi.fn(),
+                stop: vi.fn(),
+                isRunning: () => false,
+                sendMessage: vi.fn(),
+            };
+
+            const channelPlugin: IChannelPlugin = {
+                id: 'test-channel',
+                name: 'Test Channel',
+                description: 'A test channel plugin',
+                register: () => {},
+                channelMetadata: {
+                    id: 'test-channel',
+                    label: 'Test Channel',
+                    description: 'Test',
+                },
+                capabilities: {
+                    chatTypes: ['direct'],
+                },
+                createGateway: () => mockGateway,
+            };
+
+            getGlobalPluginRegistry().registerChannel(channelPlugin);
+
+            const config = {
+                channels: {
+                    'test-channel': {
+                        enabled: true,
+                        token: 'test-token',
+                    },
+                },
+            };
+
+            const manager = new PluginManager(mockRunner, config);
+            await manager.initializeAll();
+            await manager.startChannelGateways();
+
+            //attempt to start again should throw
+            await expect(manager.startChannelGateways()).rejects.toThrow('Gateway already running: test-channel');
+        });
+
+        it('should handle plugin registration errors gracefully', async () => {
+            const errorPlugin: IPlugin = {
+                id: 'error-plugin',
+                name: 'Error Plugin',
+                description: 'A plugin that throws on registration',
+                register: () => {
+                    throw new Error('Registration failed');
+                },
+            };
+
+            getGlobalPluginRegistry().register(errorPlugin);
+
+            const manager = new PluginManager(mockRunner);
+
+            //initialization should propagate the error
+            await expect(manager.initializeAll()).rejects.toThrow('Registration failed');
+        });
+
+        it('should handle async plugin registration errors', async () => {
+            const asyncErrorPlugin: IPlugin = {
+                id: 'async-error-plugin',
+                name: 'Async Error Plugin',
+                description: 'A plugin that throws async on registration',
+                register: async () => {
+                    await new Promise(resolve => setTimeout(resolve, 5));
+                    throw new Error('Async registration failed');
+                },
+            };
+
+            getGlobalPluginRegistry().register(asyncErrorPlugin);
+
+            const manager = new PluginManager(mockRunner);
+
+            //initialization should propagate the async error
+            await expect(manager.initializeAll()).rejects.toThrow('Async registration failed');
+        });
+
+        it('should handle gateway start errors', async () => {
+            const mockGateway: IChannelGateway = {
+                start: vi.fn().mockRejectedValue(new Error('Failed to start gateway')),
+                stop: vi.fn(),
+                isRunning: () => false,
+                sendMessage: vi.fn(),
+            };
+
+            const channelPlugin: IChannelPlugin = {
+                id: 'test-channel',
+                name: 'Test Channel',
+                description: 'A test channel plugin',
+                register: () => {},
+                channelMetadata: {
+                    id: 'test-channel',
+                    label: 'Test Channel',
+                    description: 'Test',
+                },
+                capabilities: {
+                    chatTypes: ['direct'],
+                },
+                createGateway: () => mockGateway,
+            };
+
+            getGlobalPluginRegistry().registerChannel(channelPlugin);
+
+            const config = {
+                channels: {
+                    'test-channel': {
+                        enabled: true,
+                        token: 'test-token',
+                    },
+                },
+            };
+
+            const manager = new PluginManager(mockRunner, config);
+            await manager.initializeAll();
+
+            //should propagate gateway start error
+            await expect(manager.startChannelGateways()).rejects.toThrow('Failed to start gateway');
+        });
+    });
+
+    describe('configuration', () => {
+        it('should provide correct config to plugin api', async () => {
+            let capturedApi: any;
+            const plugin: IPlugin = {
+                id: 'config-test-plugin',
+                name: 'Config Test Plugin',
+                description: 'A plugin to test config access',
+                register: (api) => {
+                    capturedApi = api;
+                },
+            };
+
+            getGlobalPluginRegistry().register(plugin);
+
+            const config = {
+                testKey: 'testValue',
+                nested: {
+                    key: 'nestedValue',
+                },
+            };
+
+            const manager = new PluginManager(mockRunner, config);
+            await manager.initializeAll();
+
+            expect(capturedApi).toBeDefined();
+            expect(capturedApi.getConfig('testKey')).toBe('testValue');
+            expect(capturedApi.getConfig('nested')).toEqual({ key: 'nestedValue' });
+            expect(capturedApi.getConfig('nonexistent')).toBeUndefined();
+        });
+
+        it('should provide correct runner to plugin api', async () => {
+            let capturedApi: any;
+            const plugin: IPlugin = {
+                id: 'runner-test-plugin',
+                name: 'Runner Test Plugin',
+                description: 'A plugin to test runner access',
+                register: (api) => {
+                    capturedApi = api;
+                },
+            };
+
+            getGlobalPluginRegistry().register(plugin);
+
+            const manager = new PluginManager(mockRunner);
+            await manager.initializeAll();
+
+            expect(capturedApi).toBeDefined();
+            expect(capturedApi.runner).toBe(mockRunner);
+        });
+
+        it('should provide logging interface to plugins', async () => {
+            let capturedApi: any;
+            const plugin: IPlugin = {
+                id: 'log-test-plugin',
+                name: 'Log Test Plugin',
+                description: 'A plugin to test logging',
+                register: (api) => {
+                    capturedApi = api;
+                },
+            };
+
+            getGlobalPluginRegistry().register(plugin);
+
+            const manager = new PluginManager(mockRunner);
+            await manager.initializeAll();
+
+            expect(capturedApi).toBeDefined();
+            expect(capturedApi.log).toBeDefined();
+            expect(typeof capturedApi.log.info).toBe('function');
+            expect(typeof capturedApi.log.warn).toBe('function');
+            expect(typeof capturedApi.log.error).toBe('function');
+            expect(typeof capturedApi.log.debug).toBe('function');
+
+            //should not throw when calling log methods
+            expect(() => capturedApi.log.info('test')).not.toThrow();
+            expect(() => capturedApi.log.warn('test')).not.toThrow();
+            expect(() => capturedApi.log.error('test')).not.toThrow();
+            expect(() => capturedApi.log.debug('test')).not.toThrow();
         });
     });
 });
