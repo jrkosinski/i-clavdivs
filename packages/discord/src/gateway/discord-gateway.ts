@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Events, type Message } from 'discord.js';
+import { Client, GatewayIntentBits, Events, Partials, type Message } from 'discord.js';
 import type { IChannelGateway, IChannelMessage } from '@i-clavdivs/plugins';
 import type { AgentRunner } from '@i-clavdivs/runner';
 import { MessageHandler } from './message-handler.js';
@@ -117,7 +117,9 @@ export class DiscordGateway implements IChannelGateway {
                 GatewayIntentBits.GuildMessages,
                 GatewayIntentBits.MessageContent,
                 GatewayIntentBits.DirectMessages,
+                GatewayIntentBits.DirectMessageTyping,
             ],
+            partials: [Partials.Channel], // Required for DMs
         });
 
         const handler = new MessageHandler(accountConfig);
@@ -127,6 +129,8 @@ export class DiscordGateway implements IChannelGateway {
 
         client.on(Events.ClientReady, () => {
             console.log(`[Discord:${accountConfig.id}] Bot logged in as ${client.user?.tag}`);
+            console.log(`[Discord:${accountConfig.id}] Listening on ${client.guilds.cache.size} servers`);
+            console.log(`[Discord:${accountConfig.id}] Configuration: requireMention=${accountConfig.requireMention}, allowedChannels=${accountConfig.allowedChannels?.length || 'all'}, allowedUsers=${accountConfig.allowedUsers?.length || 'all'}`);
         });
 
         client.on(Events.MessageCreate, async (message: Message) => {
@@ -135,6 +139,14 @@ export class DiscordGateway implements IChannelGateway {
 
         client.on(Events.Error, (error) => {
             console.error(`[Discord:${accountConfig.id}] Client error:`, error);
+        });
+
+        client.on(Events.Debug, (info) => {
+            if (info.includes('Heartbeat')) {
+                //skip heartbeat spam
+                return;
+            }
+            console.log(`[Discord:${accountConfig.id}] Debug:`, info);
         });
 
         await client.login(accountConfig.token);
@@ -159,10 +171,15 @@ export class DiscordGateway implements IChannelGateway {
             return;
         }
 
+        console.log(`[Discord:${accountId}] Received message from ${message.author.username}: "${message.content.substring(0, 50)}..."`);
+
         //check if message should be processed
         if (!handler.shouldProcess(message)) {
+            console.log(`[Discord:${accountId}] Message filtered out (check requireMention, allowedChannels, allowedUsers)`);
             return;
         }
+
+        console.log(`[Discord:${accountId}] Processing message...`);
 
         //convert to channel message format
         const channelMessage: IChannelMessage = {
@@ -208,7 +225,7 @@ export class DiscordGateway implements IChannelGateway {
                 sessionId: msg.conversationId,
                 prompt: msg.content,
                 provider: 'anthropic',
-                model: 'claude-3-5-sonnet-20241022',
+                model: 'claude-sonnet-4-5-20250929',
                 workspaceDir: process.cwd(),
             });
 
@@ -306,6 +323,6 @@ export class DiscordGateway implements IChannelGateway {
      * Find client instance by account ID.
      */
     private _findClient(accountId: string): IDiscordClientInstance | undefined {
-        return this._clients.find(c => c.accountId === accountId);
+        return this._clients.find((c) => c.accountId === accountId);
     }
 }

@@ -38,6 +38,7 @@ export class AgentRunner implements IAgentRunner {
     private readonly _store: SessionStore;
     private readonly _config: IAgentRunnerConfig;
     private readonly _active: Set<string> = new Set();
+    private readonly _pending: Map<string, Promise<IAgentRunResult>> = new Map();
 
     public constructor(config: IAgentRunnerConfig = {}) {
         this._config = config;
@@ -49,6 +50,32 @@ export class AgentRunner implements IAgentRunner {
         const startedAt = Date.now();
         log.debug(`run start: sessionId=${request.sessionId} model=${request.model}`);
 
+        // If there's already a request running for this session, wait for it
+        const existing = this._pending.get(request.sessionId);
+        if (existing) {
+            log.debug(`run queued: sessionId=${request.sessionId} (waiting for active request)`);
+            await existing;
+            log.debug(`run resuming: sessionId=${request.sessionId} (previous request complete)`);
+        }
+
+        // Create and track the promise for this request
+        const promise = this._executeWithTracking(request, startedAt);
+        this._pending.set(request.sessionId, promise);
+
+        try {
+            return await promise;
+        } finally {
+            this._pending.delete(request.sessionId);
+        }
+    }
+
+    /**
+     * Executes a request and manages the active session tracking.
+     */
+    private async _executeWithTracking(
+        request: IAgentRequest,
+        startedAt: number
+    ): Promise<IAgentRunResult> {
         this._active.add(request.sessionId);
         try {
             return await this._execute(request, startedAt);

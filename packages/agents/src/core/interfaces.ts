@@ -143,7 +143,7 @@ export interface IProviderConfig {
 export interface IModelResolver {
     /**
      * Resolve a model identifier to provider config
-     * @param modelId Model identifier (e.g., 'claude-3-5-sonnet-20241022')
+     * @param modelId Model identifier (e.g., 'claude-sonnet-4-5-20250929')
      * @returns Provider configuration
      */
     resolve(modelId: string): Promise<IProviderConfig>;

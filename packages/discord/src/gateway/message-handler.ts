@@ -26,22 +26,29 @@ export class MessageHandler {
     public shouldProcess(message: Message): boolean {
         //dm messages are always processed
         if (!message.guild) {
-            return this._checkUserAllowlist(message);
+            const userAllowed = this._checkUserAllowlist(message);
+            if (!userAllowed) {
+                console.log(`[MessageHandler] DM from ${message.author.id} rejected - not in allowedUsers: ${this._config.allowedUsers?.join(', ')}`);
+            }
+            return userAllowed;
         }
 
         //check channel allowlist
         if (!this._checkChannelAllowlist(message)) {
+            console.log(`[MessageHandler] Message from channel ${message.channelId} rejected - not in allowedChannels: ${this._config.allowedChannels?.join(', ') || 'all allowed'}`);
             return false;
         }
 
         //check user allowlist
         if (!this._checkUserAllowlist(message)) {
+            console.log(`[MessageHandler] Message from user ${message.author.id} rejected - not in allowedUsers: ${this._config.allowedUsers?.join(', ') || 'all allowed'}`);
             return false;
         }
 
         //check if mention is required
         if (this._config.requireMention) {
             if (!message.mentions.has(message.client.user!)) {
+                console.log(`[MessageHandler] Message rejected - bot mention required but not present`);
                 return false;
             }
         }

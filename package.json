@@ -6,13 +6,16 @@
     "description": "A TypeScript pnpm workspace monorepo",
     "scripts": {
         "build": "pnpm -r --filter=./packages/* run build",
+        "build:cli": "pnpm --filter=@i-clavdivs/cli run build",
         "dev": "pnpm -r --parallel --filter=./packages/* run dev",
         "test": "pnpm -r --filter=./packages/* run test",
         "lint": "pnpm -r --filter=./packages/* run lint",
         "typecheck": "pnpm -r --filter=./packages/* run typecheck",
         "clean": "pnpm -r --filter=./packages/* run clean && rm -rf node_modules",
         "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
-        "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md}\""
+        "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md}\"",
+        "start": "pnpm --filter=@i-clavdivs/cli run start",
+        "daemon": "pnpm --filter=@i-clavdivs/cli run daemon"
     },
     "devDependencies": {
         "@types/node": "^20.11.17",

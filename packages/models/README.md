@@ -78,7 +78,7 @@ registry.register(new AnthropicProvider(process.env.ANTHROPIC_API_KEY!));
 
 //get a specific model
 const gpt4 = registry.getModel('openai', 'gpt-4o');
-const claude = registry.getModel('anthropic', 'claude-3-5-sonnet-20241022');
+const claude = registry.getModel('anthropic', 'claude-sonnet-4-5-20250929');
 
 //list all available models
 const allModels = registry.listAllModels();

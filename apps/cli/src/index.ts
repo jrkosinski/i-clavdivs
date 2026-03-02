@@ -6,7 +6,7 @@
  *   node dist/index.js "hello"
  *   node dist/index.js --stream "write me a poem"
  *   node dist/index.js --session my-project "what did I just say?"
- *   node dist/index.js --model claude-3-5-sonnet-20241022 --stream "explain recursion"
+ *   node dist/index.js --model claude-sonnet-4-5-20250929 --stream "explain recursion"
  */
 
 import process from 'node:process';
@@ -35,7 +35,7 @@ async function main(): Promise<void> {
 
     //if prompt provided, run once and exit
     if (args.prompt) {
-        await runSinglePrompt(runner, args);
+        await runSinglePrompt(runner, args, args.prompt);
         await pluginManager.cleanup();
         process.exit(0);
     }
@@ -68,10 +68,10 @@ async function prepareSession(args: ReturnType<typeof CliArgs.parse>): Promise<v
 /**
  * Run a single prompt and return the result.
  */
-async function runSinglePrompt(runner: AgentRunner, args: ReturnType<typeof CliArgs.parse>) {
+async function runSinglePrompt(runner: AgentRunner, args: ReturnType<typeof CliArgs.parse>, prompt: string) {
     const result = await runner.run({
         sessionId: args.sessionId,
-        prompt: args.prompt,
+        prompt,
         provider: 'anthropic',
         model: args.model,
         workspaceDir: process.cwd(),
@@ -87,8 +87,19 @@ async function runDaemonMode(): Promise<void> {
     console.log('i-clavdivs is running in daemon mode. Press Ctrl+C to stop.');
     console.log('Listening for messages on configured channels...\n');
 
+    //heartbeat to show the process is alive
+    const heartbeatInterval = setInterval(() => {
+        console.log(`[${new Date().toISOString()}] Daemon alive - listening for messages...`);
+    }, 60000); //every minute
+
     //keep process alive
-    await new Promise(() => {});
+    await new Promise(() => {
+        //this promise never resolves, keeping the process running
+        //cleanup heartbeat on exit
+        process.on('beforeExit', () => {
+            clearInterval(heartbeatInterval);
+        });
+    });
 }
 
 /**
@@ -107,10 +118,7 @@ async function createRunner(stream: boolean): Promise<AgentRunner> {
 /**
  * Handles result output to stdout, either streaming or complete.
  */
-function handleOutput(
-    result: Awaited<ReturnType<AgentRunner['run']>>,
-    isStreaming: boolean
-): void {
+function handleOutput(result: Awaited<ReturnType<AgentRunner['run']>>, isStreaming: boolean): void {
     const payload = extractPayload(result);
     validatePayload(payload);
 

@@ -286,7 +286,7 @@ export class AnthropicProvider extends BaseProvider {
             await this._request<AnthropicMessageResponse>('/messages', {
                 method: 'POST',
                 body: JSON.stringify({
-                    model: 'claude-3-5-sonnet-20241022',
+                    model: 'claude-sonnet-4-5-20250929',
                     max_tokens: 1,
                     messages: [{ role: 'user', content: 'hi' }],
                 }),
@@ -417,7 +417,7 @@ type AnthropicStreamEvent =
 
 const ANTHROPIC_MODELS: ModelDefinition[] = [
     {
-        id: 'claude-3-5-sonnet-20241022',
+        id: 'claude-sonnet-4-5-20250929',
         name: 'Claude 3.5 Sonnet',
         provider: 'anthropic',
         api: 'anthropic-messages',

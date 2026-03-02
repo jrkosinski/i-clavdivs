@@ -18,12 +18,15 @@ describe('CliArgs', () => {
             expect(result.prompt).toBe('hello world');
         });
 
-        it('should throw when no prompt is provided', () => {
-            expect(() => CliArgs.parse(argv())).toThrow('prompt is required');
+        it('should allow no prompt for daemon mode', () => {
+            const result = CliArgs.parse(argv());
+            expect(result.prompt).toBeUndefined();
         });
 
-        it('should throw when only flags are provided and no prompt', () => {
-            expect(() => CliArgs.parse(argv('--stream'))).toThrow('prompt is required');
+        it('should allow daemon mode when only flags are provided', () => {
+            const result = CliArgs.parse(argv('--stream'));
+            expect(result.prompt).toBeUndefined();
+            expect(result.stream).toBe(true);
         });
     });
 
@@ -33,9 +36,9 @@ describe('CliArgs', () => {
             expect(result.sessionId).toBe('default');
         });
 
-        it('should default model to claude-3-5-haiku-20241022', () => {
+        it('should default model to claude-sonnet-4-5-20250929', () => {
             const result = CliArgs.parse(argv('hi'));
-            expect(result.model).toBe('claude-3-5-haiku-20241022');
+            expect(result.model).toBe('claude-sonnet-4-5-20250929');
         });
 
         it('should default stream to false', () => {
@@ -63,8 +66,8 @@ describe('CliArgs', () => {
 
     describe('--model', () => {
         it('should set model from --model flag', () => {
-            const result = CliArgs.parse(argv('--model', 'claude-3-5-sonnet-20241022', 'hello'));
-            expect(result.model).toBe('claude-3-5-sonnet-20241022');
+            const result = CliArgs.parse(argv('--model', 'claude-sonnet-4-5-20250929', 'hello'));
+            expect(result.model).toBe('claude-sonnet-4-5-20250929');
         });
     });
 
@@ -89,7 +92,7 @@ describe('CliArgs', () => {
                     '--session',
                     'proj',
                     '--model',
-                    'claude-3-5-sonnet-20241022',
+                    'claude-sonnet-4-5-20250929',
                     '--stream',
                     '--new',
                     'write a poem'
@@ -97,7 +100,7 @@ describe('CliArgs', () => {
             );
 
             expect(result.sessionId).toBe('proj');
-            expect(result.model).toBe('claude-3-5-sonnet-20241022');
+            expect(result.model).toBe('claude-sonnet-4-5-20250929');
             expect(result.stream).toBe(true);
             expect(result.newSession).toBe(true);
             expect(result.prompt).toBe('write a poem');

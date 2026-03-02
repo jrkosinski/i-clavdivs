@@ -41,7 +41,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.success)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             await model!.complete(testCompletionRequests.simple);
 
             expect(fetchMock).toHaveBeenCalledWith(
@@ -60,7 +60,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.success)
             );
 
-            const model = customProvider.getModel('claude-3-5-sonnet-20241022');
+            const model = customProvider.getModel('claude-sonnet-4-5-20250929');
             await model!.complete(testCompletionRequests.simple);
 
             expect(fetchMock).toHaveBeenCalledWith(
@@ -78,7 +78,7 @@ describe('AnthropicProvider', () => {
             expect(models.length).toBeGreaterThan(0);
 
             const modelIds = models.map((m) => m.id);
-            expect(modelIds).toContain('claude-3-5-sonnet-20241022');
+            expect(modelIds).toContain('claude-sonnet-4-5-20250929');
             expect(modelIds).toContain('claude-3-5-haiku-20241022');
             expect(modelIds).toContain('claude-3-opus-20240229');
         });
@@ -115,7 +115,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.success)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             expect(model).toBeDefined();
 
             const response = await model!.complete(testCompletionRequests.simple);
@@ -131,7 +131,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.withToolUse)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             const response = await model!.complete(testCompletionRequests.withTools);
 
             expect(response.finishReason).toBe('tool_calls');
@@ -149,7 +149,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.withCache)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             const response = await model!.complete(testCompletionRequests.simple);
 
             expect(response.usage.cacheReadTokens).toBe(50);
@@ -161,7 +161,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.success)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             await model!.complete(testCompletionRequests.simple);
 
             expect(fetchMock).toHaveBeenCalledWith(
@@ -186,7 +186,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.success)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             await model!.complete(testCompletionRequests.withSystem);
 
             const callArgs = fetchMock.mock.calls[0];
@@ -202,7 +202,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.success)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             await model!.complete(testCompletionRequests.simple);
 
             const callArgs = fetchMock.mock.calls[0];
@@ -217,7 +217,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.success)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             await model!.complete(testCompletionRequests.withImage);
 
             const callArgs = fetchMock.mock.calls[0];
@@ -241,7 +241,7 @@ describe('AnthropicProvider', () => {
                 createMockResponse(mockAnthropicResponses.message.withToolUse)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             await model!.complete(testCompletionRequests.withTools);
 
             const callArgs = fetchMock.mock.calls[0];
@@ -271,7 +271,7 @@ describe('AnthropicProvider', () => {
                     createMockResponse(mockAnthropicResponses.message.success)
                 );
 
-                const model = provider.getModel('claude-3-5-sonnet-20241022');
+                const model = provider.getModel('claude-sonnet-4-5-20250929');
                 await model!.complete({
                     ...testCompletionRequests.withTools,
                     toolChoice: input as any,
@@ -287,7 +287,7 @@ describe('AnthropicProvider', () => {
         it('should throw error on api error', async () => {
             fetchMock.mockResolvedValueOnce(createMockErrorResponse('Invalid API key', 401));
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
 
             await expect(model!.complete(testCompletionRequests.simple)).rejects.toThrow(
                 'provider request failed'
@@ -295,11 +295,11 @@ describe('AnthropicProvider', () => {
         });
 
         it('should validate request before sending', async () => {
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
 
             const invalidRequest: CompletionRequest = {
                 messages: [],
-                model: 'claude-3-5-sonnet-20241022',
+                model: 'claude-sonnet-4-5-20250929',
             };
 
             await expect(model!.complete(invalidRequest)).rejects.toThrow(
@@ -316,7 +316,7 @@ describe('AnthropicProvider', () => {
                 createMockStreamResponse(mockAnthropicResponses.stream.chunks)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             const stream = model!.stream(testCompletionRequests.simple);
 
             const chunks = [];
@@ -343,7 +343,7 @@ describe('AnthropicProvider', () => {
                 createMockStreamResponse(mockAnthropicResponses.stream.chunks)
             );
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
             const stream = model!.stream(testCompletionRequests.simple);
 
             // Consume stream
@@ -360,7 +360,7 @@ describe('AnthropicProvider', () => {
         it('should handle stream errors', async () => {
             fetchMock.mockResolvedValueOnce(createMockErrorResponse('Rate limit', 429));
 
-            const model = provider.getModel('claude-3-5-sonnet-20241022');
+            const model = provider.getModel('claude-sonnet-4-5-20250929');
 
             await expect(async () => {
                 const stream = model!.stream(testCompletionRequests.simple);
@@ -389,7 +389,7 @@ describe('AnthropicProvider', () => {
 
                 fetchMock.mockResolvedValueOnce(createMockResponse(mockResponse));
 
-                const model = provider.getModel('claude-3-5-sonnet-20241022');
+                const model = provider.getModel('claude-sonnet-4-5-20250929');
                 const response = await model!.complete(testCompletionRequests.simple);
 
                 expect(response.finishReason).toBe(expected);

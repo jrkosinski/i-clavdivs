@@ -6,20 +6,20 @@
  *
  * Options:
  *   --session <id>    session ID for persistent history (default: "default")
- *   --model   <id>    model ID to use (default: claude-3-5-haiku-20241022)
+ *   --model   <id>    model ID to use (default: claude-sonnet-4-5-20250929)
  *   --stream          stream output token-by-token to stdout
  *   --new             start a fresh session, ignoring any existing history
  */
 
 export interface ICliArgs {
-    prompt: string;
+    prompt?: string;
     sessionId: string;
     model: string;
     stream: boolean;
     newSession: boolean;
 }
 
-const DEFAULT_MODEL = 'claude-3-5-haiku-20241022';
+const DEFAULT_MODEL = 'claude-sonnet-4-5-20250929';
 const DEFAULT_SESSION = 'default';
 
 /**
@@ -39,7 +39,7 @@ export class CliArgs {
             '',
             'Options:',
             '  --session <id>   session ID for persistent history (default: "default")',
-            '  --model <id>     Anthropic model ID (default: claude-3-5-haiku-20241022)',
+            '  --model <id>     Anthropic model ID (default: claude-sonnet-4-5-20250929)',
             '  --stream         stream output token-by-token',
             '  --new            ignore existing session history',
         ].join('\n');
@@ -58,7 +58,6 @@ export class CliArgs {
         const result = this._createDefaultArgs();
         const remaining = this._parseArguments(result);
         this._setPrompt(result, remaining);
-        this._validatePrompt(result.prompt);
         return result;
     }
 
@@ -67,7 +66,7 @@ export class CliArgs {
      */
     private _createDefaultArgs(): ICliArgs {
         return {
-            prompt: '',
+            prompt: undefined,
             sessionId: DEFAULT_SESSION,
             model: DEFAULT_MODEL,
             stream: false,
@@ -170,15 +169,7 @@ export class CliArgs {
      * Sets the prompt field from remaining positional arguments.
      */
     private _setPrompt(result: ICliArgs, remaining: string[]): void {
-        result.prompt = remaining.join(' ').trim();
-    }
-
-    /**
-     * Validates that prompt is not empty.
-     */
-    private _validatePrompt(prompt: string): void {
-        if (!prompt) {
-            throw new Error(`prompt is required\n\n${CliArgs.usage()}`);
-        }
+        const prompt = remaining.join(' ').trim();
+        result.prompt = prompt || undefined;
     }
 }

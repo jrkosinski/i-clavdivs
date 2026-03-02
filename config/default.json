@@ -1,8 +1,7 @@
 {
     "channels": {
         "discord": {
-            "enabled": false,
-            "token": "[discord]",
+            "enabled": true,
             "requireMention": true,
             "allowedChannels": [],
             "allowedUsers": []
@@ -10,6 +9,6 @@
     },
     "agent": {
         "provider": "anthropic",
-        "model": "claude-3-5-sonnet-20241022"
+        "model": "claude-sonnet-4-5-20250929"
     }
 }
