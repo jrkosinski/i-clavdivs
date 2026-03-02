@@ -1,6 +1,6 @@
 /**
  * Core provider type definitions.
- * Ported from moltbot for i-clavdivs milestone: agent listens on one channel, sends updates on another.
+ * Agent listens on one channel, sends updates on another.
  */
 
 /**

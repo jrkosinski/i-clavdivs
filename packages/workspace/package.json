@@ -1,8 +1,8 @@
 {
-    "name": "@i-clavdivs/runner",
+    "name": "@i-clavdivs/workspace",
     "version": "0.0.0",
     "type": "module",
-    "description": "Agent runner: session management and LLM execution loop",
+    "description": "Workspace file loading and system prompt building",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -20,17 +20,12 @@
         "test": "vitest run",
         "test:watch": "vitest"
     },
-    "files": [
-        "dist",
-        "src"
-    ],
     "dependencies": {
-        "@i-clavdivs/agents": "workspace:*",
-        "@i-clavdivs/models": "workspace:*",
-        "@i-clavdivs/workspace": "workspace:*"
+        "@i-clavdivs/common": "workspace:*"
     },
     "devDependencies": {
+        "@types/node": "^22.0.0",
         "typescript": "^5.3.3",
-        "vitest": "4.0.18"
+        "vitest": "^4.0.18"
     }
 }

@@ -1,8 +1,8 @@
 {
-    "name": "@i-clavdivs/runner",
+    "name": "@i-clavdivs/discord",
     "version": "0.0.0",
     "type": "module",
-    "description": "Agent runner: session management and LLM execution loop",
+    "description": "Discord channel plugin for i-clavdivs",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -20,17 +20,15 @@
         "test": "vitest run",
         "test:watch": "vitest"
     },
-    "files": [
-        "dist",
-        "src"
-    ],
     "dependencies": {
-        "@i-clavdivs/agents": "workspace:*",
-        "@i-clavdivs/models": "workspace:*",
-        "@i-clavdivs/workspace": "workspace:*"
+        "@i-clavdivs/channels": "workspace:*",
+        "@i-clavdivs/common": "workspace:*",
+        "@i-clavdivs/plugins": "workspace:*",
+        "@i-clavdivs/runner": "workspace:*",
+        "discord.js": "^14.16.3"
     },
     "devDependencies": {
         "typescript": "^5.3.3",
-        "vitest": "4.0.18"
+        "vitest": "^4.0.18"
     }
 }
