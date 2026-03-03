@@ -213,14 +213,8 @@ I communicate clearly and concisely.`
         });
 
         it('should handle unicode content throughout the workflow', async () => {
-            await fs.writeFile(
-                path.join(testDir, 'SOUL.md'),
-                '我是一个有创造力的助手 🤖'
-            );
-            await fs.writeFile(
-                path.join(testDir, 'IDENTITY.md'),
-                'Привет! Je suis Claudius.'
-            );
+            await fs.writeFile(path.join(testDir, 'SOUL.md'), '我是一个有创造力的助手 🤖');
+            await fs.writeFile(path.join(testDir, 'IDENTITY.md'), 'Привет! Je suis Claudius.');
 
             const files = await loadWorkspaceFiles({ workspaceDir: testDir });
             const prompt = buildSystemPromptWithWorkspace({

@@ -75,19 +75,21 @@ export interface IDiscordConfig {
 export function normalizeDiscordConfig(config: IDiscordConfig): IDiscordAccountConfig[] {
     //multi-account mode
     if (config.accounts && config.accounts.length > 0) {
-        return config.accounts.filter(acc => acc.enabled !== false);
+        return config.accounts.filter((acc) => acc.enabled !== false);
     }
 
     //single-account mode
     if (config.token) {
-        return [{
-            id: 'default',
-            token: config.token,
-            enabled: true,
-            allowedChannels: config.allowedChannels,
-            allowedUsers: config.allowedUsers,
-            requireMention: config.requireMention,
-        }];
+        return [
+            {
+                id: 'default',
+                token: config.token,
+                enabled: true,
+                allowedChannels: config.allowedChannels,
+                allowedUsers: config.allowedUsers,
+                requireMention: config.requireMention,
+            },
+        ];
     }
 
     return [];

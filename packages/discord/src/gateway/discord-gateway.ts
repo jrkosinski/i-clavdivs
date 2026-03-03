@@ -129,8 +129,12 @@ export class DiscordGateway implements IChannelGateway {
 
         client.on(Events.ClientReady, () => {
             console.log(`[Discord:${accountConfig.id}] Bot logged in as ${client.user?.tag}`);
-            console.log(`[Discord:${accountConfig.id}] Listening on ${client.guilds.cache.size} servers`);
-            console.log(`[Discord:${accountConfig.id}] Configuration: requireMention=${accountConfig.requireMention}, allowedChannels=${accountConfig.allowedChannels?.length || 'all'}, allowedUsers=${accountConfig.allowedUsers?.length || 'all'}`);
+            console.log(
+                `[Discord:${accountConfig.id}] Listening on ${client.guilds.cache.size} servers`
+            );
+            console.log(
+                `[Discord:${accountConfig.id}] Configuration: requireMention=${accountConfig.requireMention}, allowedChannels=${accountConfig.allowedChannels?.length || 'all'}, allowedUsers=${accountConfig.allowedUsers?.length || 'all'}`
+            );
         });
 
         client.on(Events.MessageCreate, async (message: Message) => {
@@ -171,11 +175,15 @@ export class DiscordGateway implements IChannelGateway {
             return;
         }
 
-        console.log(`[Discord:${accountId}] Received message from ${message.author.username}: "${message.content.substring(0, 50)}..."`);
+        console.log(
+            `[Discord:${accountId}] Received message from ${message.author.username}: "${message.content.substring(0, 50)}..."`
+        );
 
         //check if message should be processed
         if (!handler.shouldProcess(message)) {
-            console.log(`[Discord:${accountId}] Message filtered out (check requireMention, allowedChannels, allowedUsers)`);
+            console.log(
+                `[Discord:${accountId}] Message filtered out (check requireMention, allowedChannels, allowedUsers)`
+            );
             return;
         }
 

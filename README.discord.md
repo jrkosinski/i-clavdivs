@@ -23,19 +23,19 @@ The Discord integration allows i-clavdivs to respond to messages in Discord chan
 3. Go to the "Bot" tab and click "Add Bot"
 4. Copy the bot token (you'll need this for configuration)
 5. Enable the following intents:
-   - Server Members Intent
-   - Message Content Intent
+    - Server Members Intent
+    - Message Content Intent
 
 ### 2. Invite the Bot to Your Server
 
 1. Go to the "OAuth2" → "URL Generator" tab
 2. Select scopes:
-   - `bot`
+    - `bot`
 3. Select bot permissions:
-   - Read Messages/View Channels
-   - Send Messages
-   - Read Message History
-   - Add Reactions
+    - Read Messages/View Channels
+    - Send Messages
+    - Read Message History
+    - Add Reactions
 4. Copy the generated URL and open it in your browser
 5. Select the server to invite the bot to
 
@@ -133,25 +133,25 @@ DISCORD_BOT2_ALLOWED_CHANNELS=channel3
 
 ### Discord Config
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `enabled` | boolean | Whether Discord integration is enabled |
-| `token` | string | Discord bot token (single-account mode) |
-| `requireMention` | boolean | Require bot mention in guild channels |
+| Option            | Type     | Description                                |
+| ----------------- | -------- | ------------------------------------------ |
+| `enabled`         | boolean  | Whether Discord integration is enabled     |
+| `token`           | string   | Discord bot token (single-account mode)    |
+| `requireMention`  | boolean  | Require bot mention in guild channels      |
 | `allowedChannels` | string[] | Allowed channel IDs (empty = all channels) |
-| `allowedUsers` | string[] | Allowed user IDs (empty = all users) |
-| `accounts` | array | Multi-account configuration (see below) |
+| `allowedUsers`    | string[] | Allowed user IDs (empty = all users)       |
+| `accounts`        | array    | Multi-account configuration (see below)    |
 
 ### Account Config (Multi-Account Mode)
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `id` | string | Unique identifier for this account |
-| `token` | string | Discord bot token |
-| `enabled` | boolean | Whether this account is enabled (default: true) |
-| `requireMention` | boolean | Require bot mention in guild channels |
-| `allowedChannels` | string[] | Allowed channel IDs for this account |
-| `allowedUsers` | string[] | Allowed user IDs for this account |
+| Option            | Type     | Description                                     |
+| ----------------- | -------- | ----------------------------------------------- |
+| `id`              | string   | Unique identifier for this account              |
+| `token`           | string   | Discord bot token                               |
+| `enabled`         | boolean  | Whether this account is enabled (default: true) |
+| `requireMention`  | boolean  | Require bot mention in guild channels           |
+| `allowedChannels` | string[] | Allowed channel IDs for this account            |
+| `allowedUsers`    | string[] | Allowed user IDs for this account               |
 
 ## Usage
 
@@ -200,6 +200,7 @@ The bot automatically splits responses longer than 2000 characters across multip
 ### "Missing Permissions" error
 
 Make sure the bot has these permissions in the channel:
+
 - View Channel
 - Send Messages
 - Read Message History
@@ -207,6 +208,7 @@ Make sure the bot has these permissions in the channel:
 ### Module resolution errors during build
 
 Run:
+
 ```bash
 pnpm install
 pnpm build

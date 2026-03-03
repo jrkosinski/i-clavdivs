@@ -28,6 +28,7 @@ pnpm install
 ### Configuration
 
 i-clavdivs uses a hybrid configuration approach:
+
 - **Environment variables** for secrets (API keys, tokens)
 - **Config files** for settings and preferences
 
@@ -41,10 +42,12 @@ cp .env.example .env
 ```
 
 **Required:**
+
 - `ANTHROPIC_API_KEY` - Your Anthropic API key
 - `DISCORD_BOT_TOKEN` - Your Discord bot token from https://discord.com/developers/applications
 
 **Optional** (configure in `config/default.json` instead):
+
 - `DISCORD_REQUIRE_MENTION` - Require @mention in channels
 - `DISCORD_ALLOWED_CHANNELS` - Comma-separated Discord channel IDs
 - `DISCORD_ALLOWED_USERS` - Comma-separated Discord user IDs
@@ -67,6 +70,7 @@ Edit `config/default.json` for behavior settings:
 ```
 
 **Tips:**
+
 - Empty arrays (`[]`) mean "allow all"
 - Get Discord IDs: Enable Developer Mode in Discord, right-click → Copy ID
 - Config file settings are overridden by environment variables if both are set
@@ -97,12 +101,14 @@ pnpm daemon
 ```
 
 The bot will:
+
 - Connect to Discord and listen for messages
 - Print a heartbeat every 60 seconds to show it's alive
 - Show detailed logs when messages are received
 - Require @mention if `requireMention: true` is set
 
 **To send a message to the bot:**
+
 - In Discord channels: `@i-clavdivs your message here`
 - In DMs: Just send your message directly
 

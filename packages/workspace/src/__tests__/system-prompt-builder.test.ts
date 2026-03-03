@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { buildSystemPromptWithWorkspace, buildMinimalSystemPrompt } from '../core/system-prompt-builder.js';
+import {
+    buildSystemPromptWithWorkspace,
+    buildMinimalSystemPrompt,
+} from '../core/system-prompt-builder.js';
 import type { IWorkspaceFile } from '../types/workspace.js';
 
 describe('system-prompt-builder', () => {
@@ -141,7 +144,9 @@ describe('system-prompt-builder', () => {
                 workspaceDir: '/test',
             });
 
-            expect(prompt).toContain('IMPORTANT: If SOUL.md is present, embody its persona and tone.');
+            expect(prompt).toContain(
+                'IMPORTANT: If SOUL.md is present, embody its persona and tone.'
+            );
             expect(prompt).toContain(
                 'Avoid stiff, generic replies; follow its guidance unless higher-priority instructions override it.'
             );

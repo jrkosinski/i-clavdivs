@@ -78,7 +78,7 @@ describe('PluginManager', () => {
 
         it('should handle async plugin registration', async () => {
             const registerSpy = vi.fn(async () => {
-                await new Promise(resolve => setTimeout(resolve, 10));
+                await new Promise((resolve) => setTimeout(resolve, 10));
             });
 
             const plugin: IPlugin = {
@@ -388,7 +388,9 @@ describe('PluginManager', () => {
             await manager.startChannelGateways();
 
             //attempt to start again should throw
-            await expect(manager.startChannelGateways()).rejects.toThrow('Gateway already running: test-channel');
+            await expect(manager.startChannelGateways()).rejects.toThrow(
+                'Gateway already running: test-channel'
+            );
         });
 
         it('should handle plugin registration errors gracefully', async () => {
@@ -415,7 +417,7 @@ describe('PluginManager', () => {
                 name: 'Async Error Plugin',
                 description: 'A plugin that throws async on registration',
                 register: async () => {
-                    await new Promise(resolve => setTimeout(resolve, 5));
+                    await new Promise((resolve) => setTimeout(resolve, 5));
                     throw new Error('Async registration failed');
                 },
             };

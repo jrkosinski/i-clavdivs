@@ -55,8 +55,10 @@ export class ConfigLoader {
                 enabled: true,
                 token: process.env.DISCORD_BOT_TOKEN,
                 requireMention: process.env.DISCORD_REQUIRE_MENTION === 'true',
-                allowedChannels: process.env.DISCORD_ALLOWED_CHANNELS?.split(',').map(s => s.trim()),
-                allowedUsers: process.env.DISCORD_ALLOWED_USERS?.split(',').map(s => s.trim()),
+                allowedChannels: process.env.DISCORD_ALLOWED_CHANNELS?.split(',').map((s) =>
+                    s.trim()
+                ),
+                allowedUsers: process.env.DISCORD_ALLOWED_USERS?.split(',').map((s) => s.trim()),
             };
         }
 
@@ -82,7 +84,7 @@ export class ConfigLoader {
         const accountsEnv = process.env.DISCORD_ACCOUNTS;
         if (!accountsEnv) return [];
 
-        const accountIds = accountsEnv.split(',').map(s => s.trim());
+        const accountIds = accountsEnv.split(',').map((s) => s.trim());
         const accounts: Array<Record<string, unknown>> = [];
 
         for (const accountId of accountIds) {
@@ -94,8 +96,12 @@ export class ConfigLoader {
                     id: accountId,
                     token,
                     requireMention: process.env[`${prefix}REQUIRE_MENTION`] === 'true',
-                    allowedChannels: process.env[`${prefix}ALLOWED_CHANNELS`]?.split(',').map(s => s.trim()),
-                    allowedUsers: process.env[`${prefix}ALLOWED_USERS`]?.split(',').map(s => s.trim()),
+                    allowedChannels: process.env[`${prefix}ALLOWED_CHANNELS`]
+                        ?.split(',')
+                        .map((s) => s.trim()),
+                    allowedUsers: process.env[`${prefix}ALLOWED_USERS`]
+                        ?.split(',')
+                        .map((s) => s.trim()),
                 });
             }
         }
@@ -112,11 +118,7 @@ export class ConfigLoader {
         }
 
         //check default locations
-        const defaults = [
-            './config/default.json',
-            './config.json',
-            './.i-clavdivs.json',
-        ];
+        const defaults = ['./config/default.json', './config.json', './.i-clavdivs.json'];
 
         for (const def of defaults) {
             const path = resolve(def);
@@ -141,7 +143,7 @@ export class ConfigLoader {
         }
 
         if (Array.isArray(config)) {
-            return config.map(item => this._replaceEnvVars(item));
+            return config.map((item) => this._replaceEnvVars(item));
         }
 
         if (config && typeof config === 'object') {
@@ -158,7 +160,10 @@ export class ConfigLoader {
     /**
      * Deep merge two config objects.
      */
-    private static _mergeConfigs(base: Record<string, unknown>, override: Record<string, unknown>): Record<string, unknown> {
+    private static _mergeConfigs(
+        base: Record<string, unknown>,
+        override: Record<string, unknown>
+    ): Record<string, unknown> {
         const result = { ...base };
 
         for (const [key, value] of Object.entries(override)) {

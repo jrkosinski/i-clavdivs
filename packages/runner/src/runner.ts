@@ -12,10 +12,7 @@ import type { IAgentRunner, IAgentRequest, IAgentRunResult } from '@i-clavdivs/a
 import { SessionStore } from './session-store.js';
 import { SystemPrompt } from './system-prompt.js';
 import { log } from './logger.js';
-import {
-    buildSystemPromptWithWorkspace,
-    type IWorkspaceFile,
-} from '@i-clavdivs/workspace';
+import { buildSystemPromptWithWorkspace, type IWorkspaceFile } from '@i-clavdivs/workspace';
 
 export interface IAgentRunnerConfig {
     /** Max messages to retain in history before truncating oldest turns. Defaults to 40. */
@@ -112,7 +109,12 @@ export class AgentRunner implements IAgentRunner {
 
         try {
             const responseText = await this._getModelResponse(model, messages, request);
-            await this._saveConversationTurn(request.sessionId, history, request.prompt, responseText);
+            await this._saveConversationTurn(
+                request.sessionId,
+                history,
+                request.prompt,
+                responseText
+            );
 
             return this._buildSuccessResult(responseText, startedAt);
         } catch (err) {
@@ -123,7 +125,9 @@ export class AgentRunner implements IAgentRunner {
     /**
      * Resolves and validates the model from the provider.
      */
-    private _resolveModel(request: IAgentRequest): ReturnType<AnthropicProvider['getModel']> | null {
+    private _resolveModel(
+        request: IAgentRequest
+    ): ReturnType<AnthropicProvider['getModel']> | null {
         const provider = this._buildProvider(request);
         return provider.getModel(request.model);
     }

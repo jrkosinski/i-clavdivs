@@ -34,7 +34,9 @@ describe('PluginRegistry', () => {
 
             registry.register(plugin);
 
-            expect(() => registry.register(plugin)).toThrow('Plugin already registered: test-plugin');
+            expect(() => registry.register(plugin)).toThrow(
+                'Plugin already registered: test-plugin'
+            );
         });
 
         it('should register multiple different plugins', () => {

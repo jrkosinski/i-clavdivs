@@ -50,6 +50,13 @@ export function buildSystemPromptWithWorkspace(params: {
         for (const file of validFiles) {
             lines.push(`## ${file.name}`);
             lines.push('');
+
+            // USER.md describes the user, not the assistant
+            if (file.name.toLowerCase() === 'user.md') {
+                lines.push('The following describes the user you are assisting:');
+                lines.push('');
+            }
+
             lines.push(file.content!);
             lines.push('');
         }

@@ -196,9 +196,7 @@ describe('DiscordGateway', () => {
 
         it('should return undefined for non-existent account', () => {
             const gw = gateway as any;
-            gw._clients = [
-                { accountId: 'bot1', client: {}, handler: {} },
-            ];
+            gw._clients = [{ accountId: 'bot1', client: {}, handler: {} }];
 
             const found = gw._findClient('nonexistent');
 

@@ -24,6 +24,7 @@ This agent has access to various tools and capabilities. Use them wisely to acco
 ## Discord Integration
 
 When operating as a Discord bot, you can:
+
 - Respond to mentions and direct messages
 - React to messages with emojis
 - Send formatted messages with embeds

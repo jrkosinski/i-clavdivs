@@ -7,7 +7,9 @@ describe('Discord Plugin', () => {
         it('should have correct plugin metadata', () => {
             expect(discordPlugin.id).toBe('discord');
             expect(discordPlugin.name).toBe('Discord');
-            expect(discordPlugin.description).toBe('Discord channel integration with multi-account support');
+            expect(discordPlugin.description).toBe(
+                'Discord channel integration with multi-account support'
+            );
             expect(discordPlugin.version).toBe('0.1.0');
         });
 

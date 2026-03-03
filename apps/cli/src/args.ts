@@ -17,6 +17,7 @@ export interface ICliArgs {
     model: string;
     stream: boolean;
     newSession: boolean;
+    workspaceDir?: string;
 }
 
 const DEFAULT_MODEL = 'claude-sonnet-4-5-20250929';
@@ -38,10 +39,11 @@ export class CliArgs {
             'Usage: node dist/index.js [options] "<prompt>"',
             '',
             'Options:',
-            '  --session <id>   session ID for persistent history (default: "default")',
-            '  --model <id>     Anthropic model ID (default: claude-sonnet-4-5-20250929)',
-            '  --stream         stream output token-by-token',
-            '  --new            ignore existing session history',
+            '  --session <id>      session ID for persistent history (default: "default")',
+            '  --model <id>        Anthropic model ID (default: claude-sonnet-4-5-20250929)',
+            '  --stream            stream output token-by-token',
+            '  --new               ignore existing session history',
+            '  --workspace-dir <path>  workspace directory for .md files (default: ~/.i-clavdivs/workspace)',
         ].join('\n');
     }
 
@@ -71,6 +73,7 @@ export class CliArgs {
             model: DEFAULT_MODEL,
             stream: false,
             newSession: false,
+            workspaceDir: undefined,
         };
     }
 
@@ -108,6 +111,9 @@ export class CliArgs {
         if (this._isModelFlag(arg)) {
             return this._handleModelFlag(currentIndex, result);
         }
+        if (this._isWorkspaceDirFlag(arg)) {
+            return this._handleWorkspaceDirFlag(currentIndex, result);
+        }
         if (arg === '--stream') {
             result.stream = true;
             return currentIndex + 1;
@@ -137,6 +143,13 @@ export class CliArgs {
     }
 
     /**
+     * Checks if argument is the --workspace-dir flag.
+     */
+    private _isWorkspaceDirFlag(arg: string): boolean {
+        return arg === '--workspace-dir';
+    }
+
+    /**
      * Checks if argument is a positional argument (not a flag).
      */
     private _isPositionalArg(arg: string): boolean {
@@ -160,6 +173,17 @@ export class CliArgs {
     private _handleModelFlag(currentIndex: number, result: ICliArgs): number {
         if (currentIndex + 1 < this._args.length) {
             result.model = this._args[currentIndex + 1] ?? DEFAULT_MODEL;
+            return currentIndex + 2;
+        }
+        return currentIndex + 1;
+    }
+
+    /**
+     * Handles --workspace-dir flag and returns next index.
+     */
+    private _handleWorkspaceDirFlag(currentIndex: number, result: ICliArgs): number {
+        if (currentIndex + 1 < this._args.length) {
+            result.workspaceDir = this._args[currentIndex + 1];
             return currentIndex + 2;
         }
         return currentIndex + 1;

@@ -25,7 +25,7 @@ async function main(): Promise<void> {
     await prepareSession(args);
 
     //create runner with workspace files
-    const runner = await createRunner(args.stream);
+    const runner = await createRunner(args.stream, args.workspaceDir);
 
     //load plugins for channel support
     const pluginManager = await loadPlugins(runner);
@@ -68,7 +68,11 @@ async function prepareSession(args: ReturnType<typeof CliArgs.parse>): Promise<v
 /**
  * Run a single prompt and return the result.
  */
-async function runSinglePrompt(runner: AgentRunner, args: ReturnType<typeof CliArgs.parse>, prompt: string) {
+async function runSinglePrompt(
+    runner: AgentRunner,
+    args: ReturnType<typeof CliArgs.parse>,
+    prompt: string
+) {
     const result = await runner.run({
         sessionId: args.sessionId,
         prompt,
@@ -105,9 +109,9 @@ async function runDaemonMode(): Promise<void> {
 /**
  * Creates agent runner with optional streaming support and workspace files.
  */
-async function createRunner(stream: boolean): Promise<AgentRunner> {
-    // Load workspace files from default location (~/.i-clavdivs/workspace)
-    const workspaceFiles = await loadWorkspaceFiles();
+async function createRunner(stream: boolean, workspaceDir?: string): Promise<AgentRunner> {
+    // Load workspace files from specified directory or default location (~/.i-clavdivs/workspace)
+    const workspaceFiles = await loadWorkspaceFiles(workspaceDir ? { workspaceDir } : undefined);
 
     return new AgentRunner({
         onChunk: stream ? writeChunk : undefined,
