@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "outDir": "./dist",
         "rootDir": "./src",
@@ -7,5 +7,6 @@
         "declarationMap": true
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist", "tests"]
+    "exclude": ["node_modules", "dist", "tests"],
+    "references": [{ "path": "../common" }, { "path": "../channels" }, { "path": "../runner" }]
 }
