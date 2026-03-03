@@ -5,7 +5,7 @@
     "type": "module",
     "description": "A TypeScript pnpm workspace monorepo",
     "scripts": {
-        "build": "pnpm --filter \"./packages/*\" --workspace-concurrency=Infinity run build",
+        "build": "pnpm --filter \"./packages/*\" run build",
         "build:cli": "pnpm --filter=@i-clavdivs/cli run build",
         "dev": "pnpm -r --parallel --filter=./packages/* run dev",
         "test": "pnpm -r --filter=./packages/* run test",
