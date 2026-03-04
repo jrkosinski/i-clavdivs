@@ -104,7 +104,7 @@ export class RedditGateway implements IChannelGateway {
 
         if (type === 'comment') {
             //reply to a comment
-            const comment = await client.getComment(id);
+            const comment = client.getComment(id);
             await comment.reply(content);
         } else if (type === 'pm') {
             //send a private message (id is username)
@@ -188,7 +188,7 @@ export class RedditGateway implements IChannelGateway {
      * Poll for new messages from all configured sources.
      */
     private async _poll(instance: IRedditClientInstance): Promise<void> {
-        const { client, handler, config } = instance;
+        const { config } = instance;
 
         try {
             //poll all sources in parallel
@@ -275,7 +275,7 @@ export class RedditGateway implements IChannelGateway {
      */
     private async _pollSubreddit(instance: IRedditClientInstance, subredditName: string): Promise<void> {
         try {
-            const subreddit = await instance.client.getSubreddit(subredditName);
+            const subreddit = instance.client.getSubreddit(subredditName);
             const comments = await subreddit.getNewComments({ limit: 10 });
             await this._processItems(instance, comments, `subreddit ${subredditName}`);
         } catch (error) {
@@ -304,8 +304,10 @@ export class RedditGateway implements IChannelGateway {
 
             //keep the set from growing too large
             if (instance.lastCheckedIds.size > 1000) {
-                const firstId = instance.lastCheckedIds.values().next().value;
-                instance.lastCheckedIds.delete(firstId);
+                const firstId = instance.lastCheckedIds.values().next().value as string;
+                if (firstId) {
+                    instance.lastCheckedIds.delete(firstId);
+                }
             }
 
             //check if should process
@@ -393,15 +395,10 @@ export class RedditGateway implements IChannelGateway {
     /**
      * Send a reply to a Reddit item.
      */
-    private async _sendReply(raw: RedditContent, text: string, client: Snoowrap): Promise<void> {
+    private async _sendReply(raw: RedditContent, text: string, _client: Snoowrap): Promise<void> {
         try {
-            if ('reply' in raw) {
-                //comment or post - reply directly
-                await raw.reply(text);
-            } else {
-                //private message - reply
-                await raw.reply(text);
-            }
+            //both comments and private messages have a reply method
+            await raw.reply(text);
         } catch (error) {
             console.error('[Reddit] Error sending reply:', error);
         }
