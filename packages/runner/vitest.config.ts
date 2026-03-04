@@ -15,6 +15,7 @@ export default defineConfig({
         alias: {
             '@i-clavdivs/models': resolve(__dirname, '../models/src/index.ts'),
             '@i-clavdivs/agents': resolve(__dirname, '../agents/src/index.ts'),
+            '@i-clavdivs/workspace': resolve(__dirname, '../workspace/src/index.ts'),
         },
     },
 });

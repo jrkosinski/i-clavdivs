@@ -14,7 +14,7 @@ describe('SystemPrompt', () => {
 
         it('should include the workspace directory', () => {
             const result = SystemPrompt.build({
-                model: 'claude-3-5-sonnet-20241022',
+                model: 'claude-sonnet-4-5-20250929',
                 workspaceDir: '/home/user/my-project',
             });
 

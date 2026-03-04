@@ -12,12 +12,16 @@
         "clean": "rm -rf dist *.tsbuildinfo",
         "typecheck": "tsc --noEmit",
         "start": "node dist/index.js",
+        "daemon": "node dist/index.js",
         "test": "vitest run",
         "test:watch": "vitest"
     },
     "dependencies": {
         "@i-clavdivs/agents": "workspace:*",
-        "@i-clavdivs/runner": "workspace:*"
+        "@i-clavdivs/discord": "workspace:*",
+        "@i-clavdivs/plugins": "workspace:*",
+        "@i-clavdivs/runner": "workspace:*",
+        "@i-clavdivs/workspace": "workspace:*"
     },
     "devDependencies": {
         "typescript": "^5.3.3",

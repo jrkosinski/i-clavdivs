@@ -58,7 +58,7 @@ const BASE_REQUEST: IAgentRequest = {
     sessionId: 'test-session',
     prompt: 'hello',
     provider: 'anthropic',
-    model: 'claude-3-5-haiku-20241022',
+    model: 'claude-sonnet-4-5-20250929',
     workspaceDir: '/tmp',
 };
 

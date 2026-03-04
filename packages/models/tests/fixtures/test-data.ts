@@ -20,7 +20,7 @@ export const testModelDefinitions: Record<string, ModelDefinition> = {
         maxTokens: 16_384,
     },
     'claude-3-5-sonnet': {
-        id: 'claude-3-5-sonnet-20241022',
+        id: 'claude-sonnet-4-5-20250929',
         name: 'Claude 3.5 Sonnet',
         provider: 'anthropic',
         api: 'anthropic-messages',

@@ -1,6 +1,5 @@
 /**
  * Utility functions for provider-specific logic and capabilities.
- * Ported from moltbot for i-clavdivs.
  */
 
 /**

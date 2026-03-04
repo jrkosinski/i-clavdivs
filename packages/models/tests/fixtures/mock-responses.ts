@@ -127,7 +127,7 @@ export const mockAnthropicResponses = {
                     text: 'Hello! How can I assist you today?',
                 },
             ],
-            model: 'claude-3-5-sonnet-20241022',
+            model: 'claude-sonnet-4-5-20250929',
             stop_reason: 'end_turn',
             stop_sequence: null,
             usage: {
@@ -154,7 +154,7 @@ export const mockAnthropicResponses = {
                     },
                 },
             ],
-            model: 'claude-3-5-sonnet-20241022',
+            model: 'claude-sonnet-4-5-20250929',
             stop_reason: 'tool_use',
             stop_sequence: null,
             usage: {
@@ -172,7 +172,7 @@ export const mockAnthropicResponses = {
                     text: 'Cached response',
                 },
             ],
-            model: 'claude-3-5-sonnet-20241022',
+            model: 'claude-sonnet-4-5-20250929',
             stop_reason: 'end_turn',
             stop_sequence: null,
             usage: {
@@ -192,7 +192,7 @@ export const mockAnthropicResponses = {
     },
     stream: {
         chunks: [
-            'data: {"type":"message_start","message":{"id":"msg_123","type":"message","role":"assistant","content":[],"model":"claude-3-5-sonnet-20241022","stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":10,"output_tokens":0}}}\n\n',
+            'data: {"type":"message_start","message":{"id":"msg_123","type":"message","role":"assistant","content":[],"model":"claude-sonnet-4-5-20250929","stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":10,"output_tokens":0}}}\n\n',
             'data: {"type":"content_block_start","index":0,"content_block":{"type":"text","text":""}}\n\n',
             'data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Hello"}}\n\n',
             'data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"!"}}\n\n',

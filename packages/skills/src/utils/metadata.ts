@@ -1,6 +1,5 @@
 /**
  * Metadata parsing utilities for skill frontmatter.
- * Adapted from i-clavdivs/moltbot frontmatter processing.
  */
 
 import JSON5 from 'json5';

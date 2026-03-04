@@ -25,9 +25,37 @@ export class SessionStore {
     /** Loads the message history for a session. Returns [] if none exists yet. */
     public async load(sessionId: string): Promise<Message[]> {
         const file = this._resolvePath(sessionId);
+        const rawContent = await this._readFileOrNull(file);
+
+        if (!rawContent) {
+            return [];
+        }
+
+        return this._parseMessages(rawContent, file);
+    }
+
+    /**
+     * Reads file content or returns null if file doesn't exist or can't be read.
+     */
+    private async _readFileOrNull(file: string): Promise<string | null> {
         try {
-            const raw = await fs.readFile(file, 'utf-8');
-            const parsed: unknown = JSON.parse(raw);
+            return await fs.readFile(file, 'utf-8');
+        } catch (err) {
+            if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+                log.debug(`no session file found, starting fresh: ${file}`);
+            } else {
+                log.warn(`failed to read session file, starting fresh: ${String(err)}`);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Parses and validates JSON content as Message array.
+     */
+    private _parseMessages(rawContent: string, file: string): Message[] {
+        try {
+            const parsed: unknown = JSON.parse(rawContent);
             if (!Array.isArray(parsed)) {
                 log.warn(`session file malformed, starting fresh: ${file}`);
                 return [];
@@ -35,11 +63,7 @@ export class SessionStore {
             log.debug(`loaded ${String(parsed.length)} messages from ${file}`);
             return parsed as Message[];
         } catch (err) {
-            if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
-                log.debug(`no session file found, starting fresh: ${file}`);
-                return [];
-            }
-            log.warn(`failed to read session file, starting fresh: ${String(err)}`);
+            log.warn(`failed to parse session file, starting fresh: ${String(err)}`);
             return [];
         }
     }
@@ -47,9 +71,24 @@ export class SessionStore {
     /** Persists the full message history for a session. */
     public async save(sessionId: string, messages: Message[]): Promise<void> {
         const file = this._resolvePath(sessionId);
-        await fs.mkdir(path.dirname(file), { recursive: true });
-        await fs.writeFile(file, JSON.stringify(messages, null, 2), 'utf-8');
+        await this._ensureDirectoryExists(file);
+        await this._writeMessagesToFile(file, messages);
         log.debug(`saved ${String(messages.length)} messages to ${file}`);
+    }
+
+    /**
+     * Ensures the parent directory for the session file exists.
+     */
+    private async _ensureDirectoryExists(file: string): Promise<void> {
+        await fs.mkdir(path.dirname(file), { recursive: true });
+    }
+
+    /**
+     * Writes message array to file as formatted JSON.
+     */
+    private async _writeMessagesToFile(file: string, messages: Message[]): Promise<void> {
+        const json = JSON.stringify(messages, null, 2);
+        await fs.writeFile(file, json, 'utf-8');
     }
 
     /** Deletes the session file if it exists. */
@@ -73,10 +112,21 @@ export class SessionStore {
             .catch(() => false);
     }
 
+    /**
+     * Resolves session ID to a safe file path, preventing path traversal attacks.
+     */
     private _resolvePath(sessionId: string): string {
-        //replace any character that isn't safe for a filename, then collapse
-        //any remaining ".." sequences so path traversal is impossible
-        const safe = sessionId.replace(/[^a-zA-Z0-9_\-.:]/g, '_').replace(/\.{2,}/g, '_');
-        return path.join(this._sessionDir, `${safe}.json`);
+        const sanitized = this._sanitizeSessionId(sessionId);
+        return path.join(this._sessionDir, `${sanitized}.json`);
+    }
+
+    /**
+     * Sanitizes session ID by replacing unsafe characters and preventing path traversal.
+     */
+    private _sanitizeSessionId(sessionId: string): string {
+        //replace any character that isn't safe for a filename
+        const cleaned = sessionId.replace(/[^a-zA-Z0-9_\-.:]/g, '_');
+        //collapse any remaining ".." sequences so path traversal is impossible
+        return cleaned.replace(/\.{2,}/g, '_');
     }
 }

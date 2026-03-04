@@ -30,15 +30,45 @@ export class Logger {
         this._write('error', msg);
     }
 
+    /**
+     * Writes a log message to stderr if it meets the minimum level threshold.
+     */
     private _write(level: LogLevel, msg: string): void {
-        if (LEVELS[level] < LEVELS[this._minLevel]) return;
-        process.stderr.write(`[${level.toUpperCase()}] ${msg}\n`);
+        if (this._shouldSkipLevel(level)) return;
+        this._writeToStderr(level, msg);
     }
 
+    /**
+     * Checks if the log level should be skipped based on minimum level.
+     */
+    private _shouldSkipLevel(level: LogLevel): boolean {
+        return LEVELS[level] < LEVELS[this._minLevel];
+    }
+
+    /**
+     * Formats and writes log message to stderr.
+     */
+    private _writeToStderr(level: LogLevel, msg: string): void {
+        const formatted = `[${level.toUpperCase()}] ${msg}\n`;
+        process.stderr.write(formatted);
+    }
+
+    /**
+     * Resolves log level from LOG_LEVEL environment variable, defaulting to 'info'.
+     */
     private _resolveEnvLevel(): LogLevel {
         const env = process.env['LOG_LEVEL']?.toLowerCase();
-        if (env === 'debug' || env === 'info' || env === 'warn' || env === 'error') return env;
+        if (this._isValidLogLevel(env)) {
+            return env;
+        }
         return 'info';
+    }
+
+    /**
+     * Type guard to check if string is a valid LogLevel.
+     */
+    private _isValidLogLevel(value: string | undefined): value is LogLevel {
+        return value === 'debug' || value === 'info' || value === 'warn' || value === 'error';
     }
 }
 

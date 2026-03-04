@@ -26,7 +26,8 @@
     ],
     "dependencies": {
         "@i-clavdivs/agents": "workspace:*",
-        "@i-clavdivs/models": "workspace:*"
+        "@i-clavdivs/models": "workspace:*",
+        "@i-clavdivs/workspace": "workspace:*"
     },
     "devDependencies": {
         "typescript": "^5.3.3",

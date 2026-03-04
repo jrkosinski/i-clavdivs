@@ -1,6 +1,5 @@
 /**
  * Core types and interfaces for the skills system.
- * Adapted from i-clavdivs/moltbot skill types.
  */
 
 /**

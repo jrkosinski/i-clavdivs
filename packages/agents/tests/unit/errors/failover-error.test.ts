@@ -8,14 +8,14 @@ describe('FailoverError', () => {
                 'Authentication failed',
                 'auth',
                 'anthropic',
-                'claude-3-5-sonnet-20241022',
+                'claude-sonnet-4-5-20250929',
                 'profile-123'
             );
 
             expect(error.message).toBe('Authentication failed');
             expect(error.reason).toBe('auth');
             expect(error.provider).toBe('anthropic');
-            expect(error.model).toBe('claude-3-5-sonnet-20241022');
+            expect(error.model).toBe('claude-sonnet-4-5-20250929');
             expect(error.profileId).toBe('profile-123');
             expect(error.code).toBe('FAILOVER');
             expect(error.retryable).toBe(true);
