@@ -105,7 +105,7 @@ export class RedditGateway implements IChannelGateway {
         if (type === 'comment') {
             //reply to a comment
             const comment = client.getComment(id);
-            await comment.reply(content);
+            await comment.reply(content).then(() => undefined);
         } else if (type === 'pm') {
             //send a private message (id is username)
             await client.composeMessage({
@@ -398,7 +398,7 @@ export class RedditGateway implements IChannelGateway {
     private async _sendReply(raw: RedditContent, text: string, _client: Snoowrap): Promise<void> {
         try {
             //both comments and private messages have a reply method
-            await raw.reply(text);
+            await raw.reply(text).then(() => undefined);
         } catch (error) {
             console.error('[Reddit] Error sending reply:', error);
         }
