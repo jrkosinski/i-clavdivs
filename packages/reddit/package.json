@@ -1,0 +1,35 @@
+{
+    "name": "@i-clavdivs/reddit",
+    "version": "0.0.0",
+    "type": "module",
+    "description": "Reddit channel plugin for i-clavdivs",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "dev": "tsc -p tsconfig.json --watch",
+        "clean": "rm -rf dist *.tsbuildinfo",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "test:watch": "vitest"
+    },
+    "dependencies": {
+        "@i-clavdivs/channels": "workspace:*",
+        "@i-clavdivs/common": "workspace:*",
+        "@i-clavdivs/plugins": "workspace:*",
+        "@i-clavdivs/runner": "workspace:*",
+        "snoowrap": "^1.23.0"
+    },
+    "devDependencies": {
+        "@types/snoowrap": "^1.19.0",
+        "typescript": "^5.3.3",
+        "vitest": "^4.0.18"
+    }
+}
