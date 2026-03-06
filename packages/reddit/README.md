@@ -91,20 +91,20 @@ pnpm add @i-clavdivs/reddit
 ## Getting Reddit API Credentials
 
 1. **Create a Reddit App**:
-   - Go to https://www.reddit.com/prefs/apps
-   - Click "create app" or "create another app"
-   - Choose "script" as the app type
-   - Fill in the required fields
-   - Note your `clientId` (under the app name) and `clientSecret`
+    - Go to https://www.reddit.com/prefs/apps
+    - Click "create app" or "create another app"
+    - Choose "script" as the app type
+    - Fill in the required fields
+    - Note your `clientId` (under the app name) and `clientSecret`
 
 2. **Get a Refresh Token**:
-   - Use a tool like [reddit-oauth-helper](https://not-an-aardvark.github.io/reddit-oauth-helper/)
-   - Or use OAuth2 flow to get a refresh token programmatically
-   - Store the refresh token securely
+    - Use a tool like [reddit-oauth-helper](https://not-an-aardvark.github.io/reddit-oauth-helper/)
+    - Or use OAuth2 flow to get a refresh token programmatically
+    - Store the refresh token securely
 
 3. **Set User Agent**:
-   - Format: `platform:app-name:version (by /u/your-username)`
-   - Example: `linux:i-clavdivs-bot:1.0.0 (by /u/mybotaccount)`
+    - Format: `platform:app-name:version (by /u/your-username)`
+    - Example: `linux:i-clavdivs-bot:1.0.0 (by /u/mybotaccount)`
 
 ## Usage
 
@@ -145,6 +145,7 @@ Reddit's API has rate limits of approximately **60 requests per minute**. The pl
 - Enabling automatic rate limit error handling
 
 **Recommended polling intervals**:
+
 - Single account, minimal monitoring: 30-60 seconds
 - Single account, extensive monitoring: 60-120 seconds
 - Multiple accounts: 60-90 seconds per account
@@ -153,13 +154,13 @@ Reddit's API has rate limits of approximately **60 requests per minute**. The pl
 
 The plugin can monitor several types of Reddit content:
 
-| Type | Description | Config Option |
-|------|-------------|---------------|
-| Mentions | Username mentions (e.g., `/u/botname`) | `monitorMentions` |
-| Direct Messages | Private messages sent to the bot | `monitorDirectMessages` |
-| Comment Replies | Replies to bot's comments | `monitorCommentReplies` |
-| Post Replies | Replies to bot's posts | `monitorPostReplies` |
-| Subreddit Comments | New comments in monitored subreddits | `subreddits` array |
+| Type               | Description                            | Config Option           |
+| ------------------ | -------------------------------------- | ----------------------- |
+| Mentions           | Username mentions (e.g., `/u/botname`) | `monitorMentions`       |
+| Direct Messages    | Private messages sent to the bot       | `monitorDirectMessages` |
+| Comment Replies    | Replies to bot's comments              | `monitorCommentReplies` |
+| Post Replies       | Replies to bot's posts                 | `monitorPostReplies`    |
+| Subreddit Comments | New comments in monitored subreddits   | `subreddits` array      |
 
 ## Architecture
 
@@ -216,19 +217,23 @@ pnpm test:watch
 ## Troubleshooting
 
 ### "No Reddit accounts configured"
+
 - Ensure `clientId`, `clientSecret`, and `refreshToken` are provided
 - Check that `enabled: true` in config
 
 ### Rate limit errors
+
 - Increase `pollingInterval` to reduce request frequency
 - Reduce number of monitored sources (mentions, DMs, subreddits)
 
 ### Messages not being processed
+
 - Verify `allowedUsers` isn't blocking users
 - Check polling interval isn't too long
 - Ensure monitoring flags are enabled (`monitorMentions`, etc.)
 
 ### Authentication errors
+
 - Verify OAuth credentials are correct
 - Check refresh token hasn't expired
 - Ensure user agent follows Reddit's format requirements

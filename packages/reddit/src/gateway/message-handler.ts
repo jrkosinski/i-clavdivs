@@ -93,7 +93,9 @@ export class MessageHandler {
             chatType,
             timestamp: new Date(content.created_utc * 1000),
             metadata: {
-                subreddit: isComment ? (content as RedditComment).subreddit?.display_name : undefined,
+                subreddit: isComment
+                    ? (content as RedditComment).subreddit?.display_name
+                    : undefined,
                 permalink: await this._getPermalink(content),
                 isComment,
             },

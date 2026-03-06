@@ -151,7 +151,9 @@ export class RedditGateway implements IChannelGateway {
 
         this._clients.push(instance);
 
-        console.log(`[Reddit:${accountConfig.id}] Client initialized for user ${accountConfig.username}`);
+        console.log(
+            `[Reddit:${accountConfig.id}] Client initialized for user ${accountConfig.username}`
+        );
         console.log(
             `[Reddit:${accountConfig.id}] Monitoring: mentions=${accountConfig.monitorMentions}, DMs=${accountConfig.monitorDirectMessages}, commentReplies=${accountConfig.monitorCommentReplies}, postReplies=${accountConfig.monitorPostReplies}`
         );
@@ -273,13 +275,19 @@ export class RedditGateway implements IChannelGateway {
     /**
      * Poll a specific subreddit for new posts/comments.
      */
-    private async _pollSubreddit(instance: IRedditClientInstance, subredditName: string): Promise<void> {
+    private async _pollSubreddit(
+        instance: IRedditClientInstance,
+        subredditName: string
+    ): Promise<void> {
         try {
             const subreddit = instance.client.getSubreddit(subredditName);
             const comments = await subreddit.getNewComments({ limit: 10 });
             await this._processItems(instance, comments, `subreddit ${subredditName}`);
         } catch (error) {
-            console.error(`[Reddit:${instance.accountId}] Error polling subreddit ${subredditName}:`, error);
+            console.error(
+                `[Reddit:${instance.accountId}] Error polling subreddit ${subredditName}:`,
+                error
+            );
         }
     }
 
@@ -332,7 +340,9 @@ export class RedditGateway implements IChannelGateway {
         }
 
         if (newItemCount > 0) {
-            console.log(`[Reddit:${instance.accountId}] Processed ${newItemCount} new items from ${source}`);
+            console.log(
+                `[Reddit:${instance.accountId}] Processed ${newItemCount} new items from ${source}`
+            );
         }
     }
 
@@ -361,7 +371,11 @@ export class RedditGateway implements IChannelGateway {
 
             const payload = result.payloads?.[0];
             if (!payload) {
-                await this._sendReply(raw, 'Sorry, I encountered an error processing your request.', client);
+                await this._sendReply(
+                    raw,
+                    'Sorry, I encountered an error processing your request.',
+                    client
+                );
                 return;
             }
 
@@ -383,12 +397,20 @@ export class RedditGateway implements IChannelGateway {
 
                 //send additional chunks as follow-up comments
                 for (let i = 1; i < chunks.length; i++) {
-                    await this._sendReply(raw, `(continued ${i}/${chunks.length - 1})\n\n${chunks[i]}`, client);
+                    await this._sendReply(
+                        raw,
+                        `(continued ${i}/${chunks.length - 1})\n\n${chunks[i]}`,
+                        client
+                    );
                 }
             }
         } catch (error) {
             console.error('[Reddit] Error processing message:', error);
-            await this._sendReply(raw, 'Sorry, an error occurred while processing your message.', client);
+            await this._sendReply(
+                raw,
+                'Sorry, an error occurred while processing your message.',
+                client
+            );
         }
     }
 
