@@ -44,13 +44,23 @@ cp .env.example .env
 **Required:**
 
 - `ANTHROPIC_API_KEY` - Your Anthropic API key
+
+**Discord (Optional):**
+
 - `DISCORD_BOT_TOKEN` - Your Discord bot token from https://discord.com/developers/applications
-
-**Optional** (configure in `config/default.json` instead):
-
-- `DISCORD_REQUIRE_MENTION` - Require @mention in channels
+- `DISCORD_REQUIRE_MENTION` - Require @mention in channels (configure in `config/default.json` instead)
 - `DISCORD_ALLOWED_CHANNELS` - Comma-separated Discord channel IDs
 - `DISCORD_ALLOWED_USERS` - Comma-separated Discord user IDs
+
+**Reddit (Optional):**
+
+See [Reddit Plugin Documentation](packages/reddit/README.md) for detailed setup instructions.
+
+- `REDDIT_CLIENT_ID` - Your Reddit app client ID
+- `REDDIT_CLIENT_SECRET` - Your Reddit app client secret
+- `REDDIT_REFRESH_TOKEN` - Your Reddit OAuth refresh token
+- `REDDIT_USERNAME` - Your Reddit bot username
+- `REDDIT_USER_AGENT` - Your bot's user agent string
 
 #### 2. Configure settings in config/default.json
 
@@ -64,7 +74,14 @@ Edit `config/default.json` for behavior settings:
             "requireMention": true,
             "allowedChannels": [],
             "allowedUsers": []
+        },
+        "reddit": {
+            "enabled": false
         }
+    },
+    "agent": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-5-20250929"
     }
 }
 ```
