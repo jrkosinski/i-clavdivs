@@ -15,7 +15,8 @@
         "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
         "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md}\"",
         "start": "pnpm --filter=@i-clavdivs/cli run start",
-        "daemon": "pnpm --filter=@i-clavdivs/cli run daemon"
+        "daemon": "pnpm --filter=@i-clavdivs/cli run daemon",
+        "run:daemon": "./apps/cli/start-daemon.sh"
     },
     "devDependencies": {
         "@types/node": "^20.11.17",
