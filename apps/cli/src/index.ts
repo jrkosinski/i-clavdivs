@@ -9,6 +9,10 @@
  *   node dist/index.js --model claude-sonnet-4-5-20250929 --stream "explain recursion"
  */
 
+// Load environment variables from .env file before anything else
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
+
 import process from 'node:process';
 import { AgentRunner } from '@i-clavdivs/runner';
 import { SessionStore } from '@i-clavdivs/runner';

@@ -38,9 +38,12 @@ export class PluginManager {
      */
     public async startChannelGateways(): Promise<void> {
         const channels = this._registry.listChannels();
+
         for (const channel of channels) {
             const channelConfig = this._getChannelConfig(channel.id);
+
             if (channelConfig?.enabled) {
+                console.log(`[PluginManager] Starting ${channel.id} gateway...`);
                 await this._startGateway(channel, channelConfig);
             }
         }

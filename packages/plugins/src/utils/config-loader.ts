@@ -137,7 +137,9 @@ export class ConfigLoader {
         if (typeof config === 'string') {
             const match = config.match(/^\$\{(.+)\}$/);
             if (match && match[1]) {
-                return process.env[match[1]] || config;
+                const envVar = match[1];
+                const value = process.env[envVar];
+                return value || config;
             }
             return config;
         }

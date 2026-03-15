@@ -26,4 +26,6 @@ echo "  WORKSPACE_DIR: ./workspace"
 echo ""
 
 # Start the daemon with workspace directory pointing to project workspace
+# Change to monorepo root so config file can be found
+cd "$(dirname "$0")/../.."
 pnpm daemon -- --workspace-dir ./workspace
