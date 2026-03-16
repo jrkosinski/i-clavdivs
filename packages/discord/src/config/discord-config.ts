@@ -31,6 +31,12 @@ export interface IDiscordAccountConfig {
      * Whether bot mention is required in guild channels.
      */
     requireMention?: boolean;
+
+    /**
+     * Workspace directory for this bot's personality files (SOUL.md, etc.).
+     * If not specified, uses default workspace directory.
+     */
+    workspaceDir?: string;
 }
 
 /**
@@ -64,6 +70,11 @@ export interface IDiscordConfig {
     requireMention?: boolean;
 
     /**
+     * Single-account mode: workspace directory for personality files.
+     */
+    workspaceDir?: string;
+
+    /**
      * Multi-account mode: array of account configurations.
      */
     accounts?: IDiscordAccountConfig[];
@@ -88,6 +99,7 @@ export function normalizeDiscordConfig(config: IDiscordConfig): IDiscordAccountC
                 allowedChannels: config.allowedChannels,
                 allowedUsers: config.allowedUsers,
                 requireMention: config.requireMention,
+                workspaceDir: config.workspaceDir,
             },
         ];
     }

@@ -25,6 +25,7 @@
         "@i-clavdivs/common": "workspace:*",
         "@i-clavdivs/plugins": "workspace:*",
         "@i-clavdivs/runner": "workspace:*",
+        "@i-clavdivs/workspace": "workspace:*",
         "discord.js": "^14.25.1"
     },
     "devDependencies": {

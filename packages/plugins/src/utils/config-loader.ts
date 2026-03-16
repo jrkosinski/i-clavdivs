@@ -79,6 +79,7 @@ export class ConfigLoader {
      * Format: DISCORD_ACCOUNTS=account1,account2
      *         DISCORD_ACCOUNT1_TOKEN=...
      *         DISCORD_ACCOUNT1_CHANNELS=...
+     *         DISCORD_ACCOUNT1_WORKSPACE_DIR=...
      */
     private static _parseDiscordAccounts(): Array<Record<string, unknown>> {
         const accountsEnv = process.env.DISCORD_ACCOUNTS;
@@ -102,6 +103,7 @@ export class ConfigLoader {
                     allowedUsers: process.env[`${prefix}ALLOWED_USERS`]
                         ?.split(',')
                         .map((s) => s.trim()),
+                    workspaceDir: process.env[`${prefix}WORKSPACE_DIR`],
                 });
             }
         }

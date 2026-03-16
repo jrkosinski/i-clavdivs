@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits, Events, Partials, type Message } from 'discord.js';
 import type { IChannelGateway, IChannelMessage } from '@i-clavdivs/plugins';
-import type { AgentRunner } from '@i-clavdivs/runner';
+import { AgentRunner } from '@i-clavdivs/runner';
+import { loadWorkspaceFiles } from '@i-clavdivs/workspace';
 import { MessageHandler } from './message-handler.js';
 import type { IDiscordConfig, IDiscordAccountConfig } from '../config/index.js';
 import { normalizeDiscordConfig } from '../config/index.js';
@@ -12,16 +13,16 @@ interface IDiscordClientInstance {
     accountId: string;
     client: Client;
     handler: MessageHandler;
+    runner: AgentRunner;
 }
 
 /**
  * Discord gateway that listens for messages and routes them to the agent.
- * Supports multiple Discord bot accounts.
+ * Supports multiple Discord bot accounts, each with its own workspace/personality.
  */
 export class DiscordGateway implements IChannelGateway {
     private _clients: IDiscordClientInstance[] = [];
     private _running = false;
-    private _runner?: AgentRunner;
 
     constructor(_config: unknown) {
         //config is passed to start() method
@@ -29,9 +30,11 @@ export class DiscordGateway implements IChannelGateway {
 
     /**
      * Set the agent runner for processing messages.
+     * @deprecated This method is kept for backward compatibility but is no longer used.
+     * Each account now has its own runner created in _startAccount().
      */
-    public setRunner(runner: AgentRunner): void {
-        this._runner = runner;
+    public setRunner(_runner: AgentRunner): void {
+        //no-op: kept for backward compatibility with IChannelGateway interface
     }
 
     /**
@@ -46,7 +49,20 @@ export class DiscordGateway implements IChannelGateway {
         const accounts = normalizeDiscordConfig(discordConfig);
 
         if (accounts.length === 0) {
-            throw new Error('No Discord accounts configured');
+            throw new Error(
+                'No Discord accounts configured. Please ensure DISCORD_BOT_TOKEN is set in your environment or .env file, ' +
+                'or configure the token in config/default.json'
+            );
+        }
+
+        // Validate that tokens don't contain placeholders
+        for (const account of accounts) {
+            if (!account.token || account.token.includes('${')) {
+                throw new Error(
+                    `Invalid Discord token for account ${account.id}: Token appears to be a placeholder or missing. ` +
+                    'Please set DISCORD_BOT_TOKEN in your environment or .env file.'
+                );
+            }
         }
 
         //start a client for each account
@@ -111,6 +127,9 @@ export class DiscordGateway implements IChannelGateway {
      * Start a Discord client for a single account.
      */
     private async _startAccount(accountConfig: IDiscordAccountConfig): Promise<void> {
+        //create a dedicated runner for this account with its own workspace
+        const runner = await this._createRunnerForAccount(accountConfig);
+
         const client = new Client({
             intents: [
                 GatewayIntentBits.Guilds,
@@ -124,7 +143,7 @@ export class DiscordGateway implements IChannelGateway {
 
         const handler = new MessageHandler(accountConfig);
         handler.setMessageCallback(async (msg, raw) => {
-            await this._processWithAgent(msg, raw);
+            await this._processWithAgent(msg, raw, accountConfig.id);
         });
 
         client.on(Events.ClientReady, () => {
@@ -135,6 +154,11 @@ export class DiscordGateway implements IChannelGateway {
             console.log(
                 `[Discord:${accountConfig.id}] Configuration: requireMention=${accountConfig.requireMention}, allowedChannels=${accountConfig.allowedChannels?.length || 'all'}, allowedUsers=${accountConfig.allowedUsers?.length || 'all'}`
             );
+            if (accountConfig.workspaceDir) {
+                console.log(
+                    `[Discord:${accountConfig.id}] Workspace: ${accountConfig.workspaceDir}`
+                );
+            }
         });
 
         client.on(Events.MessageCreate, async (message: Message) => {
@@ -159,6 +183,7 @@ export class DiscordGateway implements IChannelGateway {
             accountId: accountConfig.id,
             client,
             handler,
+            runner,
         });
     }
 
@@ -214,13 +239,38 @@ export class DiscordGateway implements IChannelGateway {
     }
 
     /**
-     * Process message with the agent runner.
+     * Create a runner instance for a specific account.
      */
-    private async _processWithAgent(msg: IChannelMessage, raw: Message): Promise<void> {
-        if (!this._runner) {
-            console.error('[Discord] No runner configured');
+    private async _createRunnerForAccount(
+        accountConfig: IDiscordAccountConfig
+    ): Promise<AgentRunner> {
+        //load workspace files from account-specific directory
+        const workspaceFiles = await loadWorkspaceFiles(
+            accountConfig.workspaceDir ? { workspaceDir: accountConfig.workspaceDir } : undefined
+        );
+
+        //create runner with workspace files
+        return new AgentRunner({
+            workspaceFiles,
+        });
+    }
+
+    /**
+     * Process message with the agent runner for a specific account.
+     */
+    private async _processWithAgent(
+        msg: IChannelMessage,
+        raw: Message,
+        accountId: string
+    ): Promise<void> {
+        //find the runner for this account
+        const instance = this._findClient(accountId);
+        if (!instance) {
+            console.error(`[Discord] No client instance found for account: ${accountId}`);
             return;
         }
+
+        const runner = instance.runner;
 
         try {
             //show typing indicator
@@ -229,7 +279,7 @@ export class DiscordGateway implements IChannelGateway {
             }
 
             //run the agent with the message content
-            const result = await this._runner.run({
+            const result = await runner.run({
                 sessionId: msg.conversationId,
                 prompt: msg.content,
                 provider: 'anthropic',
@@ -263,7 +313,7 @@ export class DiscordGateway implements IChannelGateway {
                 }
             }
         } catch (error) {
-            console.error('[Discord] Error processing message:', error);
+            console.error(`[Discord:${accountId}] Error processing message:`, error);
             await raw.reply('Sorry, an error occurred while processing your message.');
         }
     }
