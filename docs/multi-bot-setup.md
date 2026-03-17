@@ -169,6 +169,29 @@ i-clavdivs is running in daemon mode. Press Ctrl+C to stop.
 Listening for messages on configured channels...
 ```
 
+## Session Management
+
+Each bot maintains its own conversation history (sessions), completely isolated from other bots:
+
+### Session Directory Structure
+
+- **With workspace directory configured**: Sessions are stored in `<workspaceDir>/.sessions/`
+  - Example: `~/.i-clavdivs/clavdivs-workspace/.sessions/`
+
+- **Without workspace directory**: Sessions are stored in `~/.i-clavdivs/sessions/<accountId>/`
+  - Example: `~/.i-clavdivs/sessions/bot1/`
+
+This ensures that:
+- Each bot has independent conversation histories
+- No session conflicts between bots
+- Sessions are logically grouped with their workspace files
+
+### Session Files
+
+Each conversation creates a JSON file named `<channelId>.json` containing the message history for that Discord channel. The session ID is typically the Discord channel ID, so:
+- Bot 1 responding in channel `123456` will use: `bot1-workspace/.sessions/123456.json`
+- Bot 2 responding in channel `789012` will use: `bot2-workspace/.sessions/789012.json`
+
 ## Architecture Changes
 
 ### Key Components Modified
@@ -179,6 +202,8 @@ Listening for messages on configured channels...
 2. **DiscordGateway** (`packages/discord/src/gateway/discord-gateway.ts`)
    - Modified to create a separate `AgentRunner` for each account
    - Each runner loads workspace files from its account's workspace directory
+   - Each runner uses account-specific session directory
+   - Added `_getSessionDir()` method to determine session storage location
    - Updated `_processWithAgent` to use account-specific runner
 
 3. **ConfigLoader** (`packages/plugins/src/utils/config-loader.ts`)
@@ -189,12 +214,13 @@ Listening for messages on configured channels...
 1. When `DiscordGateway.start()` is called, it normalizes the config into account configs
 2. For each account, `_startAccount()` is called which:
    - Creates a dedicated `AgentRunner` with account-specific workspace files
+   - Configures account-specific session directory
    - Sets up Discord client with event handlers
    - Stores the client, handler, and runner together
 3. When a message arrives:
    - The gateway finds the correct account's runner
    - Passes the message to that specific runner
-   - The runner uses its loaded workspace files (SOUL.md, etc.)
+   - The runner uses its loaded workspace files (SOUL.md, etc.) and saves history to its session directory
 
 ## Testing Your Setup
 

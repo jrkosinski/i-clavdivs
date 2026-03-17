@@ -1,4 +1,6 @@
 import { Client, GatewayIntentBits, Events, Partials, type Message } from 'discord.js';
+import os from 'node:os';
+import path from 'node:path';
 import type { IChannelGateway, IChannelMessage } from '@i-clavdivs/plugins';
 import { AgentRunner } from '@i-clavdivs/runner';
 import { loadWorkspaceFiles } from '@i-clavdivs/workspace';
@@ -249,10 +251,30 @@ export class DiscordGateway implements IChannelGateway {
             accountConfig.workspaceDir ? { workspaceDir: accountConfig.workspaceDir } : undefined
         );
 
-        //create runner with workspace files
+        //determine session directory for this account
+        //if workspace is specified, use <workspace>/.sessions
+        //otherwise use default ~/.i-clavdivs/sessions/<accountId>
+        const sessionDir = this._getSessionDir(accountConfig);
+
+        //create runner with workspace files and account-specific session directory
         return new AgentRunner({
             workspaceFiles,
+            sessionDir,
         });
+    }
+
+    /**
+     * Get session directory for an account.
+     * Each account gets its own session directory to prevent conflicts.
+     */
+    private _getSessionDir(accountConfig: IDiscordAccountConfig): string {
+        if (accountConfig.workspaceDir) {
+            //store sessions alongside workspace
+            return path.join(accountConfig.workspaceDir, '.sessions');
+        }
+
+        //use account-specific subdirectory in default sessions folder
+        return path.join(os.homedir(), '.i-clavdivs', 'sessions', accountConfig.id);
     }
 
     /**
