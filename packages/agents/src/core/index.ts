@@ -9,14 +9,14 @@ export type {
     IAgentPayload,
     IAgentRequest,
     IAgentRunMeta,
-    IAgentRunnerConfig,
+    IAgentConfig,
     IAgentRunResult,
     IAgentToolCall,
     IAgentUsage,
 } from './types.js';
 
 export type {
-    IAgentRunner,
+    IAgent,
     IAuthConfig,
     IAuthenticationProvider,
     ICapacityResult,

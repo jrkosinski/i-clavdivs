@@ -312,7 +312,7 @@ export interface ICompleteEvent {
 /**
  * Main orchestrator for agent execution
  */
-export interface IAgentRunner {
+export interface IAgent {
     /**
      * Execute an agent request
      * @param request Agent execution request

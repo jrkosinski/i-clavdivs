@@ -182,11 +182,11 @@ Location: `apps/cli/src/index.ts`
 ```typescript
 import { loadWorkspaceFiles } from '@i-clavdivs/workspace';
 
-async function createRunner(stream: boolean): Promise<AgentRunner> {
+async function createRunner(stream: boolean): Promise<Agent> {
     //load workspace files from default location
     const workspaceFiles = await loadWorkspaceFiles();
 
-    return new AgentRunner({
+    return new Agent({
         onChunk: stream ? writeChunk : undefined,
         workspaceFiles,
     });
@@ -230,7 +230,7 @@ loadWorkspaceFiles() reads files from ~/.i-clavdivs/workspace/
     ↓
 Files parsed into IWorkspaceFile[] array
     ↓
-Passed to AgentRunner constructor
+Passed to Agent constructor
     ↓
 buildSystemPromptWithWorkspace() embeds files in system prompt
     ↓

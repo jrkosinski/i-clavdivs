@@ -199,9 +199,9 @@ registry.register(redditPlugin);
 
 ```typescript
 import { PluginManager } from '@i-clavdivs/plugins';
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/runner';
 
-const runner = new AgentRunner(/* ... */);
+const runner = new Agent(/* ... */);
 const config = {
     channels: {
         discord: {
@@ -234,7 +234,7 @@ Plugins receive an API object during registration:
 interface IPluginApi {
     log: ILogger;
     config: IConfigProvider;
-    runner: AgentRunner;
+    runner: Agent;
     registry: IPluginRegistry;
 }
 ```
@@ -266,6 +266,7 @@ Channel plugins typically read config from `channels.<channel-id>`:
 ```
 
 The plugin manager automatically:
+
 1. Reads channel config
 2. Checks `enabled` flag
 3. Creates gateway with config

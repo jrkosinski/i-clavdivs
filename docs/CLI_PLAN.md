@@ -25,7 +25,7 @@ These are not available in v0.1 and cannot be installed. The v0.0 runner is not 
 Instead, we build a clean implementation on top of what v0.1 already has:
 
 - `packages/models` — working `AnthropicProvider` with streaming support (raw HTTP, no SDK dependency)
-- `packages/agents` — `IAgentRunner` interface, `IAgentRequest`/`IAgentRunResult` types
+- `packages/agents` — `IAgent` interface, `IAgentRequest`/`IAgentRunResult` types
 - `packages/channels` — channel ID types
 
 ---
@@ -46,13 +46,13 @@ These files from v0.0 have no private package dependencies and are worth porting
 ## Architecture
 
 ```
-packages/runner/          ← new package: implements IAgentRunner
+packages/runner/          ← new package: implements IAgent
 apps/cli/                 ← new app: CLI entrypoint
 ```
 
 ### packages/runner
 
-Implements the `IAgentRunner` interface from `packages/agents` using `AnthropicProvider` from `packages/models`.
+Implements the `IAgent` interface from `packages/agents` using `AnthropicProvider` from `packages/models`.
 
 **Responsibilities:**
 
@@ -67,7 +67,7 @@ Implements the `IAgentRunner` interface from `packages/agents` using `AnthropicP
 ```
 packages/runner/
   src/
-    runner.ts              ← AgentRunner implements IAgentRunner
+    runner.ts              ← Agent implements IAgent
     session-store.ts       ← reads/writes session history as JSON (replaces SessionManager)
     system-prompt.ts       ← minimal system prompt (date, cwd, model name)
     logger.ts              ← simple console logger (ported from v0.0 pattern)
@@ -122,10 +122,10 @@ node apps/cli/dist/index.js --stream "write me a poem"
 
 ### Phase 1 — packages/runner + apps/cli (this work)
 
-- [ ] Create `packages/runner` with `AgentRunner`, `SessionStore`, `SystemPrompt`, `Logger`
+- [ ] Create `packages/runner` with `Agent`, `SessionStore`, `SystemPrompt`, `Logger`
 - [ ] Create `apps/cli` with arg parsing, runner wiring, streaming stdout output
 - [ ] Wire `packages/runner` → `packages/models/AnthropicProvider`
-- [ ] Wire `packages/runner` → `packages/agents/IAgentRunner` interface
+- [ ] Wire `packages/runner` → `packages/agents/IAgent` interface
 - [ ] Add `apps/cli` to workspace `pnpm-workspace.yaml`
 - [ ] Add `packages/runner` to workspace `pnpm-workspace.yaml`
 - [ ] Test: `node apps/cli/dist/index.js "hello world"`
@@ -134,7 +134,7 @@ node apps/cli/dist/index.js --stream "write me a poem"
 
 - [ ] Create `apps/discord-bot` using `discord.js`
 - [ ] Listen for messages in configured channels
-- [ ] Route each message through `AgentRunner` (same package as CLI)
+- [ ] Route each message through `Agent` (same package as CLI)
 - [ ] Send the reply back via Discord API
 - [ ] Session key = `discord:<guild_id>:<channel_id>:<user_id>` (one session per user per channel)
 
@@ -151,7 +151,7 @@ node apps/cli/dist/index.js --stream "write me a poem"
 | Package              | Where                        | Purpose                         |
 | -------------------- | ---------------------------- | ------------------------------- |
 | `@i-clavdivs/models` | `packages/runner`            | AnthropicProvider for API calls |
-| `@i-clavdivs/agents` | `packages/runner`            | IAgentRunner interface + types  |
+| `@i-clavdivs/agents` | `packages/runner`            | IAgent interface + types        |
 | `discord.js`         | `apps/discord-bot` (Phase 2) | Discord gateway + REST API      |
 
 No new external npm packages are needed for Phase 1 — `packages/models` already does raw HTTP via `fetch`.

@@ -51,7 +51,7 @@ vi.mock('../src/session-store.js', () => ({
     }),
 }));
 
-import { AgentRunner } from '../src/runner.js';
+import { Agent } from '../src/runner.js';
 import type { IAgentRequest } from '@i-clavdivs/agents';
 
 const BASE_REQUEST: IAgentRequest = {
@@ -62,7 +62,7 @@ const BASE_REQUEST: IAgentRequest = {
     workspaceDir: '/tmp',
 };
 
-describe('AgentRunner', () => {
+describe('Agent', () => {
     beforeEach(() => {
         //reset in-memory store; don't clear mocks as that wipes implementations
         sessionData = new Map();
@@ -70,7 +70,7 @@ describe('AgentRunner', () => {
 
     describe('run', () => {
         it('should return the model response as a payload', async () => {
-            const runner = new AgentRunner();
+            const runner = new Agent();
             const result = await runner.run(BASE_REQUEST);
 
             expect(result.payloads).toHaveLength(1);
@@ -79,14 +79,14 @@ describe('AgentRunner', () => {
         });
 
         it('should include durationMs in meta', async () => {
-            const runner = new AgentRunner();
+            const runner = new Agent();
             const result = await runner.run(BASE_REQUEST);
 
             expect(result.meta.durationMs).toBeGreaterThanOrEqual(0);
         });
 
         it('should save the turn to session history after a successful run', async () => {
-            const runner = new AgentRunner();
+            const runner = new Agent();
             await runner.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
@@ -102,7 +102,7 @@ describe('AgentRunner', () => {
                 { role: 'assistant', content: 'prior answer' },
             ]);
 
-            const runner = new AgentRunner();
+            const runner = new Agent();
             await runner.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
@@ -116,7 +116,7 @@ describe('AgentRunner', () => {
                 return { getModel: vi.fn().mockReturnValue(undefined) };
             } as never);
 
-            const runner = new AgentRunner();
+            const runner = new Agent();
             const result = await runner.run({ ...BASE_REQUEST, model: 'nonexistent-model' });
 
             expect(result.payloads?.[0]?.isError).toBe(true);
@@ -125,7 +125,7 @@ describe('AgentRunner', () => {
 
         it('should call onChunk for each streamed delta', async () => {
             const chunks: string[] = [];
-            const runner = new AgentRunner({ onChunk: (c) => chunks.push(c) });
+            const runner = new Agent({ onChunk: (c) => chunks.push(c) });
 
             await runner.run(BASE_REQUEST);
 
@@ -133,7 +133,7 @@ describe('AgentRunner', () => {
         });
 
         it('should collect streamed chunks into the saved response', async () => {
-            const runner = new AgentRunner({ onChunk: () => {} });
+            const runner = new Agent({ onChunk: () => {} });
             await runner.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
@@ -143,18 +143,18 @@ describe('AgentRunner', () => {
 
     describe('isActive / abort', () => {
         it('should report session as inactive before a run', () => {
-            const runner = new AgentRunner();
+            const runner = new Agent();
             expect(runner.isActive('test-session')).toBe(false);
         });
 
         it('should report session as inactive after a run completes', async () => {
-            const runner = new AgentRunner();
+            const runner = new Agent();
             await runner.run(BASE_REQUEST);
             expect(runner.isActive('test-session')).toBe(false);
         });
 
         it('should return false from abort when session is not active', async () => {
-            const runner = new AgentRunner();
+            const runner = new Agent();
             expect(await runner.abort('test-session')).toBe(false);
         });
     });
@@ -169,7 +169,7 @@ describe('AgentRunner', () => {
             sessionData.set('test-session', longHistory);
 
             //cap at 4 history messages
-            const runner = new AgentRunner({ maxHistoryMessages: 4 });
+            const runner = new Agent({ maxHistoryMessages: 4 });
             await runner.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
@@ -183,7 +183,7 @@ describe('AgentRunner', () => {
                 { role: 'assistant', content: 'a' },
             ]);
 
-            const runner = new AgentRunner({ maxHistoryMessages: 40 });
+            const runner = new Agent({ maxHistoryMessages: 40 });
             await runner.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');

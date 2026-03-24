@@ -1,7 +1,7 @@
 import type { IPlugin } from '../types/plugin.js';
 import type { IChannelPlugin, IChannelGateway } from '../types/channel-plugin.js';
 import type { IPluginApi } from '../types/plugin-api.js';
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/runner';
 import { getGlobalPluginRegistry } from './plugin-registry.js';
 
 /**
@@ -10,10 +10,10 @@ import { getGlobalPluginRegistry } from './plugin-registry.js';
 export class PluginManager {
     private _registry = getGlobalPluginRegistry();
     private _gateways: Map<string, IChannelGateway> = new Map();
-    private _runner: AgentRunner;
+    private _runner: Agent;
     private _config: Record<string, unknown>;
 
-    constructor(runner: AgentRunner, config: Record<string, unknown> = {}) {
+    constructor(runner: Agent, config: Record<string, unknown> = {}) {
         this._runner = runner;
         this._config = config;
     }

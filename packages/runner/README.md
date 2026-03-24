@@ -29,14 +29,14 @@ pnpm add @i-clavdivs/runner
 
 ## Core Components
 
-### AgentRunner
+### Agent
 
 The main execution engine that orchestrates LLM completions:
 
 ```typescript
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/runner';
 
-const runner = new AgentRunner({
+const runner = new Agent({
     maxHistoryMessages: 40,
     sessionDir: '~/.i-clavdivs/sessions',
     onChunk: (text) => process.stdout.write(text),
@@ -107,9 +107,9 @@ const customLog = new Logger({ level: 'debug', prefix: 'myapp' });
 ### Basic Agent Execution
 
 ```typescript
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/runner';
 
-const runner = new AgentRunner();
+const runner = new Agent();
 
 const result = await runner.run({
     sessionId: 'user-123',
@@ -125,7 +125,7 @@ console.log(result.usage); // Token usage stats
 ### Streaming Responses
 
 ```typescript
-const runner = new AgentRunner({
+const runner = new Agent({
     onChunk: (text) => {
         process.stdout.write(text);
     },
@@ -146,7 +146,7 @@ import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
 
 const workspaceFiles = await buildSystemPromptWithWorkspace('~/.i-clavdivs/workspace');
 
-const runner = new AgentRunner({
+const runner = new Agent({
     workspaceFiles,
     extraSystemPrompt: 'Focus on TypeScript best practices.',
 });
@@ -178,10 +178,10 @@ await store.delete('old-session-456');
 
 ## Configuration
 
-### AgentRunner Options
+### Agent Options
 
 ```typescript
-interface IAgentRunnerConfig {
+interface IAgentConfig {
     maxHistoryMessages?: number; // Default: 40
     sessionDir?: string; // Default: ~/.i-clavdivs/sessions
     onChunk?: (chunk: string) => void;
@@ -252,7 +252,7 @@ Each session file contains:
 When `maxHistoryMessages` is exceeded, the oldest messages are removed:
 
 ```typescript
-const runner = new AgentRunner({
+const runner = new Agent({
     maxHistoryMessages: 20, // Keep only last 20 messages
 });
 

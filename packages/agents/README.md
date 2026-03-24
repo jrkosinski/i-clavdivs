@@ -31,7 +31,7 @@ agents/
 
 ### Agent Runner
 
-The `AgentRunner` class orchestrates the execution of AI agent tasks with automatic:
+The `Agent` class orchestrates the execution of AI agent tasks with automatic:
 
 - Authentication profile rotation on failures
 - Context overflow detection and compaction
@@ -59,9 +59,9 @@ Real-time streaming of agent responses through event subscriptions:
 ## Usage
 
 ```typescript
-import { AgentRunner } from '@i-clavdivs/agents';
+import { Agent } from '@i-clavdivs/agents';
 
-const runner = new AgentRunner({
+const runner = new Agent({
     authManager,
     sessionManager,
     toolFactory,

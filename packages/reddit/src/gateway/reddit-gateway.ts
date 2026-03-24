@@ -1,6 +1,6 @@
 import Snoowrap from 'snoowrap';
 import type { IChannelGateway, IChannelMessage } from '@i-clavdivs/plugins';
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/runner';
 import { MessageHandler, type RedditContent } from './message-handler.js';
 import type { IRedditConfig, IRedditAccountConfig } from '../config/index.js';
 import { normalizeRedditConfig } from '../config/index.js';
@@ -24,7 +24,7 @@ interface IRedditClientInstance {
 export class RedditGateway implements IChannelGateway {
     private _clients: IRedditClientInstance[] = [];
     private _running = false;
-    private _runner?: AgentRunner;
+    private _runner?: Agent;
 
     constructor(_config: unknown) {
         //config is passed to start() method
@@ -33,7 +33,7 @@ export class RedditGateway implements IChannelGateway {
     /**
      * Set the agent runner for processing messages.
      */
-    public setRunner(runner: AgentRunner): void {
+    public setRunner(runner: Agent): void {
         this._runner = runner;
     }
 

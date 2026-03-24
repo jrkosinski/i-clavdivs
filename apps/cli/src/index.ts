@@ -14,7 +14,7 @@ import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 
 import process from 'node:process';
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/runner';
 import { SessionStore } from '@i-clavdivs/runner';
 import { loadWorkspaceFiles } from '@i-clavdivs/workspace';
 import { CliArgs } from './args.js';
@@ -73,7 +73,7 @@ async function prepareSession(args: ReturnType<typeof CliArgs.parse>): Promise<v
  * Run a single prompt and return the result.
  */
 async function runSinglePrompt(
-    runner: AgentRunner,
+    runner: Agent,
     args: ReturnType<typeof CliArgs.parse>,
     prompt: string
 ) {
@@ -113,11 +113,11 @@ async function runDaemonMode(): Promise<void> {
 /**
  * Creates agent runner with optional streaming support and workspace files.
  */
-async function createRunner(stream: boolean, workspaceDir?: string): Promise<AgentRunner> {
+async function createRunner(stream: boolean, workspaceDir?: string): Promise<Agent> {
     // Load workspace files from specified directory or default location (~/.i-clavdivs/workspace)
     const workspaceFiles = await loadWorkspaceFiles(workspaceDir ? { workspaceDir } : undefined);
 
-    return new AgentRunner({
+    return new Agent({
         onChunk: stream ? writeChunk : undefined,
         workspaceFiles,
     });
@@ -126,7 +126,7 @@ async function createRunner(stream: boolean, workspaceDir?: string): Promise<Age
 /**
  * Handles result output to stdout, either streaming or complete.
  */
-function handleOutput(result: Awaited<ReturnType<AgentRunner['run']>>, isStreaming: boolean): void {
+function handleOutput(result: Awaited<ReturnType<Agent['run']>>, isStreaming: boolean): void {
     const payload = extractPayload(result);
     validatePayload(payload);
 
@@ -141,7 +141,7 @@ function handleOutput(result: Awaited<ReturnType<AgentRunner['run']>>, isStreami
 /**
  * Extracts first payload from result or exits with error.
  */
-function extractPayload(result: Awaited<ReturnType<AgentRunner['run']>>) {
+function extractPayload(result: Awaited<ReturnType<Agent['run']>>) {
     const payload = result.payloads?.[0];
     if (!payload) exitWithError('no response from agent');
     return payload;

@@ -2,9 +2,18 @@
     "channels": {
         "discord": {
             "enabled": true,
-            "requireMention": true,
-            "allowedChannels": [],
-            "allowedUsers": []
+            "accounts": [
+                {
+                    "id": "alan-watts",
+                    "token": "${DISCORD_BOT_TOKEN_ALAN}",
+                    "workspaceDir": "/home/blanta/.i-clavdivs/workspace-alan-watts"
+                },
+                {
+                    "id": "conan",
+                    "token": "${DISCORD_BOT_TOKEN_CONAN}",
+                    "workspaceDir": "/home/blanta/.i-clavdivs/workspace-conan"
+                }
+            ]
         }
     },
     "agent": {

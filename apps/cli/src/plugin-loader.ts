@@ -1,4 +1,4 @@
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/runner';
 import { PluginManager, getGlobalPluginRegistry } from '@i-clavdivs/plugins';
 import { discordPlugin } from '@i-clavdivs/discord';
 import { ConfigLoader } from '@i-clavdivs/plugins';
@@ -6,10 +6,7 @@ import { ConfigLoader } from '@i-clavdivs/plugins';
 /**
  * Load and initialize all available plugins.
  */
-export async function loadPlugins(
-    runner: AgentRunner,
-    configPath?: string
-): Promise<PluginManager> {
+export async function loadPlugins(runner: Agent, configPath?: string): Promise<PluginManager> {
     //load configuration
     const config = await ConfigLoader.load(configPath);
 

@@ -1,5 +1,5 @@
 /**
- * AgentRunner: implements IAgentRunner using AnthropicProvider from @i-clavdivs/models.
+ * Agent: implements IAgent using AnthropicProvider from @i-clavdivs/models.
  *
  * Replaces pi-coding-agent's createAgentSession + SessionManager loop.
  * Phase 1: plain text completions only (no tools, no compaction).
@@ -8,13 +8,13 @@
 import process from 'node:process';
 import { AnthropicProvider } from '@i-clavdivs/models';
 import type { Message, CompletionChunk } from '@i-clavdivs/models';
-import type { IAgentRunner, IAgentRequest, IAgentRunResult } from '@i-clavdivs/agents';
+import type { IAgent, IAgentRequest, IAgentRunResult } from '@i-clavdivs/agents';
 import { SessionStore } from './session-store.js';
 import { SystemPrompt } from './system-prompt.js';
 import { log } from './logger.js';
 import { buildSystemPromptWithWorkspace, type IWorkspaceFile } from '@i-clavdivs/workspace';
 
-export interface IAgentRunnerConfig {
+export interface IAgentConfig {
     /** Max messages to retain in history before truncating oldest turns. Defaults to 40. */
     maxHistoryMessages?: number;
     /** Directory to store session files. Defaults to ~/.i-clavdivs/sessions. */
@@ -31,13 +31,13 @@ export interface IAgentRunnerConfig {
  * Runs agent turns against the Anthropic API, persisting conversation
  * history to disk between calls.
  */
-export class AgentRunner implements IAgentRunner {
+export class Agent implements IAgent {
     private readonly _store: SessionStore;
-    private readonly _config: IAgentRunnerConfig;
+    private readonly _config: IAgentConfig;
     private readonly _active: Set<string> = new Set();
     private readonly _pending: Map<string, Promise<IAgentRunResult>> = new Map();
 
-    public constructor(config: IAgentRunnerConfig = {}) {
+    public constructor(config: IAgentConfig = {}) {
         this._config = config;
         this._store = new SessionStore(config.sessionDir);
     }

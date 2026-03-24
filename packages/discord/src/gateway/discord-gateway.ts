@@ -2,7 +2,7 @@ import { Client, GatewayIntentBits, Events, Partials, type Message } from 'disco
 import os from 'node:os';
 import path from 'node:path';
 import type { IChannelGateway, IChannelMessage } from '@i-clavdivs/plugins';
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/runner';
 import { loadWorkspaceFiles } from '@i-clavdivs/workspace';
 import { MessageHandler } from './message-handler.js';
 import type { IDiscordConfig, IDiscordAccountConfig } from '../config/index.js';
@@ -15,7 +15,7 @@ interface IDiscordClientInstance {
     accountId: string;
     client: Client;
     handler: MessageHandler;
-    runner: AgentRunner;
+    runner: Agent;
 }
 
 /**
@@ -35,7 +35,7 @@ export class DiscordGateway implements IChannelGateway {
      * @deprecated This method is kept for backward compatibility but is no longer used.
      * Each account now has its own runner created in _startAccount().
      */
-    public setRunner(_runner: AgentRunner): void {
+    public setRunner(_runner: Agent): void {
         //no-op: kept for backward compatibility with IChannelGateway interface
     }
 
@@ -53,7 +53,7 @@ export class DiscordGateway implements IChannelGateway {
         if (accounts.length === 0) {
             throw new Error(
                 'No Discord accounts configured. Please ensure DISCORD_BOT_TOKEN is set in your environment or .env file, ' +
-                'or configure the token in config/default.json'
+                    'or configure the token in config/default.json'
             );
         }
 
@@ -62,7 +62,7 @@ export class DiscordGateway implements IChannelGateway {
             if (!account.token || account.token.includes('${')) {
                 throw new Error(
                     `Invalid Discord token for account ${account.id}: Token appears to be a placeholder or missing. ` +
-                    'Please set DISCORD_BOT_TOKEN in your environment or .env file.'
+                        'Please set DISCORD_BOT_TOKEN in your environment or .env file.'
                 );
             }
         }
@@ -243,9 +243,7 @@ export class DiscordGateway implements IChannelGateway {
     /**
      * Create a runner instance for a specific account.
      */
-    private async _createRunnerForAccount(
-        accountConfig: IDiscordAccountConfig
-    ): Promise<AgentRunner> {
+    private async _createRunnerForAccount(accountConfig: IDiscordAccountConfig): Promise<Agent> {
         //load workspace files from account-specific directory
         const workspaceFiles = await loadWorkspaceFiles(
             accountConfig.workspaceDir ? { workspaceDir: accountConfig.workspaceDir } : undefined
@@ -257,7 +255,7 @@ export class DiscordGateway implements IChannelGateway {
         const sessionDir = this._getSessionDir(accountConfig);
 
         //create runner with workspace files and account-specific session directory
-        return new AgentRunner({
+        return new Agent({
             workspaceFiles,
             sessionDir,
         });
