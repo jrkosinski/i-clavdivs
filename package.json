@@ -34,7 +34,7 @@
     "packageManager": "pnpm@8.15.0",
     "pnpm": {
         "overrides": {
-            "undici": ">=6.23.0"
+            "undici": "~6.23.0"
         }
     }
 }
