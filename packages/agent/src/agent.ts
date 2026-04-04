@@ -198,7 +198,9 @@ export class Agent implements IAgent {
         }
 
         const startedAt = Date.now();
-        log.debug(`[Agent:${this.id}] run start: sessionId=${request.sessionId} model=${request.model}`);
+        log.debug(
+            `[Agent:${this.id}] run start: sessionId=${request.sessionId} model=${request.model}`
+        );
 
         //if there's already a request running for this session, wait for it
         const existing = this._pending.get(request.sessionId);

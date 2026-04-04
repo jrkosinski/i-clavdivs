@@ -117,9 +117,7 @@ export class SessionStore {
         try {
             await fs.mkdir(this._sessionDir, { recursive: true });
             const files = await fs.readdir(this._sessionDir);
-            return files
-                .filter((f) => f.endsWith('.json'))
-                .map((f) => f.replace(/\.json$/, ''));
+            return files.filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/, ''));
         } catch (err) {
             log.warn(`failed to list sessions: ${String(err)}`);
             return [];
