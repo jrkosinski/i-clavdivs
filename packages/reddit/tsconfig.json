@@ -12,6 +12,6 @@
         { "path": "../common" },
         { "path": "../channels" },
         { "path": "../plugins" },
-        { "path": "../runner" }
+        { "path": "../agent" }
     ]
 }

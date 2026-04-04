@@ -4,28 +4,28 @@ import { getGlobalPluginRegistry, resetGlobalPluginRegistry } from '../src/core/
 import type { IPlugin, IChannelPlugin, IChannelGateway } from '../src/types/index.js';
 
 describe('PluginManager', () => {
-    let mockRunner: any;
+    let mockAgent: any;
 
     beforeEach(() => {
         //reset global registry before each test
         resetGlobalPluginRegistry();
 
-        //create a mock runner
-        mockRunner = {
+        //create a mock agent
+        mockAgent = {
             run: vi.fn(),
         };
     });
 
     describe('constructor', () => {
-        it('should create plugin manager with runner and config', () => {
+        it('should create plugin manager with agent and config', () => {
             const config = { test: 'value' };
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
 
             expect(manager).toBeDefined();
         });
 
         it('should create plugin manager with empty config', () => {
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
 
             expect(manager).toBeDefined();
         });
@@ -43,13 +43,13 @@ describe('PluginManager', () => {
 
             getGlobalPluginRegistry().register(plugin);
 
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
             await manager.initializeAll();
 
             expect(registerSpy).toHaveBeenCalledTimes(1);
             expect(registerSpy).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    runner: mockRunner,
+                    agent: mockAgent,
                     registerChannel: expect.any(Function),
                     getConfig: expect.any(Function),
                     log: expect.any(Object),
@@ -68,7 +68,7 @@ describe('PluginManager', () => {
 
             getGlobalPluginRegistry().register(plugin);
 
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
             await manager.initializeAll();
             await manager.initializeAll();
 
@@ -90,7 +90,7 @@ describe('PluginManager', () => {
 
             getGlobalPluginRegistry().register(plugin);
 
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
             await manager.initializeAll();
 
             expect(registerSpy).toHaveBeenCalledTimes(1);
@@ -134,7 +134,7 @@ describe('PluginManager', () => {
                 },
             };
 
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
             await manager.initializeAll();
             await manager.startChannelGateways();
 
@@ -181,21 +181,21 @@ describe('PluginManager', () => {
                 },
             };
 
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
             await manager.initializeAll();
             await manager.startChannelGateways();
 
             expect(startSpy).not.toHaveBeenCalled();
         });
 
-        it('should inject runner into gateway if setRunner method exists', async () => {
-            const setRunnerSpy = vi.fn();
+        it('should inject agent into gateway if setAgent method exists', async () => {
+            const setAgentSpy = vi.fn();
             const mockGateway: any = {
                 start: vi.fn(),
                 stop: vi.fn(),
                 isRunning: () => false,
                 sendMessage: vi.fn(),
-                setRunner: setRunnerSpy,
+                setAgent: setAgentSpy,
             };
 
             const channelPlugin: IChannelPlugin = {
@@ -225,11 +225,11 @@ describe('PluginManager', () => {
                 },
             };
 
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
             await manager.initializeAll();
             await manager.startChannelGateways();
 
-            expect(setRunnerSpy).toHaveBeenCalledWith(mockRunner);
+            expect(setAgentSpy).toHaveBeenCalledWith(mockAgent);
         });
     });
 
@@ -270,7 +270,7 @@ describe('PluginManager', () => {
                 },
             };
 
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
             await manager.initializeAll();
             await manager.startChannelGateways();
             await manager.stopAll();
@@ -319,7 +319,7 @@ describe('PluginManager', () => {
                 },
             };
 
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
             await manager.initializeAll();
             await manager.startChannelGateways();
             await manager.cleanup();
@@ -339,7 +339,7 @@ describe('PluginManager', () => {
 
             getGlobalPluginRegistry().register(plugin);
 
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
             await manager.initializeAll();
 
             //should not throw
@@ -383,7 +383,7 @@ describe('PluginManager', () => {
                 },
             };
 
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
             await manager.initializeAll();
             await manager.startChannelGateways();
 
@@ -405,7 +405,7 @@ describe('PluginManager', () => {
 
             getGlobalPluginRegistry().register(errorPlugin);
 
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
 
             //initialization should propagate the error
             await expect(manager.initializeAll()).rejects.toThrow('Registration failed');
@@ -424,7 +424,7 @@ describe('PluginManager', () => {
 
             getGlobalPluginRegistry().register(asyncErrorPlugin);
 
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
 
             //initialization should propagate the async error
             await expect(manager.initializeAll()).rejects.toThrow('Async registration failed');
@@ -465,7 +465,7 @@ describe('PluginManager', () => {
                 },
             };
 
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
             await manager.initializeAll();
 
             //should propagate gateway start error
@@ -494,7 +494,7 @@ describe('PluginManager', () => {
                 },
             };
 
-            const manager = new PluginManager(mockRunner, config);
+            const manager = new PluginManager(mockAgent, config);
             await manager.initializeAll();
 
             expect(capturedApi).toBeDefined();
@@ -503,12 +503,12 @@ describe('PluginManager', () => {
             expect(capturedApi.getConfig('nonexistent')).toBeUndefined();
         });
 
-        it('should provide correct runner to plugin api', async () => {
+        it('should provide correct agent to plugin api', async () => {
             let capturedApi: any;
             const plugin: IPlugin = {
-                id: 'runner-test-plugin',
-                name: 'Runner Test Plugin',
-                description: 'A plugin to test runner access',
+                id: 'agent-test-plugin',
+                name: 'Agent Test Plugin',
+                description: 'A plugin to test agent access',
                 register: (api) => {
                     capturedApi = api;
                 },
@@ -516,11 +516,11 @@ describe('PluginManager', () => {
 
             getGlobalPluginRegistry().register(plugin);
 
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
             await manager.initializeAll();
 
             expect(capturedApi).toBeDefined();
-            expect(capturedApi.runner).toBe(mockRunner);
+            expect(capturedApi.agent).toBe(mockAgent);
         });
 
         it('should provide logging interface to plugins', async () => {
@@ -536,7 +536,7 @@ describe('PluginManager', () => {
 
             getGlobalPluginRegistry().register(plugin);
 
-            const manager = new PluginManager(mockRunner);
+            const manager = new PluginManager(mockAgent);
             await manager.initializeAll();
 
             expect(capturedApi).toBeDefined();

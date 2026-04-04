@@ -61,7 +61,7 @@ Real-time streaming of agent responses through event subscriptions:
 ```typescript
 import { Agent } from '@i-clavdivs/agents';
 
-const runner = new Agent({
+const agent = new Agent({
     authManager,
     sessionManager,
     toolFactory,

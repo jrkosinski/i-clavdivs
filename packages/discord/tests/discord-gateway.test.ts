@@ -31,13 +31,13 @@ describe('DiscordGateway', () => {
         });
     });
 
-    describe('setRunner', () => {
-        it('should set the runner', () => {
-            const mockRunner = {
+    describe('setAgent', () => {
+        it('should set the agent', () => {
+            const mockAgent = {
                 run: async () => ({ payloads: [] }),
             } as any;
 
-            expect(() => gateway.setRunner(mockRunner)).not.toThrow();
+            expect(() => gateway.setAgent(mockAgent)).not.toThrow();
         });
     });
 

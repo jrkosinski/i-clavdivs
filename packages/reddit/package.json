@@ -24,7 +24,7 @@
         "@i-clavdivs/channels": "workspace:*",
         "@i-clavdivs/common": "workspace:*",
         "@i-clavdivs/plugins": "workspace:*",
-        "@i-clavdivs/runner": "workspace:*",
+        "@i-clavdivs/agent": "workspace:*",
         "snoowrap": "^1.23.0"
     },
     "devDependencies": {

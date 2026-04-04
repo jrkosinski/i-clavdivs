@@ -146,7 +146,7 @@ export interface IAgentRequest {
 }
 
 /**
- * Configuration options for agent runner
+ * Configuration options for agent
  */
 export interface IAgentConfig {
     /** Maximum retry attempts on failure */

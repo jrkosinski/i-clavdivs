@@ -74,8 +74,8 @@ import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
 // Build system prompt with workspace files
 const systemPrompt = await buildSystemPromptWithWorkspace('~/.i-clavdivs/workspace');
 
-// Use in agent runner
-const runner = new Agent({
+// Use in agent
+const agent = new Agent({
     extraSystemPrompt: systemPrompt,
 });
 ```
@@ -226,12 +226,12 @@ vi ~/.i-clavdivs/workspace/SOUL.md
 ### With Agent
 
 ```typescript
-import { Agent } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/agent';
 import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
 
 const systemPrompt = await buildSystemPromptWithWorkspace();
 
-const runner = new Agent({
+const agent = new Agent({
     extraSystemPrompt: systemPrompt,
 });
 ```
@@ -367,8 +367,8 @@ Keep your workspace files in git to track changes and revert if needed.
 
 ## Related Packages
 
-- [@i-clavdivs/runner](../runner/README.md) - Uses workspace files in system prompts
-- [@i-clavdivs/agents](../agents/README.md) - Agent orchestration layer
+- [@i-clavdivs/agent](../agent/README.md) - Uses workspace files in system prompts
+- [@i-clavdivs/agents](../agents/README.md) - Agent orchestration layer (deprecated)
 
 ## Examples
 

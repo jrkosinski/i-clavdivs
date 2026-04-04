@@ -23,7 +23,7 @@
     "dependencies": {
         "@i-clavdivs/common": "workspace:*",
         "@i-clavdivs/channels": "workspace:*",
-        "@i-clavdivs/runner": "workspace:*"
+        "@i-clavdivs/agent": "workspace:*"
     },
     "devDependencies": {
         "typescript": "^5.3.3",

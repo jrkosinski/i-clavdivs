@@ -35,7 +35,7 @@ describe('Discord Plugin', () => {
         it('should register itself as a channel plugin', () => {
             const mockApi: IPluginApi = {
                 registerChannel: vi.fn(),
-                runner: {} as any,
+                agent: {} as any,
                 getConfig: vi.fn(),
                 log: {
                     info: vi.fn(),

@@ -182,7 +182,7 @@ Location: `apps/cli/src/index.ts`
 ```typescript
 import { loadWorkspaceFiles } from '@i-clavdivs/workspace';
 
-async function createRunner(stream: boolean): Promise<Agent> {
+async function createAgent(stream: boolean): Promise<Agent> {
     //load workspace files from default location
     const workspaceFiles = await loadWorkspaceFiles();
 

@@ -47,11 +47,19 @@ vi.mock('../src/session-store.js', () => ({
             exists: vi
                 .fn()
                 .mockImplementation((id: string) => Promise.resolve(sessionData.has(id))),
+            listSessions: vi
+                .fn()
+                .mockImplementation(() => Promise.resolve([...sessionData.keys()])),
+            clear: vi.fn().mockImplementation(() => {
+                sessionData.clear();
+                return Promise.resolve();
+            }),
+            initialize: vi.fn().mockResolvedValue(undefined),
         };
     }),
 }));
 
-import { Agent } from '../src/runner.js';
+import { Agent } from '../src/agent.js';
 import type { IAgentRequest } from '@i-clavdivs/agents';
 
 const BASE_REQUEST: IAgentRequest = {
@@ -70,8 +78,9 @@ describe('Agent', () => {
 
     describe('run', () => {
         it('should return the model response as a payload', async () => {
-            const runner = new Agent();
-            const result = await runner.run(BASE_REQUEST);
+            const agent = new Agent({ id: 'test-agent' });
+            await agent.initialize();
+            const result = await agent.run(BASE_REQUEST);
 
             expect(result.payloads).toHaveLength(1);
             expect(result.payloads?.[0]?.text).toBe('mocked response');
@@ -79,15 +88,17 @@ describe('Agent', () => {
         });
 
         it('should include durationMs in meta', async () => {
-            const runner = new Agent();
-            const result = await runner.run(BASE_REQUEST);
+            const agent = new Agent({ id: 'test-agent' });
+            await agent.initialize();
+            const result = await agent.run(BASE_REQUEST);
 
             expect(result.meta.durationMs).toBeGreaterThanOrEqual(0);
         });
 
         it('should save the turn to session history after a successful run', async () => {
-            const runner = new Agent();
-            await runner.run(BASE_REQUEST);
+            const agent = new Agent({ id: 'test-agent' });
+            await agent.initialize();
+            await agent.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
             expect(saved).toHaveLength(2); //user + assistant
@@ -96,14 +107,15 @@ describe('Agent', () => {
         });
 
         it('should include prior history in the saved session after a second turn', async () => {
-            //seed existing history before constructing runner, so the mock load picks it up
+            //seed existing history before constructing agent, so the mock load picks it up
             sessionData.set('test-session', [
                 { role: 'user', content: 'prior question' },
                 { role: 'assistant', content: 'prior answer' },
             ]);
 
-            const runner = new Agent();
-            await runner.run(BASE_REQUEST);
+            const agent = new Agent({ id: 'test-agent' });
+            await agent.initialize();
+            await agent.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
             //2 prior + 2 new = 4
@@ -113,11 +125,26 @@ describe('Agent', () => {
         it('should return an error payload when the model is not found', async () => {
             const { AnthropicProvider } = await import('@i-clavdivs/models');
             vi.mocked(AnthropicProvider).mockImplementationOnce(function () {
-                return { getModel: vi.fn().mockReturnValue(undefined) };
+                return {
+                    getModel: vi.fn().mockImplementation((modelName: string) => {
+                        //return the default model during initialize, but not the nonexistent one
+                        if (modelName === 'claude-sonnet-4-5-20250929') {
+                            return {
+                                complete: vi.fn().mockResolvedValue({
+                                    content: 'mocked response',
+                                    finishReason: 'stop',
+                                    usage: { inputTokens: 10, outputTokens: 5 },
+                                }),
+                            };
+                        }
+                        return undefined;
+                    }),
+                };
             } as never);
 
-            const runner = new Agent();
-            const result = await runner.run({ ...BASE_REQUEST, model: 'nonexistent-model' });
+            const agent = new Agent({ id: 'test-agent' });
+            await agent.initialize();
+            const result = await agent.run({ ...BASE_REQUEST, model: 'nonexistent-model' });
 
             expect(result.payloads?.[0]?.isError).toBe(true);
             expect(result.payloads?.[0]?.text).toContain('nonexistent-model');
@@ -125,16 +152,18 @@ describe('Agent', () => {
 
         it('should call onChunk for each streamed delta', async () => {
             const chunks: string[] = [];
-            const runner = new Agent({ onChunk: (c) => chunks.push(c) });
+            const agent = new Agent({ id: 'test-agent', onChunk: (c) => chunks.push(c) });
+            await agent.initialize();
 
-            await runner.run(BASE_REQUEST);
+            await agent.run(BASE_REQUEST);
 
             expect(chunks).toEqual(['streamed ', 'response']);
         });
 
         it('should collect streamed chunks into the saved response', async () => {
-            const runner = new Agent({ onChunk: () => {} });
-            await runner.run(BASE_REQUEST);
+            const agent = new Agent({ id: 'test-agent', onChunk: () => {} });
+            await agent.initialize();
+            await agent.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
             expect(saved?.[1]?.content).toBe('streamed response');
@@ -143,19 +172,20 @@ describe('Agent', () => {
 
     describe('isActive / abort', () => {
         it('should report session as inactive before a run', () => {
-            const runner = new Agent();
-            expect(runner.isActive('test-session')).toBe(false);
+            const agent = new Agent({ id: 'test-agent' });
+            expect(agent.isActive('test-session')).toBe(false);
         });
 
         it('should report session as inactive after a run completes', async () => {
-            const runner = new Agent();
-            await runner.run(BASE_REQUEST);
-            expect(runner.isActive('test-session')).toBe(false);
+            const agent = new Agent({ id: 'test-agent' });
+            await agent.initialize();
+            await agent.run(BASE_REQUEST);
+            expect(agent.isActive('test-session')).toBe(false);
         });
 
         it('should return false from abort when session is not active', async () => {
-            const runner = new Agent();
-            expect(await runner.abort('test-session')).toBe(false);
+            const agent = new Agent({ id: 'test-agent' });
+            expect(await agent.abort('test-session')).toBe(false);
         });
     });
 
@@ -169,8 +199,9 @@ describe('Agent', () => {
             sessionData.set('test-session', longHistory);
 
             //cap at 4 history messages
-            const runner = new Agent({ maxHistoryMessages: 4 });
-            await runner.run(BASE_REQUEST);
+            const agent = new Agent({ id: 'test-agent', maxHistoryMessages: 4 });
+            await agent.initialize();
+            await agent.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
             //4 trimmed history + 2 new = 6
@@ -183,8 +214,9 @@ describe('Agent', () => {
                 { role: 'assistant', content: 'a' },
             ]);
 
-            const runner = new Agent({ maxHistoryMessages: 40 });
-            await runner.run(BASE_REQUEST);
+            const agent = new Agent({ id: 'test-agent', maxHistoryMessages: 40 });
+            await agent.initialize();
+            await agent.run(BASE_REQUEST);
 
             const saved = sessionData.get('test-session');
             //2 existing + 2 new = 4

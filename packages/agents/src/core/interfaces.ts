@@ -313,6 +313,27 @@ export interface ICompleteEvent {
  * Main orchestrator for agent execution
  */
 export interface IAgent {
+    /** Unique agent identifier */
+    readonly id: string;
+    /** Human-readable agent name */
+    readonly name: string;
+
+    /**
+     * Initialize the agent (must be called before use)
+     */
+    initialize(): Promise<void>;
+
+    /**
+     * Cleanup resources when agent is no longer needed
+     */
+    dispose(): Promise<void>;
+
+    /**
+     * Check if agent is ready to handle requests
+     * @returns True if initialized and not disposed
+     */
+    isReady(): boolean;
+
     /**
      * Execute an agent request
      * @param request Agent execution request
@@ -333,4 +354,28 @@ export interface IAgent {
      * @returns True if active
      */
     isActive(sessionId: string): boolean;
+
+    /**
+     * List all session IDs for this agent
+     * @returns Array of session IDs
+     */
+    listSessions(): Promise<string[]>;
+
+    /**
+     * Get conversation history for a session
+     * @param sessionId Session identifier
+     * @returns Array of messages
+     */
+    getSessionHistory(sessionId: string): Promise<unknown[]>;
+
+    /**
+     * Delete a specific session
+     * @param sessionId Session to delete
+     */
+    deleteSession(sessionId: string): Promise<void>;
+
+    /**
+     * Clear all sessions for this agent
+     */
+    clearAllSessions(): Promise<void>;
 }

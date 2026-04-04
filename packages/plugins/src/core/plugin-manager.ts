@@ -1,20 +1,21 @@
 import type { IPlugin } from '../types/plugin.js';
 import type { IChannelPlugin, IChannelGateway } from '../types/channel-plugin.js';
 import type { IPluginApi } from '../types/plugin-api.js';
-import type { Agent } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/agent';
 import { getGlobalPluginRegistry } from './plugin-registry.js';
 
 /**
  * Manages plugin lifecycle (initialization, starting gateways, cleanup).
+ * In daemon mode, agent can be undefined as plugins create their own agents.
  */
 export class PluginManager {
     private _registry = getGlobalPluginRegistry();
     private _gateways: Map<string, IChannelGateway> = new Map();
-    private _runner: Agent;
+    private _agent?: Agent;
     private _config: Record<string, unknown>;
 
-    constructor(runner: Agent, config: Record<string, unknown> = {}) {
-        this._runner = runner;
+    constructor(agent: Agent | undefined, config: Record<string, unknown> = {}) {
+        this._agent = agent;
         this._config = config;
     }
 
@@ -93,9 +94,9 @@ export class PluginManager {
 
         const gateway = plugin.createGateway(config);
 
-        //inject runner if gateway supports it
-        if ('setRunner' in gateway && typeof gateway.setRunner === 'function') {
-            (gateway as any).setRunner(this._runner);
+        //inject agent if gateway supports it
+        if ('setAgent' in gateway && typeof gateway.setAgent === 'function') {
+            (gateway as any).setAgent(this._agent);
         }
 
         this._gateways.set(plugin.id, gateway);
@@ -105,7 +106,7 @@ export class PluginManager {
     private _createPluginApi(): IPluginApi {
         return {
             registerChannel: (plugin) => this._registry.registerChannel(plugin),
-            runner: this._runner,
+            agent: this._agent!,
             getConfig: (key) => this._config[key],
             log: {
                 info: (msg) => console.log(`[plugin] ${msg}`),

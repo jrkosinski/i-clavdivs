@@ -8,7 +8,7 @@ type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 const LEVELS: Record<LogLevel, number> = { debug: 0, info: 1, warn: 2, error: 3 };
 
 /**
- * Simple stderr logger used across the runner package.
+ * Simple stderr logger used across the agent package.
  */
 export class Logger {
     private readonly _minLevel: LogLevel;
@@ -72,5 +72,5 @@ export class Logger {
     }
 }
 
-//shared default instance for the runner package
+//shared default instance for the agent package
 export const log = new Logger();

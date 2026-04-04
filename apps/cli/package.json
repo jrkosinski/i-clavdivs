@@ -20,7 +20,7 @@
         "@i-clavdivs/agents": "workspace:*",
         "@i-clavdivs/discord": "workspace:*",
         "@i-clavdivs/plugins": "workspace:*",
-        "@i-clavdivs/runner": "workspace:*",
+        "@i-clavdivs/agent": "workspace:*",
         "@i-clavdivs/workspace": "workspace:*",
         "dotenv": "^16.4.5"
     },
