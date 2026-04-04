@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  undici: '>=6.23.0'
+  undici: ~8.0.2
 
 importers:
 
@@ -35,6 +35,9 @@ importers:
 
   apps/cli:
     dependencies:
+      '@i-clavdivs/agent':
+        specifier: workspace:*
+        version: link:../../packages/agent
       '@i-clavdivs/agents':
         specifier: workspace:*
         version: link:../../packages/agents
@@ -44,12 +47,31 @@ importers:
       '@i-clavdivs/plugins':
         specifier: workspace:*
         version: link:../../packages/plugins
-      '@i-clavdivs/runner':
-        specifier: workspace:*
-        version: link:../../packages/runner
       '@i-clavdivs/workspace':
         specifier: workspace:*
         version: link:../../packages/workspace
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.6.1
+    devDependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+      vitest:
+        specifier: 4.0.18
+        version: 4.0.18(@types/node@20.19.32)(@vitest/ui@4.0.18)(happy-dom@20.6.1)(tsx@4.21.0)
+
+  packages/agent:
+    dependencies:
+      '@i-clavdivs/agents':
+        specifier: workspace:*
+        version: link:../agents
+      '@i-clavdivs/models':
+        specifier: workspace:*
+        version: link:../models
+      '@i-clavdivs/workspace':
+        specifier: workspace:*
+        version: link:../workspace
     devDependencies:
       typescript:
         specifier: ^5.3.3
@@ -105,6 +127,9 @@ importers:
 
   packages/discord:
     dependencies:
+      '@i-clavdivs/agent':
+        specifier: workspace:*
+        version: link:../agent
       '@i-clavdivs/channels':
         specifier: workspace:*
         version: link:../channels
@@ -114,9 +139,9 @@ importers:
       '@i-clavdivs/plugins':
         specifier: workspace:*
         version: link:../plugins
-      '@i-clavdivs/runner':
+      '@i-clavdivs/workspace':
         specifier: workspace:*
-        version: link:../runner
+        version: link:../workspace
       discord.js:
         specifier: ^14.25.1
         version: 14.25.1
@@ -146,15 +171,15 @@ importers:
 
   packages/plugins:
     dependencies:
+      '@i-clavdivs/agent':
+        specifier: workspace:*
+        version: link:../agent
       '@i-clavdivs/channels':
         specifier: workspace:*
         version: link:../channels
       '@i-clavdivs/common':
         specifier: workspace:*
         version: link:../common
-      '@i-clavdivs/runner':
-        specifier: workspace:*
-        version: link:../runner
     devDependencies:
       typescript:
         specifier: ^5.3.3
@@ -181,6 +206,9 @@ importers:
 
   packages/reddit:
     dependencies:
+      '@i-clavdivs/agent':
+        specifier: workspace:*
+        version: link:../agent
       '@i-clavdivs/channels':
         specifier: workspace:*
         version: link:../channels
@@ -190,9 +218,6 @@ importers:
       '@i-clavdivs/plugins':
         specifier: workspace:*
         version: link:../plugins
-      '@i-clavdivs/runner':
-        specifier: workspace:*
-        version: link:../runner
       snoowrap:
         specifier: ^1.23.0
         version: 1.23.0
@@ -205,25 +230,6 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^4.0.18
-        version: 4.0.18(@types/node@20.19.32)(@vitest/ui@4.0.18)(happy-dom@20.6.1)(tsx@4.21.0)
-
-  packages/runner:
-    dependencies:
-      '@i-clavdivs/agents':
-        specifier: workspace:*
-        version: link:../agents
-      '@i-clavdivs/models':
-        specifier: workspace:*
-        version: link:../models
-      '@i-clavdivs/workspace':
-        specifier: workspace:*
-        version: link:../workspace
-    devDependencies:
-      typescript:
-        specifier: ^5.3.3
-        version: 5.9.3
-      vitest:
-        specifier: 4.0.18
         version: 4.0.18(@types/node@20.19.32)(@vitest/ui@4.0.18)(happy-dom@20.6.1)(tsx@4.21.0)
 
   packages/skills:
@@ -339,7 +345,7 @@ packages:
       discord-api-types: 0.38.40
       magic-bytes.js: 1.13.0
       tslib: 2.8.1
-      undici: 7.22.0
+      undici: 8.0.2
     dev: false
 
   /@discordjs/util@1.2.0:
@@ -1339,10 +1345,15 @@ packages:
       lodash.snakecase: 4.1.1
       magic-bytes.js: 1.13.0
       tslib: 2.8.1
-      undici: 7.22.0
+      undici: 8.0.2
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+    dev: false
+
+  /dotenv@16.6.1:
+    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+    engines: {node: '>=12'}
     dev: false
 
   /dunder-proto@1.0.1:
@@ -2076,9 +2087,9 @@ packages:
   /undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  /undici@7.22.0:
-    resolution: {integrity: sha512-RqslV2Us5BrllB+JeiZnK4peryVTndy9Dnqq62S3yYRRTj0tFQCwEniUy2167skdGOy3vqRzEvl1Dm4sV2ReDg==}
-    engines: {node: '>=20.18.1'}
+  /undici@8.0.2:
+    resolution: {integrity: sha512-B9MeU5wuFhkFAuNeA19K2GDFcQXZxq33fL0nRy2Aq30wdufZbyyvxW3/ChaeipXVfy/wUweZyzovQGk39+9k2w==}
+    engines: {node: '>=22.19.0'}
     dev: false
 
   /uri-js@4.4.1:

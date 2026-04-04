@@ -1,15 +1,14 @@
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/agent';
 import { PluginManager, getGlobalPluginRegistry } from '@i-clavdivs/plugins';
 import { discordPlugin } from '@i-clavdivs/discord';
 import { ConfigLoader } from '@i-clavdivs/plugins';
 
 /**
  * Load and initialize all available plugins.
+ * @param agent Optional agent agent (not needed in daemon mode where plugins create their own agents)
+ * @param configPath Optional path to config file
  */
-export async function loadPlugins(
-    runner: AgentRunner,
-    configPath?: string
-): Promise<PluginManager> {
+export async function loadPlugins(agent?: Agent, configPath?: string): Promise<PluginManager> {
     //load configuration
     const config = await ConfigLoader.load(configPath);
 
@@ -22,7 +21,8 @@ export async function loadPlugins(
     }
 
     //create plugin manager
-    const manager = new PluginManager(runner, config);
+    //in daemon mode, agent is undefined and plugins create their own agents
+    const manager = new PluginManager(agent, config);
 
     //initialize all plugins
     await manager.initializeAll();

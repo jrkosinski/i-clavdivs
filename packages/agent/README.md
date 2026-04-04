@@ -1,6 +1,6 @@
-# @i-clavdivs/runner
+# @i-clavdivs/agent
 
-Agent runner for session management and LLM execution loop in i-clavdivs.
+Agent execution engine for session management and LLM execution loop in i-clavdivs.
 
 ## Overview
 
@@ -24,19 +24,24 @@ This package provides the core agent execution engine that:
 ## Installation
 
 ```bash
-pnpm add @i-clavdivs/runner
+pnpm add @i-clavdivs/agent
 ```
 
 ## Core Components
 
-### AgentRunner
+### Agent
 
 The main execution engine that orchestrates LLM completions:
 
 ```typescript
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/agent';
 
-const runner = new AgentRunner({
+const agent = new Agent({
+    id: 'my-agent', // Required: unique agent identifier
+    name: 'My Assistant', // Optional: human-readable name
+    model: 'claude-sonnet-4-5-20250929', // Optional: default model
+    provider: 'anthropic', // Optional: default provider
+    workspaceDir: '/path/to/workspace', // Optional: agent's workspace
     maxHistoryMessages: 40,
     sessionDir: '~/.i-clavdivs/sessions',
     onChunk: (text) => process.stdout.write(text),
@@ -44,12 +49,25 @@ const runner = new AgentRunner({
     extraSystemPrompt: 'Additional instructions...',
 });
 
-const result = await runner.run({
+// Initialize the agent (required before use)
+await agent.initialize();
+
+// Simple execution using agent's defaults
+const result = await agent.execute({
+    sessionId: 'user-123',
+    prompt: 'Hello, how are you?',
+});
+
+// Or use run() to override defaults
+const result2 = await agent.run({
     sessionId: 'user-123',
     prompt: 'Hello, how are you?',
     model: 'claude-sonnet-4-5-20250929',
     provider: 'anthropic',
 });
+
+// Cleanup when done
+await agent.dispose();
 ```
 
 ### SessionStore
@@ -57,7 +75,7 @@ const result = await runner.run({
 Manages conversation history persistence:
 
 ```typescript
-import { SessionStore } from '@i-clavdivs/runner';
+import { SessionStore } from '@i-clavdivs/agent';
 
 const store = new SessionStore('~/.i-clavdivs/sessions');
 
@@ -79,7 +97,7 @@ await store.delete('session-123');
 Builds structured system prompts:
 
 ```typescript
-import { SystemPrompt } from '@i-clavdivs/runner';
+import { SystemPrompt } from '@i-clavdivs/agent';
 
 const prompt = SystemPrompt.build({
     workspaceDir: '~/.i-clavdivs/workspace',
@@ -92,7 +110,7 @@ const prompt = SystemPrompt.build({
 Simple structured logging:
 
 ```typescript
-import { log, Logger } from '@i-clavdivs/runner';
+import { log, Logger } from '@i-clavdivs/agent';
 
 log.info('Agent started');
 log.debug('Processing request', { sessionId: '123' });
@@ -107,11 +125,11 @@ const customLog = new Logger({ level: 'debug', prefix: 'myapp' });
 ### Basic Agent Execution
 
 ```typescript
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/agent';
 
-const runner = new AgentRunner();
+const agent = new Agent();
 
-const result = await runner.run({
+const result = await agent.run({
     sessionId: 'user-123',
     prompt: 'Write a function to reverse a string',
     model: 'claude-sonnet-4-5-20250929',
@@ -125,13 +143,13 @@ console.log(result.usage); // Token usage stats
 ### Streaming Responses
 
 ```typescript
-const runner = new AgentRunner({
+const agent = new Agent({
     onChunk: (text) => {
         process.stdout.write(text);
     },
 });
 
-await runner.run({
+await agent.run({
     sessionId: 'user-123',
     prompt: 'Explain async/await in JavaScript',
     model: 'claude-sonnet-4-5-20250929',
@@ -146,12 +164,12 @@ import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
 
 const workspaceFiles = await buildSystemPromptWithWorkspace('~/.i-clavdivs/workspace');
 
-const runner = new AgentRunner({
+const agent = new Agent({
     workspaceFiles,
     extraSystemPrompt: 'Focus on TypeScript best practices.',
 });
 
-await runner.run({
+await agent.run({
     sessionId: 'dev-session',
     prompt: 'Review this code...',
     model: 'claude-sonnet-4-5-20250929',
@@ -178,10 +196,10 @@ await store.delete('old-session-456');
 
 ## Configuration
 
-### AgentRunner Options
+### Agent Options
 
 ```typescript
-interface IAgentRunnerConfig {
+interface IAgentConfig {
     maxHistoryMessages?: number; // Default: 40
     sessionDir?: string; // Default: ~/.i-clavdivs/sessions
     onChunk?: (chunk: string) => void;
@@ -252,7 +270,7 @@ Each session file contains:
 When `maxHistoryMessages` is exceeded, the oldest messages are removed:
 
 ```typescript
-const runner = new AgentRunner({
+const agent = new Agent({
     maxHistoryMessages: 20, // Keep only last 20 messages
 });
 
@@ -263,14 +281,14 @@ const runner = new AgentRunner({
 
 ## Concurrency Handling
 
-The runner prevents race conditions by queuing requests per session:
+The agent prevents race conditions by queuing requests per session:
 
 ```typescript
 // Multiple concurrent requests for the same session
 const [result1, result2, result3] = await Promise.all([
-    runner.run({ sessionId: 'user-123', prompt: 'Question 1' }),
-    runner.run({ sessionId: 'user-123', prompt: 'Question 2' }),
-    runner.run({ sessionId: 'user-123', prompt: 'Question 3' }),
+    agent.run({ sessionId: 'user-123', prompt: 'Question 1' }),
+    agent.run({ sessionId: 'user-123', prompt: 'Question 2' }),
+    agent.run({ sessionId: 'user-123', prompt: 'Question 3' }),
 ]);
 
 // Requests are executed sequentially per session
@@ -279,7 +297,7 @@ const [result1, result2, result3] = await Promise.all([
 
 ## Integration with Workspace Files
 
-The runner integrates with [@i-clavdivs/workspace](../workspace/README.md) to include:
+The agent integrates with [@i-clavdivs/workspace](../workspace/README.md) to include:
 
 - **SOUL.md** - Agent personality and behavior
 - **IDENTITY.md** - Agent identity and purpose
@@ -293,7 +311,7 @@ These files are automatically included in the system prompt.
 
 ## Environment Variables
 
-The runner respects these environment variables:
+The agent respects these environment variables:
 
 - `ANTHROPIC_API_KEY` - Required for Anthropic provider
 - `OPENAI_API_KEY` - Required for OpenAI provider (future)
@@ -302,11 +320,11 @@ The runner respects these environment variables:
 
 ## Error Handling
 
-The runner handles common errors:
+The agent handles common errors:
 
 ```typescript
 try {
-    const result = await runner.run(request);
+    const result = await agent.run(request);
 } catch (error) {
     if (error.code === 'ENOENT') {
         // Session file not found
@@ -338,7 +356,7 @@ pnpm typecheck
 
 ## Related Packages
 
-- [@i-clavdivs/agents](../agents/README.md) - Agent orchestration layer
+- [@i-clavdivs/agents](../agents/README.md) - Agent orchestration layer (deprecated, functionality moved to this package)
 - [@i-clavdivs/models](../models/README.md) - LLM provider implementations
 - [@i-clavdivs/workspace](../workspace/README.md) - Workspace file management
 

@@ -1,4 +1,4 @@
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/agent';
 import type { IChannelPlugin } from './channel-plugin.js';
 
 /**
@@ -11,9 +11,9 @@ export interface IPluginApi {
     registerChannel(plugin: IChannelPlugin): void;
 
     /**
-     * Access to the agent runner for executing prompts.
+     * Access to the agent for executing prompts.
      */
-    runner: AgentRunner;
+    agent: Agent;
 
     /**
      * Configuration access.

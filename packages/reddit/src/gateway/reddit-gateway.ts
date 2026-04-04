@@ -1,6 +1,6 @@
 import Snoowrap from 'snoowrap';
 import type { IChannelGateway, IChannelMessage } from '@i-clavdivs/plugins';
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/agent';
 import { MessageHandler, type RedditContent } from './message-handler.js';
 import type { IRedditConfig, IRedditAccountConfig } from '../config/index.js';
 import { normalizeRedditConfig } from '../config/index.js';
@@ -24,17 +24,17 @@ interface IRedditClientInstance {
 export class RedditGateway implements IChannelGateway {
     private _clients: IRedditClientInstance[] = [];
     private _running = false;
-    private _runner?: AgentRunner;
+    private _agent?: Agent;
 
     constructor(_config: unknown) {
         //config is passed to start() method
     }
 
     /**
-     * Set the agent runner for processing messages.
+     * Set the agent for processing messages.
      */
-    public setRunner(runner: AgentRunner): void {
-        this._runner = runner;
+    public setAgent(agent: Agent): void {
+        this._agent = agent;
     }
 
     /**
@@ -347,21 +347,21 @@ export class RedditGateway implements IChannelGateway {
     }
 
     /**
-     * Process message with the agent runner.
+     * Process message with the agent.
      */
     private async _processWithAgent(
         msg: IChannelMessage,
         raw: RedditContent,
         client: Snoowrap
     ): Promise<void> {
-        if (!this._runner) {
-            console.error('[Reddit] No runner configured');
+        if (!this._agent) {
+            console.error('[Reddit] No agent configured');
             return;
         }
 
         try {
             //run the agent with the message content
-            const result = await this._runner.run({
+            const result = await this._agent.run({
                 sessionId: msg.conversationId,
                 prompt: msg.content,
                 provider: 'anthropic',

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * CLI entrypoint for the i-clavdivs agent runner.
+ * CLI entrypoint for the i-clavdivs agent.
  *
  * Examples:
  *   node dist/index.js "hello"
@@ -11,11 +11,20 @@
 
 // Load environment variables from .env file before anything else
 import { config as dotenvConfig } from 'dotenv';
-dotenvConfig();
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// Find project root (2 levels up from this file: apps/cli/src -> apps/cli -> root)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = resolve(__filename, '..');
+const projectRoot = resolve(__dirname, '..', '..');
+
+// Load .env from project root
+dotenvConfig({ path: resolve(projectRoot, '.env') });
 
 import process from 'node:process';
-import { AgentRunner } from '@i-clavdivs/runner';
-import { SessionStore } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/agent';
+import { SessionStore } from '@i-clavdivs/agent';
 import { loadWorkspaceFiles } from '@i-clavdivs/workspace';
 import { CliArgs } from './args.js';
 import { writeChunk, writeResponse, exitWithError } from './output.js';
@@ -26,25 +35,23 @@ import { loadPlugins } from './plugin-loader.js';
  */
 async function main(): Promise<void> {
     const args = parseArgsOrExit();
-    await prepareSession(args);
 
-    //create runner with workspace files
-    const runner = await createRunner(args.stream, args.workspaceDir);
-
-    //load plugins for channel support
-    const pluginManager = await loadPlugins(runner);
-
-    //setup graceful shutdown
-    setupShutdownHandlers(pluginManager);
-
-    //if prompt provided, run once and exit
+    //if prompt provided, run in single-shot mode
     if (args.prompt) {
-        await runSinglePrompt(runner, args, args.prompt);
-        await pluginManager.cleanup();
+        await prepareSession(args);
+        const agent = await createAgent(args.stream, args.workspaceDir);
+        await runSinglePrompt(agent, args, args.prompt);
+        await agent.dispose();
         process.exit(0);
     }
 
     //otherwise, run in daemon mode listening to channels
+    //plugins will create their own agents with IDs from config
+    const pluginManager = await loadPlugins(undefined);
+
+    //setup graceful shutdown
+    setupShutdownHandlers(pluginManager);
+
     await runDaemonMode();
 }
 
@@ -73,11 +80,11 @@ async function prepareSession(args: ReturnType<typeof CliArgs.parse>): Promise<v
  * Run a single prompt and return the result.
  */
 async function runSinglePrompt(
-    runner: AgentRunner,
+    agent: Agent,
     args: ReturnType<typeof CliArgs.parse>,
     prompt: string
 ) {
-    const result = await runner.run({
+    const result = await agent.run({
         sessionId: args.sessionId,
         prompt,
         provider: 'anthropic',
@@ -111,22 +118,28 @@ async function runDaemonMode(): Promise<void> {
 }
 
 /**
- * Creates agent runner with optional streaming support and workspace files.
+ * Creates agent with optional streaming support and workspace files.
  */
-async function createRunner(stream: boolean, workspaceDir?: string): Promise<AgentRunner> {
+async function createAgent(stream: boolean, workspaceDir?: string): Promise<Agent> {
     // Load workspace files from specified directory or default location (~/.i-clavdivs/workspace)
     const workspaceFiles = await loadWorkspaceFiles(workspaceDir ? { workspaceDir } : undefined);
 
-    return new AgentRunner({
+    const agent = new Agent({
+        id: 'cli-agent',
         onChunk: stream ? writeChunk : undefined,
+        workspaceDir,
         workspaceFiles,
     });
+
+    await agent.initialize();
+
+    return agent;
 }
 
 /**
  * Handles result output to stdout, either streaming or complete.
  */
-function handleOutput(result: Awaited<ReturnType<AgentRunner['run']>>, isStreaming: boolean): void {
+function handleOutput(result: Awaited<ReturnType<Agent['run']>>, isStreaming: boolean): void {
     const payload = extractPayload(result);
     validatePayload(payload);
 
@@ -141,7 +154,7 @@ function handleOutput(result: Awaited<ReturnType<AgentRunner['run']>>, isStreami
 /**
  * Extracts first payload from result or exits with error.
  */
-function extractPayload(result: Awaited<ReturnType<AgentRunner['run']>>) {
+function extractPayload(result: Awaited<ReturnType<Agent['run']>>) {
     const payload = result.payloads?.[0];
     if (!payload) exitWithError('no response from agent');
     return payload;

@@ -146,9 +146,9 @@ export interface IAgentRequest {
 }
 
 /**
- * Configuration options for agent runner
+ * Configuration options for agent
  */
-export interface IAgentRunnerConfig {
+export interface IAgentConfig {
     /** Maximum retry attempts on failure */
     maxRetries?: number;
     /** Enable automatic context compaction on overflow */

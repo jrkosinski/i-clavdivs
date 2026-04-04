@@ -112,6 +112,31 @@ export class SessionStore {
             .catch(() => false);
     }
 
+    /** Lists all session IDs for this store. */
+    public async listSessions(): Promise<string[]> {
+        try {
+            await fs.mkdir(this._sessionDir, { recursive: true });
+            const files = await fs.readdir(this._sessionDir);
+            return files.filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/, ''));
+        } catch (err) {
+            log.warn(`failed to list sessions: ${String(err)}`);
+            return [];
+        }
+    }
+
+    /** Clears all session files in this store. */
+    public async clear(): Promise<void> {
+        const sessions = await this.listSessions();
+        await Promise.all(sessions.map((s) => this.delete(s)));
+        log.debug(`cleared ${String(sessions.length)} sessions`);
+    }
+
+    /** Ensures the session directory exists. */
+    public async initialize(): Promise<void> {
+        await fs.mkdir(this._sessionDir, { recursive: true });
+        log.debug(`session store initialized: ${this._sessionDir}`);
+    }
+
     /**
      * Resolves session ID to a safe file path, preventing path traversal attacks.
      */

@@ -182,20 +182,20 @@ Location: `apps/cli/src/index.ts`
 ```typescript
 import { loadWorkspaceFiles } from '@i-clavdivs/workspace';
 
-async function createRunner(stream: boolean): Promise<AgentRunner> {
+async function createAgent(stream: boolean): Promise<Agent> {
     //load workspace files from default location
     const workspaceFiles = await loadWorkspaceFiles();
 
-    return new AgentRunner({
+    return new Agent({
         onChunk: stream ? writeChunk : undefined,
         workspaceFiles,
     });
 }
 ```
 
-#### 2. Runner Integration
+#### 2. Agent Integration
 
-Location: `packages/runner/src/runner.ts`
+Location: `packages/agent/src/agent.ts`
 
 ```typescript
 import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
@@ -219,7 +219,7 @@ private _buildSystemPrompt(request: IAgentRequest): string {
 
 #### 3. Discord Plugin Integration (Planned)
 
-The Discord plugin will load workspace files when creating the runner instance, similar to the CLI integration.
+The Discord plugin will load workspace files when creating the agent instance, similar to the CLI integration.
 
 ### Data Flow
 
@@ -230,7 +230,7 @@ loadWorkspaceFiles() reads files from ~/.i-clavdivs/workspace/
     ↓
 Files parsed into IWorkspaceFile[] array
     ↓
-Passed to AgentRunner constructor
+Passed to Agent constructor
     ↓
 buildSystemPromptWithWorkspace() embeds files in system prompt
     ↓

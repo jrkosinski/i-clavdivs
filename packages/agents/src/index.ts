@@ -12,4 +12,4 @@ export * from './errors/index.js';
 // Authentication system
 export * from './auth/index.js';
 
-// TODO: Export runner, session, tools modules as they are implemented
+// TODO: Export agent, session, tools modules as they are implemented

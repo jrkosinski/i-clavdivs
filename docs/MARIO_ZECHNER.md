@@ -107,11 +107,11 @@ They are referenced across **168 source files** in v0.0.
 
 ## Summary: what we actually need to replace
 
-| Package           | Needed for CLI runner?          | v0.1 replacement                                                |
-| ----------------- | ------------------------------- | --------------------------------------------------------------- |
-| `pi-agent-core`   | Types only                      | Already covered by `packages/agents` + `packages/models`        |
-| `pi-ai`           | HTTP streaming to LLM           | Already covered by `packages/models/AnthropicProvider`          |
-| `pi-coding-agent` | Session management + agent loop | **Must build** → `packages/runner` (SessionStore + AgentRunner) |
-| `pi-tui`          | Terminal UI                     | Not needed                                                      |
+| Package           | Needed for CLI runner?          | v0.1 replacement                                          |
+| ----------------- | ------------------------------- | --------------------------------------------------------- |
+| `pi-agent-core`   | Types only                      | Already covered by `packages/agents` + `packages/models`  |
+| `pi-ai`           | HTTP streaming to LLM           | Already covered by `packages/models/AnthropicProvider`    |
+| `pi-coding-agent` | Session management + agent loop | **Must build** → `packages/runner` (SessionStore + Agent) |
+| `pi-tui`          | Terminal UI                     | Not needed                                                |
 
 The only real work is replacing `pi-coding-agent`'s `SessionManager` and `createAgentSession` with a simpler implementation in `packages/runner`. Everything else is already in place.

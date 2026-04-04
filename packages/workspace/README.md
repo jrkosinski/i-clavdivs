@@ -24,14 +24,14 @@ pnpm add @i-clavdivs/workspace
 
 The package supports these workspace files:
 
-| File            | Purpose                                  | Priority |
-| --------------- | ---------------------------------------- | -------- |
-| **SOUL.md**     | Agent personality and communication style | High     |
-| **IDENTITY.md** | Agent identity and purpose               | Medium   |
-| **USER.md**     | User preferences and context             | Medium   |
-| **TOOLS.md**    | Available tools and capabilities         | Medium   |
-| **MEMORY.md**   | Persistent knowledge across sessions     | Low      |
-| **HEARTBEAT.md**| Periodic behavioral reminders            | Low      |
+| File             | Purpose                                   | Priority |
+| ---------------- | ----------------------------------------- | -------- |
+| **SOUL.md**      | Agent personality and communication style | High     |
+| **IDENTITY.md**  | Agent identity and purpose                | Medium   |
+| **USER.md**      | User preferences and context              | Medium   |
+| **TOOLS.md**     | Available tools and capabilities          | Medium   |
+| **MEMORY.md**    | Persistent knowledge across sessions      | Low      |
+| **HEARTBEAT.md** | Periodic behavioral reminders             | Low      |
 
 See [examples/workspace/README.md](../../examples/workspace/README.md) for detailed descriptions and examples.
 
@@ -74,8 +74,8 @@ import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
 // Build system prompt with workspace files
 const systemPrompt = await buildSystemPromptWithWorkspace('~/.i-clavdivs/workspace');
 
-// Use in agent runner
-const runner = new AgentRunner({
+// Use in agent
+const agent = new Agent({
     extraSystemPrompt: systemPrompt,
 });
 ```
@@ -122,6 +122,7 @@ interface IWorkspaceConfig {
 Load all workspace files from the specified directory.
 
 **Parameters:**
+
 - `workspaceDir` - Directory path (default: `~/.i-clavdivs/workspace`)
 
 **Returns:** Array of workspace files (includes missing files with `missing: true`)
@@ -131,6 +132,7 @@ Load all workspace files from the specified directory.
 Load a single workspace file.
 
 **Parameters:**
+
 - `filename` - Name of the file to load
 - `workspaceDir` - Directory path (default: `~/.i-clavdivs/workspace`)
 
@@ -147,6 +149,7 @@ Get the default workspace directory path.
 Build a system prompt including workspace file content.
 
 **Parameters:**
+
 - `workspaceDir` - Directory path (default: `~/.i-clavdivs/workspace`)
 
 **Returns:** Formatted system prompt text
@@ -220,15 +223,15 @@ vi ~/.i-clavdivs/workspace/SOUL.md
 
 ## Integration
 
-### With AgentRunner
+### With Agent
 
 ```typescript
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/agent';
 import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
 
 const systemPrompt = await buildSystemPromptWithWorkspace();
 
-const runner = new AgentRunner({
+const agent = new Agent({
     extraSystemPrompt: systemPrompt,
 });
 ```
@@ -315,6 +318,7 @@ pnpm typecheck
 ### 1. Start with SOUL.md
 
 This file has the most impact on agent behavior. Define:
+
 - Personality traits
 - Communication style
 - Core values
@@ -323,6 +327,7 @@ This file has the most impact on agent behavior. Define:
 ### 2. Keep Files Focused
 
 Each file should have a clear purpose:
+
 - SOUL.md → How the agent acts
 - IDENTITY.md → What the agent is
 - USER.md → Who you are and your preferences
@@ -332,20 +337,24 @@ Each file should have a clear purpose:
 
 Show, don't just tell:
 
-```markdown
+````markdown
 ## Code Style
 
 Prefer:
+
 ```typescript
 // like this
 const result = await fetch(url);
 ```
+````
 
 Not:
+
 ```typescript
 // Like This
 const result = await fetch(url);
 ```
+
 ```
 
 ### 4. Iterate Based on Behavior
@@ -358,8 +367,8 @@ Keep your workspace files in git to track changes and revert if needed.
 
 ## Related Packages
 
-- [@i-clavdivs/runner](../runner/README.md) - Uses workspace files in system prompts
-- [@i-clavdivs/agents](../agents/README.md) - Agent orchestration layer
+- [@i-clavdivs/agent](../agent/README.md) - Uses workspace files in system prompts
+- [@i-clavdivs/agents](../agents/README.md) - Agent orchestration layer (deprecated)
 
 ## Examples
 
@@ -372,3 +381,4 @@ See [examples/workspace/](../../examples/workspace/) for:
 ## License
 
 See root project license.
+```

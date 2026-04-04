@@ -1,0 +1,33 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "cli",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "ts-node",
+            "runtimeArgs": ["src/index"],
+            "cwd": "${workspaceRoot}/apps/cli",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": "daemon",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/apps/cli/dist/index.js",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "DISCORD_BOT_TOKEN_ALAN": "${env:DISCORD_BOT_TOKEN_ALAN}",
+                "DISCORD_BOT_TOKEN_CONAN": "${env:DISCORD_BOT_TOKEN_CONAN}",
+                "ANTHROPIC_API_KEY": "${env:ANTHROPIC_API_KEY}"
+            },
+            "outputCapture": "std"
+        }
+    ]
+}

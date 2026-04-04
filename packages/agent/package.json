@@ -1,8 +1,8 @@
 {
-    "name": "@i-clavdivs/runner",
+    "name": "@i-clavdivs/agent",
     "version": "0.0.0",
     "type": "module",
-    "description": "Agent runner: session management and LLM execution loop",
+    "description": "Agent: session management and LLM execution loop",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {

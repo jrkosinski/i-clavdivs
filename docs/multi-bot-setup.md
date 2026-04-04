@@ -5,10 +5,11 @@ This guide explains how to run multiple Discord bots, each with its own personal
 ## Overview
 
 The system now supports running multiple Discord bot accounts simultaneously, where each bot can have:
+
 - Its own bot token
 - Its own allowed channels and users
 - Its own workspace directory with unique SOUL.md and other personality files
-- Its own agent runner instance
+- Its own agent instance
 
 ## Configuration Methods
 
@@ -144,8 +145,9 @@ pnpm run daemon
 ```
 
 The system will:
+
 1. Load configuration from `.env` and `config/default.json`
-2. Create a separate AgentRunner for each bot account
+2. Create a separate Agent for each bot account
 3. Load workspace files from each bot's workspace directory
 4. Connect each bot to Discord with its own token
 5. Listen for messages on all configured channels
@@ -176,12 +178,13 @@ Each bot maintains its own conversation history (sessions), completely isolated 
 ### Session Directory Structure
 
 - **With workspace directory configured**: Sessions are stored in `<workspaceDir>/.sessions/`
-  - Example: `~/.i-clavdivs/clavdivs-workspace/.sessions/`
+    - Example: `~/.i-clavdivs/clavdivs-workspace/.sessions/`
 
 - **Without workspace directory**: Sessions are stored in `~/.i-clavdivs/sessions/<accountId>/`
-  - Example: `~/.i-clavdivs/sessions/bot1/`
+    - Example: `~/.i-clavdivs/sessions/bot1/`
 
 This ensures that:
+
 - Each bot has independent conversation histories
 - No session conflicts between bots
 - Sessions are logically grouped with their workspace files
@@ -189,6 +192,7 @@ This ensures that:
 ### Session Files
 
 Each conversation creates a JSON file named `<channelId>.json` containing the message history for that Discord channel. The session ID is typically the Discord channel ID, so:
+
 - Bot 1 responding in channel `123456` will use: `bot1-workspace/.sessions/123456.json`
 - Bot 2 responding in channel `789012` will use: `bot2-workspace/.sessions/789012.json`
 
@@ -197,66 +201,72 @@ Each conversation creates a JSON file named `<channelId>.json` containing the me
 ### Key Components Modified
 
 1. **IDiscordAccountConfig** (`packages/discord/src/config/discord-config.ts`)
-   - Added `workspaceDir?: string` field
+    - Added `workspaceDir?: string` field
 
 2. **DiscordGateway** (`packages/discord/src/gateway/discord-gateway.ts`)
-   - Modified to create a separate `AgentRunner` for each account
-   - Each runner loads workspace files from its account's workspace directory
-   - Each runner uses account-specific session directory
-   - Added `_getSessionDir()` method to determine session storage location
-   - Updated `_processWithAgent` to use account-specific runner
+    - Modified to create a separate `Agent` for each account
+    - Each agent loads workspace files from its account's workspace directory
+    - Each agent uses account-specific session directory
+    - Added `_getSessionDir()` method to determine session storage location
+    - Updated `_processWithAgent` to use account-specific agent
 
 3. **ConfigLoader** (`packages/plugins/src/utils/config-loader.ts`)
-   - Added support for `DISCORD_<ACCOUNT>_WORKSPACE_DIR` environment variable
+    - Added support for `DISCORD_<ACCOUNT>_WORKSPACE_DIR` environment variable
 
 ### How It Works
 
 1. When `DiscordGateway.start()` is called, it normalizes the config into account configs
 2. For each account, `_startAccount()` is called which:
-   - Creates a dedicated `AgentRunner` with account-specific workspace files
-   - Configures account-specific session directory
-   - Sets up Discord client with event handlers
-   - Stores the client, handler, and runner together
+    - Creates a dedicated `Agent` with account-specific workspace files
+    - Configures account-specific session directory
+    - Sets up Discord client with event handlers
+    - Stores the client, handler, and agent together
 3. When a message arrives:
-   - The gateway finds the correct account's runner
-   - Passes the message to that specific runner
-   - The runner uses its loaded workspace files (SOUL.md, etc.) and saves history to its session directory
+    - The gateway finds the correct account's agent
+    - Passes the message to that specific agent
+    - The agent uses its loaded workspace files (SOUL.md, etc.) and saves history to its session directory
 
 ## Testing Your Setup
 
 1. **Verify configuration**:
-   ```bash
-   # Check your .env file has all required tokens and paths
-   cat .env
-   ```
+
+    ```bash
+    # Check your .env file has all required tokens and paths
+    cat .env
+    ```
 
 2. **Verify workspace files exist**:
-   ```bash
-   ls -la ~/.i-clavdivs/clavdivs-workspace/
-   ls -la ~/.i-clavdivs/aurelius-workspace/
-   ```
+
+    ```bash
+    ls -la ~/.i-clavdivs/clavdivs-workspace/
+    ls -la ~/.i-clavdivs/aurelius-workspace/
+    ```
 
 3. **Start the daemon**:
-   ```bash
-   pnpm run daemon
-   ```
+
+    ```bash
+    pnpm run daemon
+    ```
 
 4. **Test each bot** by sending messages in their configured channels
 
 ## Troubleshooting
 
 ### Bot doesn't respond
+
 - Check that the bot token is correct
 - Verify the bot has permissions in the channel
 - Check `requireMention` setting if in guild channels
 - Verify `allowedChannels` includes the channel you're testing in
 
 ### Wrong personality
+
 - Verify `workspaceDir` is set correctly for each account
 - Check that SOUL.md exists in the workspace directory
 - Review console output to see which workspace is loaded
 
 ### Both bots have the same personality
+
 - Make sure each account has a unique `workspaceDir` configured
 - Verify the workspace directories contain different SOUL.md files
 - Check that you're not using the deprecated single-account setup

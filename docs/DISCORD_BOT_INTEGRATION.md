@@ -8,7 +8,7 @@ This document outlines the full approach to adding Discord bot capabilities to i
 
 1. **Plugin-based architecture** - Discord as a pluggable channel extension
 2. **Reusable plugin system** - Support future channels (Slack, Telegram, etc.)
-3. **Clean separation** - Core runner remains channel-agnostic
+3. **Clean separation** - Core agent remains channel-agnostic
 4. **Configuration-driven** - Enable/disable channels via config
 
 ## High-Level Architecture
@@ -24,7 +24,7 @@ This document outlines the full approach to adding Discord bot capabilities to i
                            ├─────────────────────────┐
                            ▼                         ▼
               ┌─────────────────────┐   ┌─────────────────────┐
-              │   Plugin System     │   │   AgentRunner       │
+              │   Plugin System     │   │      Agent          │
               │  - Registry         │   │  - Session mgmt     │
               │  - Loader           │   │  - LLM execution    │
               │  - Lifecycle        │   │  - Skill routing    │
@@ -242,7 +242,7 @@ export interface IChannelPlugin extends IPlugin {
 **`packages/plugins/src/types/plugin-api.ts`**
 
 ```typescript
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/agent';
 import type { IChannelPlugin } from './channel-plugin.js';
 
 /**
@@ -255,9 +255,9 @@ export interface PluginApi {
     registerChannel(plugin: IChannelPlugin): void;
 
     /**
-     * Access to the agent runner for executing prompts.
+     * Access to the agent for executing prompts.
      */
-    runner: AgentRunner;
+    agent: Agent;
 
     /**
      * Configuration access.
@@ -406,7 +406,7 @@ export function resetGlobalPluginRegistry(): void {
 import type { IPlugin } from '../types/plugin.js';
 import type { IChannelPlugin, IChannelGateway } from '../types/channel-plugin.js';
 import type { PluginApi } from '../types/plugin-api.js';
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/agent';
 import { getGlobalPluginRegistry } from './plugin-registry.js';
 
 /**
@@ -415,11 +415,11 @@ import { getGlobalPluginRegistry } from './plugin-registry.js';
 export class PluginManager {
     private _registry = getGlobalPluginRegistry();
     private _gateways: Map<string, IChannelGateway> = new Map();
-    private _runner: AgentRunner;
+    private _agent: Agent;
     private _config: Record<string, unknown>;
 
-    constructor(runner: AgentRunner, config: Record<string, unknown> = {}) {
-        this._runner = runner;
+    constructor(agent: Agent, config: Record<string, unknown> = {}) {
+        this._agent = agent;
         this._config = config;
     }
 
@@ -501,7 +501,7 @@ export class PluginManager {
     private _createPluginApi(): PluginApi {
         return {
             registerChannel: (plugin) => this._registry.registerChannel(plugin),
-            runner: this._runner,
+            agent: this._agent,
             getConfig: (key) => this._config[key],
             log: {
                 info: (msg) => console.log(`[plugin] ${msg}`),
@@ -549,7 +549,7 @@ export class PluginManager {
     "dependencies": {
         "@i-clavdivs/common": "workspace:*",
         "@i-clavdivs/channels": "workspace:*",
-        "@i-clavdivs/runner": "workspace:*"
+        "@i-clavdivs/agent": "workspace:*"
     },
     "devDependencies": {
         "typescript": "^5.3.3",
@@ -644,6 +644,7 @@ export const discordPlugin: IChannelPlugin = {
 ```typescript
 import { Client, GatewayIntentBits, Events, Message } from 'discord.js';
 import type { IChannelGateway, IChannelMessage } from '@i-clavdivs/plugins';
+import type { Agent } from '@i-clavdivs/agent';
 import { MessageHandler } from './message-handler.js';
 
 export interface IDiscordConfig {
@@ -662,6 +663,7 @@ export class DiscordGateway implements IChannelGateway {
     private _config: IDiscordConfig;
     private _running = false;
     private _messageHandler: MessageHandler;
+    private _agent?: Agent;
 
     constructor(config: unknown) {
         this._config = config as IDiscordConfig;
@@ -1209,9 +1211,9 @@ export function buildMinimalSystemPrompt(params: {
 }
 ```
 
-#### 2.5.6 Enhance AgentRunner
+#### 2.5.6 Enhance Agent
 
-Update the `AgentRunner` in `packages/runner/src/runner.ts` to use workspace files:
+Update the `Agent` in `packages/agent/src/agent.ts` to use workspace files:
 
 **Key Changes:**
 
@@ -1219,13 +1221,13 @@ Update the `AgentRunner` in `packages/runner/src/runner.ts` to use workspace fil
 2. Use enhanced system prompt builder
 3. Make it backward compatible (still works without workspace)
 
-**`packages/runner/src/runner.ts`** (modifications)
+**`packages/agent/src/agent.ts`** (modifications)
 
 ```typescript
 import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
 import type { IWorkspaceFile } from '@i-clavdivs/workspace';
 
-export interface IAgentRunnerConfig {
+export interface IAgentConfig {
     /** Max messages to retain in history before truncating oldest turns. Defaults to 40. */
     maxHistoryMessages?: number;
     /** Directory to store session files. Defaults to ~/.i-clavdivs/sessions. */
@@ -1281,14 +1283,14 @@ async function main(): Promise<void> {
         `[workspace] Loaded ${workspaceFiles.filter((f) => !f.missing).length} workspace files`
     );
 
-    // Create runner with workspace files
-    const runner = new AgentRunner({
+    // Create agent with workspace files
+    const agent = new Agent({
         onChunk: args.stream ? writeChunk : undefined,
         workspaceFiles,
     });
 
     // Load plugins for channel support
-    const pluginManager = await loadPlugins(runner);
+    const pluginManager = await loadPlugins(agent);
 
     // ... rest of main function
 }
@@ -1507,7 +1509,7 @@ You are a helpful, friendly assistant. Customize this file to define your agent'
 
 ---
 
-### Phase 3: Runner Integration (0.5-1 day)
+### Phase 3: Agent Integration (0.5-1 day)
 
 Integrate the plugin system into the existing CLI/runner.
 
@@ -1518,21 +1520,21 @@ Integrate the plugin system into the existing CLI/runner.
 ```typescript
 #!/usr/bin/env node
 import process from 'node:process';
-import { AgentRunner, SessionStore } from '@i-clavdivs/runner';
+import { Agent, SessionStore } from '@i-clavdivs/agent';
 import { PluginManager } from '@i-clavdivs/plugins';
 import { discordPlugin } from '@i-clavdivs/discord';
 import { getGlobalPluginRegistry } from '@i-clavdivs/plugins';
 import { CliArgs } from './args.js';
 import { writeChunk, writeResponse, exitWithError } from './output.js';
 
-async function loadPlugins(runner: AgentRunner, config: Record<string, unknown>) {
+async function loadPlugins(agent: Agent, config: Record<string, unknown>) {
     const registry = getGlobalPluginRegistry();
 
     // Register available plugins
     registry.register(discordPlugin);
 
     // Initialize and start plugins
-    const manager = new PluginManager(runner, config);
+    const manager = new PluginManager(agent, config);
     await manager.initializeAll();
     await manager.startChannelGateways();
 
@@ -1553,12 +1555,12 @@ async function main(): Promise<void> {
     const store = new SessionStore();
     if (args.newSession) await store.delete(args.sessionId);
 
-    const runner = new AgentRunner({
+    const agent = new Agent({
         onChunk: args.stream ? writeChunk : undefined,
     });
 
     // Load and start plugins (Discord, etc.)
-    const pluginManager = await loadPlugins(runner, config);
+    const pluginManager = await loadPlugins(agent, config);
 
     // Handle shutdown gracefully
     process.on('SIGINT', async () => {
@@ -1569,7 +1571,7 @@ async function main(): Promise<void> {
 
     // If prompt provided via CLI, run it and exit
     if (args.prompt) {
-        const result = await runner.run({
+        const result = await agent.run({
             sessionId: args.sessionId,
             prompt: args.prompt,
             provider: 'anthropic',
@@ -1624,22 +1626,22 @@ To connect incoming Discord messages to the agent runner, we need to modify the 
 **`packages/discord/src/gateway/discord-gateway.ts`** (additions)
 
 ```typescript
-import type { AgentRunner } from '@i-clavdivs/runner';
+import type { Agent } from '@i-clavdivs/agent';
 
 export class DiscordGateway implements IChannelGateway {
-    private _runner?: AgentRunner;
+    private _agent?: Agent;
 
-    // Add setter for runner injection
-    setRunner(runner: AgentRunner): void {
-        this._runner = runner;
+    // Add setter for agent injection
+    setAgent(agent: Agent): void {
+        this._agent = agent;
         this._messageHandler.setMessageCallback(async (msg, raw) => {
             await this._processWithAgent(msg, raw);
         });
     }
 
     private async _processWithAgent(msg: IChannelMessage, raw: Message): Promise<void> {
-        if (!this._runner) {
-            console.error('[Discord] No runner configured');
+        if (!this._agent) {
+            console.error('[Discord] No agent configured');
             return;
         }
 
@@ -1648,7 +1650,7 @@ export class DiscordGateway implements IChannelGateway {
             await raw.channel.sendTyping();
 
             // Run the agent with the message content
-            const result = await this._runner.run({
+            const result = await this._agent.run({
                 sessionId: msg.conversationId,
                 prompt: msg.content,
                 provider: 'anthropic',
@@ -1712,7 +1714,7 @@ export class DiscordGateway implements IChannelGateway {
 }
 ```
 
-And update the plugin manager to inject the runner:
+And update the plugin manager to inject the agent:
 
 **`packages/plugins/src/core/plugin-manager.ts`** (modification)
 
@@ -1724,9 +1726,9 @@ async startGateway(plugin: IChannelPlugin, config: unknown): Promise<void> {
 
     const gateway = plugin.createGateway(config);
 
-    // Inject runner if gateway supports it
-    if ('setRunner' in gateway && typeof gateway.setRunner === 'function') {
-        (gateway as any).setRunner(this._runner);
+    // Inject agent if gateway supports it
+    if ('setAgent' in gateway && typeof gateway.setAgent === 'function') {
+        (gateway as any).setAgent(this._agent);
     }
 
     this._gateways.set(plugin.id, gateway);
@@ -1897,10 +1899,10 @@ ANTHROPIC_API_KEY=your-api-key
 - [ ] Implement Discord plugin definition
 - [ ] Build Discord gateway
 - [ ] Build message handler
-- [ ] Wire agent runner integration
+- [ ] Wire agent integration
 - [ ] Write unit tests
 
-### Phase 3: Runner Integration
+### Phase 3: Agent Integration
 
 - [ ] Update CLI to load plugins
 - [ ] Add configuration loading

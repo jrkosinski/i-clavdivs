@@ -65,34 +65,34 @@ pnpm add @i-clavdivs/discord
 ## Getting Discord Bot Token
 
 1. **Create a Discord Application**:
-   - Go to https://discord.com/developers/applications
-   - Click "New Application"
-   - Give it a name and create
+    - Go to https://discord.com/developers/applications
+    - Click "New Application"
+    - Give it a name and create
 
 2. **Create a Bot**:
-   - Navigate to the "Bot" section
-   - Click "Add Bot"
-   - Copy the bot token (keep it secret!)
+    - Navigate to the "Bot" section
+    - Click "Add Bot"
+    - Copy the bot token (keep it secret!)
 
 3. **Configure Bot Permissions**:
-   - Under "Privileged Gateway Intents", enable:
-     - Message Content Intent (required to read messages)
-     - Server Members Intent (optional, for member info)
-   - Under "Bot Permissions", select:
-     - Read Messages/View Channels
-     - Send Messages
-     - Send Messages in Threads
-     - Embed Links
-     - Attach Files
-     - Read Message History
-     - Add Reactions
+    - Under "Privileged Gateway Intents", enable:
+        - Message Content Intent (required to read messages)
+        - Server Members Intent (optional, for member info)
+    - Under "Bot Permissions", select:
+        - Read Messages/View Channels
+        - Send Messages
+        - Send Messages in Threads
+        - Embed Links
+        - Attach Files
+        - Read Message History
+        - Add Reactions
 
 4. **Invite Bot to Server**:
-   - Go to OAuth2 → URL Generator
-   - Select scopes: `bot`
-   - Select permissions (same as above)
-   - Copy the generated URL and open in browser
-   - Select your server and authorize
+    - Go to OAuth2 → URL Generator
+    - Select scopes: `bot`
+    - Select permissions (same as above)
+    - Copy the generated URL and open in browser
+    - Select your server and authorize
 
 ## Usage
 

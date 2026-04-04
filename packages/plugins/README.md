@@ -103,7 +103,7 @@ The manager handles plugin lifecycle and gateway orchestration:
 ```typescript
 import { PluginManager } from '@i-clavdivs/plugins';
 
-const manager = new PluginManager(runner, config);
+const manager = new PluginManager(agent, config);
 
 // Initialize all plugins
 await manager.initializeAll();
@@ -199,9 +199,9 @@ registry.register(redditPlugin);
 
 ```typescript
 import { PluginManager } from '@i-clavdivs/plugins';
-import { AgentRunner } from '@i-clavdivs/runner';
+import { Agent } from '@i-clavdivs/agent';
 
-const runner = new AgentRunner(/* ... */);
+const agent = new Agent(/* ... */);
 const config = {
     channels: {
         discord: {
@@ -214,7 +214,7 @@ const config = {
     },
 };
 
-const manager = new PluginManager(runner, config);
+const manager = new PluginManager(agent, config);
 
 // Initialize all registered plugins
 await manager.initializeAll();
@@ -234,7 +234,7 @@ Plugins receive an API object during registration:
 interface IPluginApi {
     log: ILogger;
     config: IConfigProvider;
-    runner: AgentRunner;
+    agent: Agent;
     registry: IPluginRegistry;
 }
 ```
@@ -243,7 +243,7 @@ This provides access to:
 
 - **Logging**: Structured logging
 - **Configuration**: Access to app config
-- **Runner**: Agent execution
+- **Agent**: Agent execution engine
 - **Registry**: Other plugin lookup
 
 ## Configuration
@@ -266,6 +266,7 @@ Channel plugins typically read config from `channels.<channel-id>`:
 ```
 
 The plugin manager automatically:
+
 1. Reads channel config
 2. Checks `enabled` flag
 3. Creates gateway with config
