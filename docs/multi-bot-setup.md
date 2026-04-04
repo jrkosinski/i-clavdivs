@@ -9,7 +9,7 @@ The system now supports running multiple Discord bot accounts simultaneously, wh
 - Its own bot token
 - Its own allowed channels and users
 - Its own workspace directory with unique SOUL.md and other personality files
-- Its own agent runner instance
+- Its own agent instance
 
 ## Configuration Methods
 
@@ -205,10 +205,10 @@ Each conversation creates a JSON file named `<channelId>.json` containing the me
 
 2. **DiscordGateway** (`packages/discord/src/gateway/discord-gateway.ts`)
     - Modified to create a separate `Agent` for each account
-    - Each runner loads workspace files from its account's workspace directory
-    - Each runner uses account-specific session directory
+    - Each agent loads workspace files from its account's workspace directory
+    - Each agent uses account-specific session directory
     - Added `_getSessionDir()` method to determine session storage location
-    - Updated `_processWithAgent` to use account-specific runner
+    - Updated `_processWithAgent` to use account-specific agent
 
 3. **ConfigLoader** (`packages/plugins/src/utils/config-loader.ts`)
     - Added support for `DISCORD_<ACCOUNT>_WORKSPACE_DIR` environment variable
@@ -220,11 +220,11 @@ Each conversation creates a JSON file named `<channelId>.json` containing the me
     - Creates a dedicated `Agent` with account-specific workspace files
     - Configures account-specific session directory
     - Sets up Discord client with event handlers
-    - Stores the client, handler, and runner together
+    - Stores the client, handler, and agent together
 3. When a message arrives:
-    - The gateway finds the correct account's runner
-    - Passes the message to that specific runner
-    - The runner uses its loaded workspace files (SOUL.md, etc.) and saves history to its session directory
+    - The gateway finds the correct account's agent
+    - Passes the message to that specific agent
+    - The agent uses its loaded workspace files (SOUL.md, etc.) and saves history to its session directory
 
 ## Testing Your Setup
 

@@ -193,9 +193,9 @@ async function createAgent(stream: boolean): Promise<Agent> {
 }
 ```
 
-#### 2. Runner Integration
+#### 2. Agent Integration
 
-Location: `packages/runner/src/runner.ts`
+Location: `packages/agent/src/agent.ts`
 
 ```typescript
 import { buildSystemPromptWithWorkspace } from '@i-clavdivs/workspace';
@@ -219,7 +219,7 @@ private _buildSystemPrompt(request: IAgentRequest): string {
 
 #### 3. Discord Plugin Integration (Planned)
 
-The Discord plugin will load workspace files when creating the runner instance, similar to the CLI integration.
+The Discord plugin will load workspace files when creating the agent instance, similar to the CLI integration.
 
 ### Data Flow
 

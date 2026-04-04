@@ -29,7 +29,7 @@ agents/
 
 ## Core Concepts
 
-### Agent Runner
+### Agent
 
 The `Agent` class orchestrates the execution of AI agent tasks with automatic:
 
@@ -67,7 +67,7 @@ const agent = new Agent({
     toolFactory,
 });
 
-const result = await runner.run({
+const result = await agent.run({
     sessionId: 'session-123',
     prompt: 'Hello, agent!',
     provider: 'anthropic',

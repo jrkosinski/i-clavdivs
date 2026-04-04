@@ -8,7 +8,7 @@ This document outlines the full approach to adding Discord bot capabilities to i
 
 1. **Plugin-based architecture** - Discord as a pluggable channel extension
 2. **Reusable plugin system** - Support future channels (Slack, Telegram, etc.)
-3. **Clean separation** - Core runner remains channel-agnostic
+3. **Clean separation** - Core agent remains channel-agnostic
 4. **Configuration-driven** - Enable/disable channels via config
 
 ## High-Level Architecture
@@ -1213,7 +1213,7 @@ export function buildMinimalSystemPrompt(params: {
 
 #### 2.5.6 Enhance Agent
 
-Update the `Agent` in `packages/runner/src/runner.ts` to use workspace files:
+Update the `Agent` in `packages/agent/src/agent.ts` to use workspace files:
 
 **Key Changes:**
 
@@ -1283,7 +1283,7 @@ async function main(): Promise<void> {
         `[workspace] Loaded ${workspaceFiles.filter((f) => !f.missing).length} workspace files`
     );
 
-    // Create runner with workspace files
+    // Create agent with workspace files
     const agent = new Agent({
         onChunk: args.stream ? writeChunk : undefined,
         workspaceFiles,
@@ -1509,7 +1509,7 @@ You are a helpful, friendly assistant. Customize this file to define your agent'
 
 ---
 
-### Phase 3: Runner Integration (0.5-1 day)
+### Phase 3: Agent Integration (0.5-1 day)
 
 Integrate the plugin system into the existing CLI/runner.
 
@@ -1899,10 +1899,10 @@ ANTHROPIC_API_KEY=your-api-key
 - [ ] Implement Discord plugin definition
 - [ ] Build Discord gateway
 - [ ] Build message handler
-- [ ] Wire agent runner integration
+- [ ] Wire agent integration
 - [ ] Write unit tests
 
-### Phase 3: Runner Integration
+### Phase 3: Agent Integration
 
 - [ ] Update CLI to load plugins
 - [ ] Add configuration loading
