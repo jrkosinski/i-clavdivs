@@ -22,11 +22,6 @@
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "internalConsoleOptions": "openOnSessionStart",
-            "env": {
-                "DISCORD_BOT_TOKEN_ALAN": "${env:DISCORD_BOT_TOKEN_ALAN}",
-                "DISCORD_BOT_TOKEN_CONAN": "${env:DISCORD_BOT_TOKEN_CONAN}",
-                "ANTHROPIC_API_KEY": "${env:ANTHROPIC_API_KEY}"
-            },
             "outputCapture": "std"
         }
     ]
