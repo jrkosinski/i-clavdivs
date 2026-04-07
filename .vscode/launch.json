@@ -18,6 +18,7 @@
             "name": "daemon",
             "type": "node",
             "request": "launch",
+            "runtimeExecutable": "/home/blanta/.nvm/versions/node/v22.16.0/bin/node",
             "program": "${workspaceFolder}/apps/cli/dist/index.js",
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
