@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/agents",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "AI agent orchestration and execution layer",
     "main": "./dist/index.js",

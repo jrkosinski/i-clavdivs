@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/skills",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "Skills system for managing and executing tool-based capabilities",
     "main": "./dist/index.js",

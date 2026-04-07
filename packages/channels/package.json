@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/channels",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "Communication channel abstractions and management",
     "main": "./dist/index.js",

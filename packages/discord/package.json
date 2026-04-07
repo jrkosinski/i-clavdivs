@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/discord",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "Discord channel plugin for i-clavdivs",
     "main": "./dist/index.js",

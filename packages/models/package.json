@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/models",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "LLM provider abstraction and implementations",
     "main": "./dist/index.js",

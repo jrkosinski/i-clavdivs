@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/providers",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "AI model provider integrations and authentication",
     "main": "./dist/index.js",

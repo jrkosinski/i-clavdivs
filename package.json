@@ -1,6 +1,6 @@
 {
     "name": "i-clavdivs",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "private": true,
     "type": "module",
     "description": "A TypeScript pnpm workspace monorepo",

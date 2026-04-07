@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/cli",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "CLI entrypoint for running the agent from the command line",
     "bin": {

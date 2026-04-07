@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/agent",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "Agent: session management and LLM execution loop",
     "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/reddit",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "Reddit channel plugin for i-clavdivs",
     "main": "./dist/index.js",

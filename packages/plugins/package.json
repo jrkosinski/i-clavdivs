@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/plugins",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "Plugin system for extensible channel support",
     "main": "./dist/index.js",

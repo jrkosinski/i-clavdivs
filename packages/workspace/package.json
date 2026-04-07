@@ -1,6 +1,6 @@
 {
     "name": "@i-clavdivs/workspace",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "description": "Workspace file loading and system prompt building",
     "main": "./dist/index.js",
