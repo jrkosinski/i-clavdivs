@@ -141,7 +141,9 @@ export class ConfigLoader {
             if (match && match[1]) {
                 const envVar = match[1];
                 const value = process.env[envVar];
-                console.log(`[DEBUG] Replacing env var: ${envVar} = ${value ? value.substring(0, 20) + '...' : 'undefined'}`);
+                console.log(
+                    `[DEBUG] Replacing env var: ${envVar} = ${value ? value.substring(0, 20) + '...' : 'undefined'}`
+                );
                 return value || config;
             }
             return config;

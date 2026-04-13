@@ -29,11 +29,30 @@ console.log('  envPath:', envPath);
 
 // Load .env from project root
 const dotenvResult = dotenvConfig({ path: envPath });
-console.log('[DEBUG] dotenv result:', dotenvResult.error ? `ERROR: ${dotenvResult.error}` : 'SUCCESS');
-console.log('[DEBUG] dotenv parsed:', dotenvResult.parsed ? Object.keys(dotenvResult.parsed) : 'none');
-console.log('[DEBUG] DISCORD_BOT_TOKEN_ALAN from process.env:', typeof process.env.DISCORD_BOT_TOKEN_ALAN, 'value:', process.env.DISCORD_BOT_TOKEN_ALAN);
-console.log('[DEBUG] DISCORD_BOT_TOKEN_CONAN from process.env:', typeof process.env.DISCORD_BOT_TOKEN_CONAN, 'value:', process.env.DISCORD_BOT_TOKEN_CONAN);
-console.log('[DEBUG] All DISCORD env vars:', Object.keys(process.env).filter(k => k.startsWith('DISCORD')));
+console.log(
+    '[DEBUG] dotenv result:',
+    dotenvResult.error ? `ERROR: ${dotenvResult.error}` : 'SUCCESS'
+);
+console.log(
+    '[DEBUG] dotenv parsed:',
+    dotenvResult.parsed ? Object.keys(dotenvResult.parsed) : 'none'
+);
+console.log(
+    '[DEBUG] DISCORD_BOT_TOKEN_ALAN from process.env:',
+    typeof process.env.DISCORD_BOT_TOKEN_ALAN,
+    'value:',
+    process.env.DISCORD_BOT_TOKEN_ALAN
+);
+console.log(
+    '[DEBUG] DISCORD_BOT_TOKEN_CONAN from process.env:',
+    typeof process.env.DISCORD_BOT_TOKEN_CONAN,
+    'value:',
+    process.env.DISCORD_BOT_TOKEN_CONAN
+);
+console.log(
+    '[DEBUG] All DISCORD env vars:',
+    Object.keys(process.env).filter((k) => k.startsWith('DISCORD'))
+);
 console.log('[DEBUG] Dotenv parsed values:', dotenvResult.parsed);
 
 import process from 'node:process';
