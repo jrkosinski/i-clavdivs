@@ -14,13 +14,46 @@ import { config as dotenvConfig } from 'dotenv';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-// Find project root (2 levels up from this file: apps/cli/src -> apps/cli -> root)
+// Find project root (when built: apps/cli/dist/index.js -> apps/cli/dist -> apps/cli -> apps -> root)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = resolve(__filename, '..');
-const projectRoot = resolve(__dirname, '..', '..');
+const projectRoot = resolve(__dirname, '..', '..', '..');
+const envPath = resolve(projectRoot, '.env');
+
+// Debug: log the paths
+console.log('[DEBUG] Path resolution:');
+console.log('  __filename:', __filename);
+console.log('  __dirname:', __dirname);
+console.log('  projectRoot:', projectRoot);
+console.log('  envPath:', envPath);
 
 // Load .env from project root
-dotenvConfig({ path: resolve(projectRoot, '.env') });
+const dotenvResult = dotenvConfig({ path: envPath });
+console.log(
+    '[DEBUG] dotenv result:',
+    dotenvResult.error ? `ERROR: ${dotenvResult.error}` : 'SUCCESS'
+);
+console.log(
+    '[DEBUG] dotenv parsed:',
+    dotenvResult.parsed ? Object.keys(dotenvResult.parsed) : 'none'
+);
+console.log(
+    '[DEBUG] DISCORD_BOT_TOKEN_ALAN from process.env:',
+    typeof process.env.DISCORD_BOT_TOKEN_ALAN,
+    'value:',
+    process.env.DISCORD_BOT_TOKEN_ALAN
+);
+console.log(
+    '[DEBUG] DISCORD_BOT_TOKEN_CONAN from process.env:',
+    typeof process.env.DISCORD_BOT_TOKEN_CONAN,
+    'value:',
+    process.env.DISCORD_BOT_TOKEN_CONAN
+);
+console.log(
+    '[DEBUG] All DISCORD env vars:',
+    Object.keys(process.env).filter((k) => k.startsWith('DISCORD'))
+);
+console.log('[DEBUG] Dotenv parsed values:', dotenvResult.parsed);
 
 import process from 'node:process';
 import { Agent } from '@i-clavdivs/agent';

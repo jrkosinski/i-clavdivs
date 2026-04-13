@@ -35,3 +35,6 @@ export type {
     IToolResultEvent,
     IToolStartEvent,
 } from './interfaces.js';
+
+export type { IAgentRegistration } from './agent-registry.js';
+export { AgentRegistry, getGlobalRegistry, resetGlobalRegistry } from './agent-registry.js';

@@ -59,6 +59,13 @@ export class DiscordGateway implements IChannelGateway {
 
         // Validate that tokens don't contain placeholders
         for (const account of accounts) {
+            console.log(`[DEBUG] Validating token for account ${account.id}:`, {
+                hasToken: !!account.token,
+                tokenLength: account.token?.length,
+                tokenPrefix: account.token?.substring(0, 30),
+                containsPlaceholder: account.token?.includes('${'),
+            });
+
             if (!account.token || account.token.includes('${')) {
                 throw new Error(
                     `Invalid Discord token for account ${account.id}: Token appears to be a placeholder or missing. ` +
