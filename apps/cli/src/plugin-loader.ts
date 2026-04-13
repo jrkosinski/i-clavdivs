@@ -12,6 +12,9 @@ export async function loadPlugins(agent?: Agent, configPath?: string): Promise<P
     //load configuration
     const config = await ConfigLoader.load(configPath);
 
+    //debug: log the loaded config
+    console.log('[DEBUG] Loaded config:', JSON.stringify(config, null, 2));
+
     //get plugin registry
     const registry = getGlobalPluginRegistry();
 

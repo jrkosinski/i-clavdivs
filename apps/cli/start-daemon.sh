@@ -9,23 +9,19 @@
 unset DISCORD_ALLOWED_CHANNELS
 unset DISCORD_ALLOWED_USERS
 
-# Set bot tokens - each bot needs its own token
-export DISCORD_BOT_TOKEN_ALAN="${DISCORD_BOT_TOKEN_ALAN}"
-export DISCORD_BOT_TOKEN_CONAN="${DISCORD_BOT_TOKEN_CONAN}"
-export ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}"
+# Note: Environment variables are loaded from .env file by the CLI application
+# No need to export them here - dotenv will handle it
 
 # Optional: Set these if you want to override config/default.json
 # export DISCORD_REQUIRE_MENTION="true"
 
 echo "Starting i-clavdivs daemon with multi-bot support..."
-echo "Environment variables:"
-echo "  DISCORD_BOT_TOKEN_ALAN: ${DISCORD_BOT_TOKEN_ALAN:0:20}..."
-echo "  DISCORD_BOT_TOKEN_CONAN: ${DISCORD_BOT_TOKEN_CONAN:0:20}..."
-echo "  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:+[set]}"
 echo ""
-echo "Bot workspaces (from config/default.json):"
-echo "  alan-watts: /home/blanta/.i-clavdivs/workspace-alan-watts"
-echo "  conan: /home/blanta/.i-clavdivs/workspace-conan"
+echo "Bot configuration:"
+echo "  Tokens: Loaded from .env file"
+echo "  Workspaces: Configured in config/default.json"
+echo "    - alan-watts: /home/blanta/.i-clavdivs/workspace-alan-watts"
+echo "    - conan: /home/blanta/.i-clavdivs/workspace-conan"
 echo ""
 
 # Start the daemon - workspace dirs are now configured per-bot in config/default.json
