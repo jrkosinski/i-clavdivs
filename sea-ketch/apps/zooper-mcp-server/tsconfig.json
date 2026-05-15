@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "ES2021",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "rootDir": "./src",
+        "paths": {
+            "ai": ["./node_modules/ai/dist/index"],
+            "ai/*": ["./node_modules/ai/dist/*"],
+            "common": ["./node_modules/common/dist/index"],
+            "common/*": ["./node_modules/common/dist/*"]
+        },
+        "incremental": true,
+        "skipLibCheck": true,
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noUncheckedIndexedAccess": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "esModuleInterop": true
+    },
+    "include": ["src/**/*"]
+}

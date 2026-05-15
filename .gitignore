@@ -22,6 +22,8 @@ build/
 *.swp
 *.swo
 *~
+**/.claude
+**/.vscode 
 
 # OS
 .DS_Store

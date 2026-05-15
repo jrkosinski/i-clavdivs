@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node"
+    },
+    "ts-node": {
+        "transpileOnly": true,
+        "files": true,
+        "compilerOptions": {
+            "module": "commonjs",
+            "sourceMap": true,
+            "inlineSourceMap": false,
+            "inlineSources": false
+        }
+    }
+}
