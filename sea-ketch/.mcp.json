@@ -1,7 +1,0 @@
-{
-    "mcpServers": {
-        "zooper": {
-            "url": "http://localhost:3000/mcp"
-        }
-    }
-}

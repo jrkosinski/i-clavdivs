@@ -1,12 +1,3 @@
-/**
- * Channel management and communication abstractions.
- *
- * Provides core functionality for managing communication channels,
- * including type definitions, configuration, and utilities.
- *
- * @packageDocumentation
- */
-
-export * from './core/index.js';
-export * from './types/index.js';
-export * from './utils/index.js';
+export { IChannel, IChannelMessage, IChannelSender } from './channel';
+export { DiscordChannel, IDiscordChannelOptions } from './discord/discord-channel';
+export { DiscordMessageHandler, IDiscordMessageHandlerOptions } from './discord/message-handler';
